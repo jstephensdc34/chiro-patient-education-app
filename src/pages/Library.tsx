@@ -21,7 +21,7 @@ const mockItems: ReportItem[] = [
 ];
 
 const mockCategories: Category[] = [
-  { id: "diagnosis", name: "Diagnosis", description: "Clinical diagnoses" },
+  { id: "diagnosis", name: "Spinal Diagnosis", description: "Clinical diagnoses" },
   { id: "treatment", name: "Treatment Plan", description: "In-office procedures" },
   { id: "homecare", name: "Home Care", description: "At-home recommendations" },
   { id: "exercises", name: "Therapeutic Exercises", description: "Rehabilitative movements" }

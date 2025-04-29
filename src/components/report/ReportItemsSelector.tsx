@@ -7,7 +7,7 @@ import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
-  diagnosis: "Diagnosis",
+  diagnosis: "Spinal Diagnosis",
   treatment: "Treatment Plan",
   homecare: "Home Care",
   exercises: "Therapeutic Exercises"
