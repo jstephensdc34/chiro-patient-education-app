@@ -45,6 +45,13 @@ export const ReportItemsSelector = ({
     }
   };
 
+  // Handle subcategory selection without causing the main tab to change
+  const handleSubcategoryClick = (subcategoryId: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setActiveSubcategory(subcategoryId);
+  };
+
   // Get subcategories for the active category
   const getSubcategoriesForCategory = (categoryId: string) => {
     return mockSubcategories.filter(subcat => subcat.parentCategoryId === categoryId);
@@ -87,18 +94,21 @@ export const ReportItemsSelector = ({
                 
                 {category === "diagnosis" && (
                   <div className="mb-4">
-                    <TabsList className="w-full bg-gray-50 mb-4">
+                    <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                       {getSubcategoriesForCategory(category).map((subcategory) => (
-                        <TabsTrigger
+                        <button
                           key={subcategory.id}
-                          value={subcategory.id}
-                          onClick={() => setActiveSubcategory(subcategory.id)}
-                          className={`flex-1 ${activeSubcategory === subcategory.id ? 'bg-medical-50 text-medical-700' : ''}`}
+                          onClick={(e) => handleSubcategoryClick(subcategory.id, e)}
+                          className={`px-4 py-2 text-sm rounded-md transition-colors ${
+                            activeSubcategory === subcategory.id 
+                              ? 'bg-medical-100 text-medical-700' 
+                              : 'bg-white text-gray-600 hover:bg-gray-100'
+                          }`}
                         >
                           {subcategory.name}
-                        </TabsTrigger>
+                        </button>
                       ))}
-                    </TabsList>
+                    </div>
                   </div>
                 )}
                 
