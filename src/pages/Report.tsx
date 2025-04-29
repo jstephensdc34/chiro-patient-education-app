@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -198,33 +197,18 @@ const Report = () => {
                           {mockItems
                             .filter(item => item.categoryId === category)
                             .map(item => (
-                              <div key={item.id} className="flex items-start space-x-3 p-3 bg-white border border-gray-200 rounded-md">
+                              <div key={item.id} className="flex items-center space-x-3 p-3 bg-white border border-gray-200 rounded-md">
                                 <Checkbox
                                   id={item.id}
                                   checked={selectedItems.includes(item.id)}
                                   onCheckedChange={() => handleToggleItem(item.id)}
                                 />
-                                <div className="grid gap-1.5">
-                                  <Label
-                                    htmlFor={item.id}
-                                    className="font-medium cursor-pointer"
-                                  >
-                                    {item.name}
-                                  </Label>
-                                  <p className="text-sm text-gray-500">
-                                    {item.description}
-                                  </p>
-                                  {item.infoLink && (
-                                    <a
-                                      href={item.infoLink}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-xs text-medical-600 hover:underline"
-                                    >
-                                      More information
-                                    </a>
-                                  )}
-                                </div>
+                                <Label
+                                  htmlFor={item.id}
+                                  className="font-medium cursor-pointer"
+                                >
+                                  {item.name}
+                                </Label>
                               </div>
                             ))}
                         </div>
