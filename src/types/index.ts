@@ -27,6 +27,6 @@ export interface ReportData {
   notes?: string;
 }
 
-export type CategoryType = 'diagnosis' | 'treatment' | 'homecare' | 'exercises';
+export type CategoryType = 'diagnosis' | 'extremity' | 'treatment' | 'homecare' | 'exercises';
 
-export const MAIN_CATEGORIES: CategoryType[] = ['diagnosis', 'treatment', 'homecare', 'exercises'];
+export const MAIN_CATEGORIES: CategoryType[] = ['diagnosis', 'extremity', 'treatment', 'homecare', 'exercises'];

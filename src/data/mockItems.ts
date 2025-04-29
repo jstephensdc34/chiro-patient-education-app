@@ -9,5 +9,7 @@ export const mockItems: ReportItem[] = [
   { id: "4", name: "Ice Therapy", description: "Application of ice to reduce inflammation", infoLink: "https://www.spine-health.com/treatment/pain-management/ice-packs-back-pain-relief", categoryId: "homecare" },
   { id: "5", name: "Heat Therapy", description: "Application of heat to relax muscles and increase blood flow", infoLink: "https://www.spine-health.com/treatment/heat-therapy-cold-therapy/heat-therapy-benefits-for-lower-back-pain", categoryId: "homecare" },
   { id: "6", name: "McKenzie Extensions", description: "Extension-based exercises for disc problems", infoLink: "https://www.spine-health.com/treatment/physical-therapy/mckenzie-therapy-mechanical-diagnosis-and-therapy-back-pain", categoryId: "exercises" },
-  { id: "7", name: "Cat-Camel Stretch", description: "Flexion and extension movement for the spine", infoLink: "https://www.spine-health.com/wellness/exercise/cat-camel-back-stretch", categoryId: "exercises" }
+  { id: "7", name: "Cat-Camel Stretch", description: "Flexion and extension movement for the spine", infoLink: "https://www.spine-health.com/wellness/exercise/cat-camel-back-stretch", categoryId: "exercises" },
+  { id: "8", name: "Carpal Tunnel Syndrome", description: "Compression of the median nerve in the wrist causing numbness and pain", infoLink: "https://orthoinfo.aaos.org/en/diseases--conditions/carpal-tunnel-syndrome/", categoryId: "extremity" },
+  { id: "9", name: "Tennis Elbow", description: "Inflammation of the tendons on the outside of the elbow", infoLink: "https://www.mayoclinic.org/diseases-conditions/tennis-elbow/symptoms-causes/syc-20351987", categoryId: "extremity" }
 ];
