@@ -5,12 +5,20 @@ export interface ReportItem {
   description: string;
   infoLink?: string;
   categoryId: string;
+  subcategoryId?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
   parentId?: string | null;
+  description?: string;
+}
+
+export interface Subcategory {
+  id: string;
+  name: string;
+  parentCategoryId: string;
   description?: string;
 }
 
@@ -30,3 +38,10 @@ export interface ReportData {
 export type CategoryType = 'diagnosis' | 'extremity' | 'treatment' | 'homecare' | 'exercises';
 
 export const MAIN_CATEGORIES: CategoryType[] = ['diagnosis', 'extremity', 'treatment', 'homecare', 'exercises'];
+
+export const DIAGNOSIS_SUBCATEGORIES = [
+  'general_diagnosis',
+  'cervical_diagnosis',
+  'thoracic_diagnosis',
+  'lumbopelvic_diagnosis'
+];

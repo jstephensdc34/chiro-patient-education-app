@@ -2,6 +2,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
+import { mockSubcategories } from "@/services/libraryService";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -25,6 +26,43 @@ export const ReportPreview = ({
   selectedItems,
   additionalNotes
 }: ReportPreviewProps) => {
+  const getSelectedItems = (categoryId: string) => {
+    return items.filter(item => 
+      item.categoryId === categoryId && selectedItems.includes(item.id)
+    );
+  };
+
+  const getSubcategoryName = (subcategoryId: string) => {
+    const subcategory = mockSubcategories.find(s => s.id === subcategoryId);
+    return subcategory ? subcategory.name : "";
+  };
+
+  const groupItemsBySubcategory = (items: ReportItem[]) => {
+    const grouped: Record<string, ReportItem[]> = {};
+    
+    items.forEach(item => {
+      if (item.subcategoryId) {
+        if (!grouped[item.subcategoryId]) {
+          grouped[item.subcategoryId] = [];
+        }
+        grouped[item.subcategoryId].push(item);
+      } else {
+        if (!grouped["uncategorized"]) {
+          grouped["uncategorized"] = [];
+        }
+        grouped["uncategorized"].push(item);
+      }
+    });
+    
+    return grouped;
+  };
+  
+  const hasSelectedItemsInCategory = (categoryId: string) => {
+    return items.some(item => 
+      item.categoryId === categoryId && selectedItems.includes(item.id)
+    );
+  };
+
   return (
     <Card className="mt-6">
       <CardHeader className="bg-gray-100 border-b border-gray-200">
@@ -45,27 +83,38 @@ export const ReportPreview = ({
             )}
             
             <Accordion type="multiple" className="w-full">
-              {MAIN_CATEGORIES.filter(category => 
-                items.some(item => 
-                  item.categoryId === category && selectedItems.includes(item.id)
-                )
-              ).map((category) => (
+              {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
                 <AccordionItem key={category} value={category}>
                   <AccordionTrigger className="text-medical-700 hover:text-medical-800">
                     {categoryNames[category]}
                   </AccordionTrigger>
                   <AccordionContent>
-                    <ul className="space-y-2 ml-4">
-                      {items
-                        .filter(item => 
-                          item.categoryId === category && selectedItems.includes(item.id)
-                        )
-                        .map(item => (
+                    {category === "diagnosis" ? (
+                      <div className="space-y-4">
+                        {Object.entries(groupItemsBySubcategory(getSelectedItems(category))).map(([subcategoryId, items]) => (
+                          <div key={subcategoryId} className="ml-4">
+                            <h4 className="font-medium text-medical-600 mb-2">
+                              {subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
+                            </h4>
+                            <ul className="space-y-2 ml-4">
+                              {items.map(item => (
+                                <li key={item.id} className="list-disc ml-4">
+                                  <span className="font-medium">{item.name}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <ul className="space-y-2 ml-4">
+                        {getSelectedItems(category).map(item => (
                           <li key={item.id} className="list-disc ml-4">
                             <span className="font-medium">{item.name}</span>
                           </li>
                         ))}
-                    </ul>
+                      </ul>
+                    )}
                   </AccordionContent>
                 </AccordionItem>
               ))}
