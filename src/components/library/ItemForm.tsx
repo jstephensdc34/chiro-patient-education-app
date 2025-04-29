@@ -1,11 +1,19 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import { ReportItem, CategoryType } from "@/types";
+import { mockSubcategories } from "@/services/libraryService";
 
 interface ItemFormProps {
   activeCategory: CategoryType;
@@ -23,21 +31,39 @@ export const ItemForm = ({
   setIsDialogOpen,
 }: ItemFormProps) => {
   const [item, setItem] = useState<Partial<ReportItem>>({ categoryId: activeCategory });
-
+  const [availableSubcategories, setAvailableSubcategories] = useState<{ id: string; name: string }[]>([]);
+  
   // Update the item when editingItem changes or when activeCategory changes and not editing
-  useState(() => {
+  useEffect(() => {
     if (editingItem) {
       setItem(editingItem);
     } else {
       setItem({ categoryId: activeCategory });
     }
-  });
+    
+    // Update available subcategories when category changes
+    if (activeCategory === "diagnosis") {
+      setAvailableSubcategories(
+        mockSubcategories.filter(subcat => subcat.parentCategoryId === "diagnosis")
+      );
+    } else {
+      setAvailableSubcategories([]);
+    }
+  }, [editingItem, activeCategory]);
 
   const handleChange = (field: keyof ReportItem, value: string) => {
     setItem(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
+    // For diagnosis items, ensure there's a subcategory
+    if (item.categoryId === "diagnosis" && !item.subcategoryId && availableSubcategories.length > 0) {
+      setItem(prev => ({ 
+        ...prev, 
+        subcategoryId: availableSubcategories[0].id 
+      }));
+    }
+    
     onSaveItem(item);
     setItem({ categoryId: activeCategory });
   };
@@ -55,15 +81,37 @@ export const ItemForm = ({
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              value={editingItem?.name || item.name || ""}
+              value={item.name || ""}
               onChange={(e) => handleChange("name", e.target.value)}
             />
           </div>
+          
+          {activeCategory === "diagnosis" && (
+            <div className="grid gap-2">
+              <Label htmlFor="subcategory">Subcategory</Label>
+              <Select
+                value={item.subcategoryId}
+                onValueChange={(value) => handleChange("subcategoryId", value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a subcategory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableSubcategories.map((subcategory) => (
+                    <SelectItem key={subcategory.id} value={subcategory.id}>
+                      {subcategory.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          
           <div className="grid gap-2">
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              value={editingItem?.description || item.description || ""}
+              value={item.description || ""}
               onChange={(e) => handleChange("description", e.target.value)}
             />
           </div>
@@ -73,7 +121,7 @@ export const ItemForm = ({
               id="infoLink"
               type="url"
               placeholder="https://example.com"
-              value={editingItem?.infoLink || item.infoLink || ""}
+              value={item.infoLink || ""}
               onChange={(e) => handleChange("infoLink", e.target.value)}
             />
           </div>

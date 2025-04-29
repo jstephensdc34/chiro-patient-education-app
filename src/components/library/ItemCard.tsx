@@ -1,7 +1,9 @@
 
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ReportItem } from "@/types";
+import { mockSubcategories } from "@/services/libraryService";
 
 interface ItemCardProps {
   item: ReportItem;
@@ -10,10 +12,30 @@ interface ItemCardProps {
 }
 
 export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
+  // Get subcategory name if available
+  const getSubcategoryName = () => {
+    if (item.subcategoryId) {
+      const subcategory = mockSubcategories.find(
+        subcat => subcat.id === item.subcategoryId
+      );
+      return subcategory ? subcategory.name : null;
+    }
+    return null;
+  };
+
+  const subcategoryName = getSubcategoryName();
+
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <CardHeader className="bg-gray-50 border-b border-gray-100">
-        <CardTitle className="text-lg">{item.name}</CardTitle>
+        <div className="flex justify-between items-start">
+          <CardTitle className="text-lg">{item.name}</CardTitle>
+          {subcategoryName && (
+            <Badge variant="outline" className="bg-medical-50 text-medical-700 border-medical-200">
+              {subcategoryName}
+            </Badge>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="pt-4">
         <p className="text-gray-600 mb-4">{item.description}</p>
