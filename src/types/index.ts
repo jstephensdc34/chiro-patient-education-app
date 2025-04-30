@@ -45,3 +45,12 @@ export const DIAGNOSIS_SUBCATEGORIES = [
   'thoracic_diagnosis',
   'lumbopelvic_diagnosis'
 ];
+
+export const EXTREMITY_SUBCATEGORIES = [
+  'shoulder',
+  'elbow',
+  'wrist_hand',
+  'hip',
+  'knee',
+  'ankle_foot'
+];

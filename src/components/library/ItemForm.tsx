@@ -42,9 +42,9 @@ export const ItemForm = ({
     }
     
     // Update available subcategories when category changes
-    if (activeCategory === "diagnosis") {
+    if (activeCategory === "diagnosis" || activeCategory === "extremity") {
       setAvailableSubcategories(
-        mockSubcategories.filter(subcat => subcat.parentCategoryId === "diagnosis")
+        mockSubcategories.filter(subcat => subcat.parentCategoryId === activeCategory)
       );
     } else {
       setAvailableSubcategories([]);
@@ -56,8 +56,10 @@ export const ItemForm = ({
   };
 
   const handleSave = () => {
-    // For diagnosis items, ensure there's a subcategory
-    if (item.categoryId === "diagnosis" && !item.subcategoryId && availableSubcategories.length > 0) {
+    // For diagnosis and extremity items, ensure there's a subcategory
+    if ((item.categoryId === "diagnosis" || item.categoryId === "extremity") && 
+        !item.subcategoryId && 
+        availableSubcategories.length > 0) {
       setItem(prev => ({ 
         ...prev, 
         subcategoryId: availableSubcategories[0].id 
@@ -86,7 +88,7 @@ export const ItemForm = ({
             />
           </div>
           
-          {activeCategory === "diagnosis" && (
+          {(activeCategory === "diagnosis" || activeCategory === "extremity") && availableSubcategories.length > 0 && (
             <div className="grid gap-2">
               <Label htmlFor="subcategory">Subcategory</Label>
               <Select

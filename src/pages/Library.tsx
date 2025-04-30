@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
+import { CategoryType, MAIN_CATEGORIES, DIAGNOSIS_SUBCATEGORIES, EXTREMITY_SUBCATEGORIES, ReportItem } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { ItemForm } from "@/components/library/ItemForm";
@@ -23,6 +23,8 @@ const Library = () => {
   useEffect(() => {
     if (activeCategory === "diagnosis") {
       setActiveSubcategory("general_diagnosis");
+    } else if (activeCategory === "extremity") {
+      setActiveSubcategory("shoulder");
     } else {
       setActiveSubcategory(null);
     }
@@ -48,7 +50,9 @@ const Library = () => {
         description: item.description,
         infoLink: item.infoLink,
         categoryId: activeCategory,
-        subcategoryId: activeCategory === "diagnosis" ? item.subcategoryId || activeSubcategory : undefined
+        subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity") 
+          ? item.subcategoryId || activeSubcategory 
+          : undefined
       };
       setItems([...items, itemToAdd]);
       toast({
@@ -95,7 +99,7 @@ const Library = () => {
 
   // Filter items based on category and subcategory
   const getFilteredItems = () => {
-    if (activeCategory === "diagnosis" && activeSubcategory) {
+    if ((activeCategory === "diagnosis" || activeCategory === "extremity") && activeSubcategory) {
       return items.filter(item => 
         item.categoryId === activeCategory && 
         item.subcategoryId === activeSubcategory
@@ -118,7 +122,9 @@ const Library = () => {
               setEditingItem(null);
               setNewItem({ 
                 categoryId: activeCategory,
-                subcategoryId: activeCategory === "diagnosis" ? activeSubcategory : undefined 
+                subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity") 
+                  ? activeSubcategory 
+                  : undefined 
               });
               setIsDialogOpen(true);
             }}
@@ -142,7 +148,7 @@ const Library = () => {
           
           {MAIN_CATEGORIES.map((category) => (
             <TabsContent key={category} value={category}>
-              {category === "diagnosis" && (
+              {(category === "diagnosis" || category === "extremity") && (
                 <div className="mb-6">
                   <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                     {getSubcategoriesForCategory(category).map((subcategory) => (
