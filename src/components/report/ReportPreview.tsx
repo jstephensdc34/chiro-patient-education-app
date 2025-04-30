@@ -1,5 +1,4 @@
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
 import { mockSubcategories } from "@/services/libraryService";
@@ -82,54 +81,53 @@ export const ReportPreview = ({
               </div>
             )}
             
-            <Accordion type="multiple" className="w-full">
+            <div className="space-y-8">
               {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
-                <AccordionItem key={category} value={category}>
-                  <AccordionTrigger className="text-medical-700 hover:text-medical-800">
+                <div key={category} className="border-b pb-4">
+                  <h3 className="text-medical-700 font-medium text-lg mb-3">
                     {categoryNames[category]}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    {category === "diagnosis" ? (
-                      <div className="space-y-4">
-                        {Object.entries(groupItemsBySubcategory(getSelectedItems(category))).map(([subcategoryId, items]) => (
-                          <div key={subcategoryId} className="ml-4">
-                            <h4 className="font-medium text-medical-600 mb-2">
-                              {subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
-                            </h4>
-                            <ul className="space-y-2 ml-4">
-                              {items.map(item => (
-                                <li key={item.id} className="list-disc ml-4">
-                                  <span className="font-medium">{item.name}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <ul className="space-y-2 ml-4">
-                        {getSelectedItems(category).map(item => (
-                          <li key={item.id} className="list-disc ml-4">
-                            <span className="font-medium">{item.name}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
+                  </h3>
+                  
+                  {category === "diagnosis" || category === "extremity" ? (
+                    <div className="space-y-4 pl-4">
+                      {Object.entries(groupItemsBySubcategory(getSelectedItems(category))).map(([subcategoryId, items]) => (
+                        <div key={subcategoryId} className="ml-2">
+                          <h4 className="font-medium text-medical-600 mb-2">
+                            {subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
+                          </h4>
+                          <ul className="space-y-2 ml-4">
+                            {items.map(item => (
+                              <li key={item.id} className="list-disc ml-4">
+                                <span className="font-medium">{item.name}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <ul className="space-y-2 ml-8">
+                      {getSelectedItems(category).map(item => (
+                        <li key={item.id} className="list-disc ml-4">
+                          <span className="font-medium">{item.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               ))}
               
               {additionalNotes && (
-                <AccordionItem value="notes">
-                  <AccordionTrigger className="text-medical-700 hover:text-medical-800">
+                <div className="border-b pb-4">
+                  <h3 className="text-medical-700 font-medium text-lg mb-3">
                     Additional Notes
-                  </AccordionTrigger>
-                  <AccordionContent>
+                  </h3>
+                  <div className="pl-4">
                     <p className="whitespace-pre-wrap">{additionalNotes}</p>
-                  </AccordionContent>
-                </AccordionItem>
+                  </div>
+                </div>
               )}
-            </Accordion>
+            </div>
           </div>
         ) : (
           <div className="p-8 text-center text-gray-500">
