@@ -68,3 +68,11 @@ export const HOMECARE_SUBCATEGORIES = [
   'activity_modification',
   'wellness'
 ];
+
+export const EXERCISES_SUBCATEGORIES = [
+  'cervical_exercises',
+  'thoracic_exercises',
+  'lumbopelvic_exercises',
+  'lower_extremity_exercises',
+  'upper_extremity_exercises'
+];
