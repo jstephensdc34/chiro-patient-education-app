@@ -54,3 +54,10 @@ export const EXTREMITY_SUBCATEGORIES = [
   'knee',
   'ankle_foot'
 ];
+
+export const TREATMENT_SUBCATEGORIES = [
+  'care_plan_type',
+  'treatment_modalities',
+  'treatment_goals',
+  'estimated_cost'
+];

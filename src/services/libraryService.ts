@@ -5,13 +5,17 @@ import { ReportItem, Category, CategoryType, Subcategory } from "@/types";
 export const mockItems: ReportItem[] = [
   { id: "1", name: "Cervical Sprain/Strain", description: "Stretch injury to the ligaments or muscles of the neck", infoLink: "https://www.spine-health.com/conditions/neck-pain/cervical-sprain-and-strain", categoryId: "diagnosis", subcategoryId: "cervical_diagnosis" },
   { id: "2", name: "Lumbar Disc Herniation", description: "Protrusion of the intervertebral disc material in lumbar spine", infoLink: "https://www.spine-health.com/conditions/herniated-disc/lumbar-herniated-disc", categoryId: "diagnosis", subcategoryId: "lumbopelvic_diagnosis" },
-  { id: "3", name: "Spinal Manipulation", description: "High-velocity, low-amplitude thrust to spinal joints", infoLink: "https://www.spine-health.com/treatment/chiropractic/spinal-manipulation-and-chiropractic-care", categoryId: "treatment" },
+  { id: "3", name: "Spinal Manipulation", description: "High-velocity, low-amplitude thrust to spinal joints", infoLink: "https://www.spine-health.com/treatment/chiropractic/spinal-manipulation-and-chiropractic-care", categoryId: "treatment", subcategoryId: "treatment_modalities" },
   { id: "4", name: "Ice Therapy", description: "Application of ice to reduce inflammation", infoLink: "https://www.spine-health.com/treatment/pain-management/ice-packs-back-pain-relief", categoryId: "homecare" },
   { id: "5", name: "McKenzie Extensions", description: "Extension-based exercises for disc problems", infoLink: "https://www.spine-health.com/treatment/physical-therapy/mckenzie-therapy-mechanical-diagnosis-and-therapy-back-pain", categoryId: "exercises" },
   { id: "8", name: "Carpal Tunnel Syndrome", description: "Compression of the median nerve in the wrist causing numbness and pain", infoLink: "https://orthoinfo.aaos.org/en/diseases--conditions/carpal-tunnel-syndrome/", categoryId: "extremity", subcategoryId: "wrist_hand" },
   { id: "9", name: "Tennis Elbow", description: "Inflammation of the tendons on the outside of the elbow", infoLink: "https://www.mayoclinic.org/diseases-conditions/tennis-elbow/symptoms-causes/syc-20351987", categoryId: "extremity", subcategoryId: "elbow" },
   { id: "10", name: "Vertebral Subluxation", description: "Misalignment of vertebrae causing neural interference", infoLink: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1208927/", categoryId: "diagnosis", subcategoryId: "general_diagnosis" },
-  { id: "11", name: "Thoracic Facet Syndrome", description: "Irritation of thoracic facet joints causing mid-back pain", infoLink: "https://www.spine-health.com/conditions/spine-anatomy/thoracic-spine-anatomy-and-upper-back-pain", categoryId: "diagnosis", subcategoryId: "thoracic_diagnosis" }
+  { id: "11", name: "Thoracic Facet Syndrome", description: "Irritation of thoracic facet joints causing mid-back pain", infoLink: "https://www.spine-health.com/conditions/spine-anatomy/thoracic-spine-anatomy-and-upper-back-pain", categoryId: "diagnosis", subcategoryId: "thoracic_diagnosis" },
+  // Sample items for treatment plan subcategories
+  { id: "12", name: "Acute Care Plan", description: "Short-term intensive care for recent injuries", infoLink: "https://www.spine-health.com/treatment/chiropractic/what-expect-first-chiropractic-consultation", categoryId: "treatment", subcategoryId: "care_plan_type" },
+  { id: "13", name: "Pain Reduction", description: "Focused on decreasing pain levels", infoLink: "https://www.spine-health.com/treatment/chiropractic/chiropractic-treatments-lower-back-pain-relief", categoryId: "treatment", subcategoryId: "treatment_goals" },
+  { id: "14", name: "Initial Consultation", description: "Estimated cost for initial evaluation", infoLink: "https://www.spine-health.com/treatment/chiropractic/what-expect-first-chiropractic-consultation", categoryId: "treatment", subcategoryId: "estimated_cost" }
 ];
 
 export const mockCategories: Category[] = [
@@ -33,5 +37,10 @@ export const mockSubcategories: Subcategory[] = [
   { id: "wrist_hand", name: "Wrist & Hand", parentCategoryId: "extremity", description: "Wrist and hand conditions" },
   { id: "hip", name: "Hip", parentCategoryId: "extremity", description: "Hip conditions" },
   { id: "knee", name: "Knee", parentCategoryId: "extremity", description: "Knee conditions" },
-  { id: "ankle_foot", name: "Ankle & Foot", parentCategoryId: "extremity", description: "Ankle and foot conditions" }
+  { id: "ankle_foot", name: "Ankle & Foot", parentCategoryId: "extremity", description: "Ankle and foot conditions" },
+  // Treatment plan subcategories
+  { id: "care_plan_type", name: "Care Plan Type", parentCategoryId: "treatment", description: "Types of care plans" },
+  { id: "treatment_modalities", name: "Treatment Modalities", parentCategoryId: "treatment", description: "Treatment techniques and approaches" },
+  { id: "treatment_goals", name: "Treatment Goals", parentCategoryId: "treatment", description: "Objectives of the treatment" },
+  { id: "estimated_cost", name: "Estimated Cost", parentCategoryId: "treatment", description: "Estimated costs for treatment" }
 ];
