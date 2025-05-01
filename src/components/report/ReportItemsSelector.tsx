@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { CategoryType, DIAGNOSIS_SUBCATEGORIES, EXTREMITY_SUBCATEGORIES, MAIN_CATEGORIES, ReportItem } from "@/types";
+import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { mockSubcategories } from "@/services/libraryService";
 import { useState } from "react";
 
@@ -33,7 +33,8 @@ export const ReportItemsSelector = ({
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     activeCategory === "diagnosis" ? "general_diagnosis" : 
-    activeCategory === "extremity" ? "shoulder" : null
+    activeCategory === "extremity" ? "shoulder" :
+    activeCategory === "treatment" ? "care_plan_type" : null
   );
 
   // When category changes, reset subcategory if needed
@@ -43,6 +44,8 @@ export const ReportItemsSelector = ({
       setActiveSubcategory("general_diagnosis");
     } else if (category === "extremity") {
       setActiveSubcategory("shoulder");
+    } else if (category === "treatment") {
+      setActiveSubcategory("care_plan_type");
     } else {
       setActiveSubcategory(null);
     }
@@ -62,7 +65,7 @@ export const ReportItemsSelector = ({
 
   // Filter items based on subcategory if active
   const getFilteredItems = (categoryId: string) => {
-    if ((categoryId === "diagnosis" || categoryId === "extremity") && activeSubcategory) {
+    if ((categoryId === "diagnosis" || categoryId === "extremity" || categoryId === "treatment") && activeSubcategory) {
       return items.filter(item => 
         item.categoryId === categoryId && 
         item.subcategoryId === activeSubcategory
@@ -95,7 +98,7 @@ export const ReportItemsSelector = ({
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Select {categoryNames[category]}:</h3>
                 
-                {(category === "diagnosis" || category === "extremity") && (
+                {(category === "diagnosis" || category === "extremity" || category === "treatment") && (
                   <div className="mb-4">
                     <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                       {getSubcategoriesForCategory(category).map((subcategory) => (
