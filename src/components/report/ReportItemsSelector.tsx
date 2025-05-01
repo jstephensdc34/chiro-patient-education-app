@@ -34,7 +34,8 @@ export const ReportItemsSelector = ({
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     activeCategory === "diagnosis" ? "general_diagnosis" : 
     activeCategory === "extremity" ? "shoulder" :
-    activeCategory === "treatment" ? "care_plan_type" : null
+    activeCategory === "treatment" ? "care_plan_type" :
+    activeCategory === "homecare" ? "home_therapy" : null
   );
 
   // When category changes, reset subcategory if needed
@@ -46,6 +47,8 @@ export const ReportItemsSelector = ({
       setActiveSubcategory("shoulder");
     } else if (category === "treatment") {
       setActiveSubcategory("care_plan_type");
+    } else if (category === "homecare") {
+      setActiveSubcategory("home_therapy");
     } else {
       setActiveSubcategory(null);
     }
@@ -65,7 +68,7 @@ export const ReportItemsSelector = ({
 
   // Filter items based on subcategory if active
   const getFilteredItems = (categoryId: string) => {
-    if ((categoryId === "diagnosis" || categoryId === "extremity" || categoryId === "treatment") && activeSubcategory) {
+    if ((categoryId === "diagnosis" || categoryId === "extremity" || categoryId === "treatment" || categoryId === "homecare") && activeSubcategory) {
       return items.filter(item => 
         item.categoryId === categoryId && 
         item.subcategoryId === activeSubcategory
@@ -98,7 +101,7 @@ export const ReportItemsSelector = ({
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Select {categoryNames[category]}:</h3>
                 
-                {(category === "diagnosis" || category === "extremity" || category === "treatment") && (
+                {(category === "diagnosis" || category === "extremity" || category === "treatment" || category === "homecare") && (
                   <div className="mb-4">
                     <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                       {getSubcategoriesForCategory(category).map((subcategory) => (

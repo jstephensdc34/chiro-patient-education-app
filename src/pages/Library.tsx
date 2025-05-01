@@ -27,6 +27,8 @@ const Library = () => {
       setActiveSubcategory("shoulder");
     } else if (activeCategory === "treatment") {
       setActiveSubcategory("care_plan_type");
+    } else if (activeCategory === "homecare") {
+      setActiveSubcategory("home_therapy");
     } else {
       setActiveSubcategory(null);
     }
@@ -52,7 +54,8 @@ const Library = () => {
         description: item.description,
         infoLink: item.infoLink,
         categoryId: activeCategory,
-        subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") 
+        subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || 
+                        activeCategory === "treatment" || activeCategory === "homecare") 
           ? item.subcategoryId || activeSubcategory 
           : undefined
       };
@@ -101,7 +104,8 @@ const Library = () => {
 
   // Filter items based on category and subcategory
   const getFilteredItems = () => {
-    if ((activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") && activeSubcategory) {
+    if ((activeCategory === "diagnosis" || activeCategory === "extremity" || 
+         activeCategory === "treatment" || activeCategory === "homecare") && activeSubcategory) {
       return items.filter(item => 
         item.categoryId === activeCategory && 
         item.subcategoryId === activeSubcategory
@@ -124,7 +128,8 @@ const Library = () => {
               setEditingItem(null);
               setNewItem({ 
                 categoryId: activeCategory,
-                subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") 
+                subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || 
+                               activeCategory === "treatment" || activeCategory === "homecare") 
                   ? activeSubcategory 
                   : undefined 
               });
@@ -150,7 +155,8 @@ const Library = () => {
           
           {MAIN_CATEGORIES.map((category) => (
             <TabsContent key={category} value={category}>
-              {(category === "diagnosis" || category === "extremity" || category === "treatment") && (
+              {(category === "diagnosis" || category === "extremity" || 
+                category === "treatment" || category === "homecare") && (
                 <div className="mb-6">
                   <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                     {getSubcategoriesForCategory(category).map((subcategory) => (

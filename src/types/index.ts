@@ -61,3 +61,10 @@ export const TREATMENT_SUBCATEGORIES = [
   'treatment_goals',
   'estimated_cost'
 ];
+
+export const HOMECARE_SUBCATEGORIES = [
+  'home_therapy',
+  'adls',
+  'activity_modification',
+  'wellness'
+];
