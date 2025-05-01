@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CategoryType, MAIN_CATEGORIES, DIAGNOSIS_SUBCATEGORIES, EXTREMITY_SUBCATEGORIES, ReportItem } from "@/types";
+import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { ItemForm } from "@/components/library/ItemForm";
@@ -25,6 +25,8 @@ const Library = () => {
       setActiveSubcategory("general_diagnosis");
     } else if (activeCategory === "extremity") {
       setActiveSubcategory("shoulder");
+    } else if (activeCategory === "treatment") {
+      setActiveSubcategory("care_plan_type");
     } else {
       setActiveSubcategory(null);
     }
@@ -50,7 +52,7 @@ const Library = () => {
         description: item.description,
         infoLink: item.infoLink,
         categoryId: activeCategory,
-        subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity") 
+        subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") 
           ? item.subcategoryId || activeSubcategory 
           : undefined
       };
@@ -99,7 +101,7 @@ const Library = () => {
 
   // Filter items based on category and subcategory
   const getFilteredItems = () => {
-    if ((activeCategory === "diagnosis" || activeCategory === "extremity") && activeSubcategory) {
+    if ((activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") && activeSubcategory) {
       return items.filter(item => 
         item.categoryId === activeCategory && 
         item.subcategoryId === activeSubcategory
@@ -122,7 +124,7 @@ const Library = () => {
               setEditingItem(null);
               setNewItem({ 
                 categoryId: activeCategory,
-                subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity") 
+                subcategoryId: (activeCategory === "diagnosis" || activeCategory === "extremity" || activeCategory === "treatment") 
                   ? activeSubcategory 
                   : undefined 
               });
@@ -148,7 +150,7 @@ const Library = () => {
           
           {MAIN_CATEGORIES.map((category) => (
             <TabsContent key={category} value={category}>
-              {(category === "diagnosis" || category === "extremity") && (
+              {(category === "diagnosis" || category === "extremity" || category === "treatment") && (
                 <div className="mb-6">
                   <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
                     {getSubcategoriesForCategory(category).map((subcategory) => (
