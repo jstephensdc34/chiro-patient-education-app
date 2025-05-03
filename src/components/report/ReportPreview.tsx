@@ -95,10 +95,13 @@ export const ReportPreview = ({
                           <h4 className="font-medium text-medical-600 mb-2">
                             {subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
                           </h4>
-                          <ul className="space-y-2 ml-4">
+                          <ul className="space-y-3 ml-4">
                             {items.map(item => (
-                              <li key={item.id} className="list-disc ml-4">
-                                <span className="font-medium">{item.name}</span>
+                              <li key={item.id} className="ml-4">
+                                <div className="font-medium">• {item.name}</div>
+                                {item.description && (
+                                  <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
+                                )}
                               </li>
                             ))}
                           </ul>
@@ -106,10 +109,13 @@ export const ReportPreview = ({
                       ))}
                     </div>
                   ) : (
-                    <ul className="space-y-2 ml-8">
+                    <ul className="space-y-3 ml-8">
                       {getSelectedItems(category).map(item => (
-                        <li key={item.id} className="list-disc ml-4">
-                          <span className="font-medium">{item.name}</span>
+                        <li key={item.id} className="ml-4">
+                          <div className="font-medium">• {item.name}</div>
+                          {item.description && (
+                            <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
+                          )}
                         </li>
                       ))}
                     </ul>
