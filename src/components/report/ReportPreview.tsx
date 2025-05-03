@@ -2,6 +2,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
 import { mockSubcategories } from "@/services/libraryService";
+import { ExternalLink } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -62,6 +65,26 @@ export const ReportPreview = ({
     );
   };
 
+  const InfoLink = ({ link }: { link: string }) => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a 
+            href={link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center ml-2 text-medical-600 hover:text-medical-800"
+          >
+            <ExternalLink size={14} />
+          </a>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>View more information</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+
   return (
     <Card className="mt-6">
       <CardHeader className="bg-gray-100 border-b border-gray-200">
@@ -98,7 +121,10 @@ export const ReportPreview = ({
                           <ul className="space-y-3 ml-4">
                             {items.map(item => (
                               <li key={item.id} className="ml-4">
-                                <div className="font-medium">• {item.name}</div>
+                                <div className="font-medium">
+                                  • {item.name}
+                                  {item.infoLink && <InfoLink link={item.infoLink} />}
+                                </div>
                                 {item.description && (
                                   <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
                                 )}
@@ -112,7 +138,10 @@ export const ReportPreview = ({
                     <ul className="space-y-3 ml-8">
                       {getSelectedItems(category).map(item => (
                         <li key={item.id} className="ml-4">
-                          <div className="font-medium">• {item.name}</div>
+                          <div className="font-medium">
+                            • {item.name}
+                            {item.infoLink && <InfoLink link={item.infoLink} />}
+                          </div>
                           {item.description && (
                             <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
                           )}
