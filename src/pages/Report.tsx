@@ -8,7 +8,7 @@ import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
-import { mockItems } from "@/data/mockItems";
+import { mockItems } from "@/services/libraryService";
 
 const Report = () => {
   const { toast } = useToast();
