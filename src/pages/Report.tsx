@@ -8,7 +8,9 @@ import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
+import { ReportSettings } from "@/components/report/ReportSettings";
 import { mockItems } from "@/services/libraryService";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Report = () => {
   const { toast } = useToast();
@@ -21,6 +23,7 @@ const Report = () => {
   });
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
   
   const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
@@ -72,45 +75,58 @@ const Report = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="container mx-auto py-8 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Patient Info */}
-          <div className="lg:col-span-1">
-            <PatientInfoForm 
-              patient={patient}
-              onPatientInfoChange={handlePatientInfoChange}
-            />
-            
-            <NotesField
-              notes={additionalNotes}
-              onChange={setAdditionalNotes}
-            />
-            
-            <Button 
-              className="w-full mt-6 bg-medical-700 hover:bg-medical-800 text-lg py-6"
-              onClick={handleGenerateReport}
-            >
-              Generate PDF Report
-            </Button>
-          </div>
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "report" | "settings")} className="mb-6">
+          <TabsList className="mb-4">
+            <TabsTrigger value="report">Report Builder</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
           
-          {/* Right Column - Report Items */}
-          <div className="lg:col-span-2">
-            <ReportItemsSelector
-              items={mockItems}
-              activeCategory={activeCategory}
-              selectedItems={selectedItems}
-              onCategoryChange={setActiveCategory}
-              onToggleItem={handleToggleItem}
-            />
-            
-            <ReportPreview
-              patient={patient}
-              items={mockItems}
-              selectedItems={selectedItems}
-              additionalNotes={additionalNotes}
-            />
-          </div>
-        </div>
+          <TabsContent value="report">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Patient Info */}
+              <div className="lg:col-span-1">
+                <PatientInfoForm 
+                  patient={patient}
+                  onPatientInfoChange={handlePatientInfoChange}
+                />
+                
+                <NotesField
+                  notes={additionalNotes}
+                  onChange={setAdditionalNotes}
+                />
+                
+                <Button 
+                  className="w-full mt-6 bg-medical-700 hover:bg-medical-800 text-lg py-6"
+                  onClick={handleGenerateReport}
+                >
+                  Generate PDF Report
+                </Button>
+              </div>
+              
+              {/* Right Column - Report Items */}
+              <div className="lg:col-span-2">
+                <ReportItemsSelector
+                  items={mockItems}
+                  activeCategory={activeCategory}
+                  selectedItems={selectedItems}
+                  onCategoryChange={setActiveCategory}
+                  onToggleItem={handleToggleItem}
+                />
+                
+                <ReportPreview
+                  patient={patient}
+                  items={mockItems}
+                  selectedItems={selectedItems}
+                  additionalNotes={additionalNotes}
+                />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="settings">
+            <ReportSettings />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
