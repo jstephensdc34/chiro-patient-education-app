@@ -49,8 +49,8 @@ export const ReportSettings = () => {
         setConnectionStatus("connected");
         
         // Check authentication status
-        const session = await supabase.auth.getSession();
-        setIsAuthenticated(!!session.data.session);
+        const { data: sessionData } = await supabase.auth.getSession();
+        setIsAuthenticated(!!sessionData.session);
       } catch (error) {
         console.error("Database connection error:", error);
         setConnectionStatus("disconnected");
@@ -68,33 +68,32 @@ export const ReportSettings = () => {
   }, []);
 
   // Load settings
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchSettings();
-        setSettings(data);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred while fetching settings");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadSettings = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await fetchSettings();
+      setSettings(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred while fetching settings");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Load settings on initial render and when connection status changes
+  useEffect(() => {
     if (connectionStatus === "connected") {
       loadSettings();
     }
   }, [connectionStatus]);
 
   const handleCreateSetting = async () => {
-    if (!newSettingName.trim() || !isAuthenticated) {
+    if (!newSettingName.trim()) {
       toast({
         title: "Invalid Input",
-        description: !isAuthenticated 
-          ? "You must be logged in to create settings"
-          : "Please provide both a name and value",
+        description: "Please provide a setting name",
         variant: "destructive"
       });
       return;
@@ -103,10 +102,14 @@ export const ReportSettings = () => {
     try {
       setLoading(true);
       const newSetting = await createSetting(newSettingName, newSettingValue);
-      setSettings([...settings, newSetting]);
+      
+      // Update local state with the new setting
+      setSettings(prev => [...prev, newSetting]);
+      
       setNewSettingName("");
       setNewSettingValue("");
       setActiveTab("view");
+      
       toast({
         title: "Success",
         description: "Setting created successfully",
@@ -133,20 +136,15 @@ export const ReportSettings = () => {
   };
 
   const handleUpdateSetting = async (id: string) => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Authentication Required",
-        description: "You must be logged in to update settings",
-        variant: "destructive"
-      });
-      return;
-    }
-
     try {
       setLoading(true);
-      await updateSetting(id, editSettingValue);
-      setSettings(settings.map(s => s.id === id ? { ...s, value: editSettingValue } : s));
+      const updatedSetting = await updateSetting(id, editSettingValue);
+      
+      // Update the setting in the local state
+      setSettings(prev => prev.map(s => s.id === id ? updatedSetting : s));
+      
       setEditSettingId(null);
+      
       toast({
         title: "Success",
         description: "Setting updated successfully",
@@ -163,19 +161,13 @@ export const ReportSettings = () => {
   };
 
   const handleDeleteSetting = async (id: string) => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Authentication Required",
-        description: "You must be logged in to delete settings",
-        variant: "destructive"
-      });
-      return;
-    }
-
     try {
       setLoading(true);
       await deleteSetting(id);
-      setSettings(settings.filter(s => s.id !== id));
+      
+      // Remove the deleted setting from local state
+      setSettings(prev => prev.filter(s => s.id !== id));
+      
       toast({
         title: "Success",
         description: "Setting deleted successfully",

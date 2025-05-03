@@ -23,6 +23,11 @@ export const fetchSettings = async (): Promise<ReportSetting[]> => {
 };
 
 export const createSetting = async (name: string, value: string): Promise<ReportSetting> => {
+  // Validate inputs before sending to Supabase
+  if (!name.trim()) {
+    throw new Error("Setting name cannot be empty");
+  }
+  
   const { data, error } = await supabase
     .from("report_settings")
     .insert({ name, value })
@@ -34,22 +39,43 @@ export const createSetting = async (name: string, value: string): Promise<Report
     throw new Error(error.message);
   }
 
+  if (!data) {
+    throw new Error("Failed to create setting: No data returned");
+  }
+
   return data;
 };
 
-export const updateSetting = async (id: string, value: string): Promise<void> => {
-  const { error } = await supabase
+export const updateSetting = async (id: string, value: string): Promise<ReportSetting> => {
+  // Validate inputs
+  if (!id.trim()) {
+    throw new Error("Setting ID cannot be empty");
+  }
+  
+  const { data, error } = await supabase
     .from("report_settings")
     .update({ value })
-    .eq("id", id);
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) {
     console.error("Error updating report setting:", error);
     throw new Error(error.message);
   }
+
+  if (!data) {
+    throw new Error("Failed to update setting: No data returned");
+  }
+
+  return data;
 };
 
 export const deleteSetting = async (id: string): Promise<void> => {
+  if (!id.trim()) {
+    throw new Error("Setting ID cannot be empty");
+  }
+  
   const { error } = await supabase
     .from("report_settings")
     .delete()
