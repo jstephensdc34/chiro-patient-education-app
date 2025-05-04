@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { ReportItem, Category, Subcategory } from "@/types";
 
@@ -72,7 +73,10 @@ export const fetchItemsByCategory = async (
 };
 
 // Create a new item
-export const createItem = async (item: Omit<ReportItem, "id">): Promise<ReportItem> => {
+export const createItem = async (
+  item: Omit<ReportItem, "id">, 
+  userId: string
+): Promise<ReportItem> => {
   const { data, error } = await supabase
     .from("library_items")
     .insert({
@@ -80,7 +84,8 @@ export const createItem = async (item: Omit<ReportItem, "id">): Promise<ReportIt
       description: item.description,
       info_link: item.infoLink,
       category_id: item.categoryId,
-      subcategory_id: item.subcategoryId
+      subcategory_id: item.subcategoryId,
+      user_id: userId // Add user_id to the insert
     })
     .select()
     .single();
@@ -101,7 +106,10 @@ export const createItem = async (item: Omit<ReportItem, "id">): Promise<ReportIt
 };
 
 // Update an existing item
-export const updateItem = async (item: ReportItem): Promise<ReportItem> => {
+export const updateItem = async (
+  item: ReportItem,
+  userId: string
+): Promise<ReportItem> => {
   const { data, error } = await supabase
     .from("library_items")
     .update({
@@ -109,7 +117,8 @@ export const updateItem = async (item: ReportItem): Promise<ReportItem> => {
       description: item.description,
       info_link: item.infoLink,
       category_id: item.categoryId,
-      subcategory_id: item.subcategoryId
+      subcategory_id: item.subcategoryId,
+      user_id: userId // Add user_id to the update
     })
     .eq("id", item.id)
     .select()
