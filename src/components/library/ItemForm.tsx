@@ -13,7 +13,14 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { ReportItem, CategoryType } from "@/types";
-import { mockSubcategories } from "@/services/libraryService";
+import { Loader2 } from "lucide-react";
+
+interface Subcategory {
+  id: string;
+  name: string;
+  parentCategoryId?: string;
+  description?: string;
+}
 
 interface ItemFormProps {
   activeCategory: CategoryType;
@@ -21,6 +28,8 @@ interface ItemFormProps {
   editingItem: ReportItem | null;
   isDialogOpen: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
+  isSubmitting?: boolean;
+  availableSubcategories: Subcategory[];
 }
 
 export const ItemForm = ({
@@ -29,9 +38,10 @@ export const ItemForm = ({
   editingItem,
   isDialogOpen,
   setIsDialogOpen,
+  isSubmitting = false,
+  availableSubcategories,
 }: ItemFormProps) => {
   const [item, setItem] = useState<Partial<ReportItem>>({ categoryId: activeCategory });
-  const [availableSubcategories, setAvailableSubcategories] = useState<{ id: string; name: string }[]>([]);
   
   // Update the item when editingItem changes or when activeCategory changes and not editing
   useEffect(() => {
@@ -39,17 +49,6 @@ export const ItemForm = ({
       setItem(editingItem);
     } else {
       setItem({ categoryId: activeCategory });
-    }
-    
-    // Update available subcategories when category changes
-    if (activeCategory === "diagnosis" || activeCategory === "extremity" || 
-        activeCategory === "treatment" || activeCategory === "homecare" ||
-        activeCategory === "exercises") {
-      setAvailableSubcategories(
-        mockSubcategories.filter(subcat => subcat.parentCategoryId === activeCategory)
-      );
-    } else {
-      setAvailableSubcategories([]);
     }
   }, [editingItem, activeCategory]);
 
@@ -71,7 +70,6 @@ export const ItemForm = ({
     }
     
     onSaveItem(item);
-    setItem({ categoryId: activeCategory });
   };
 
   return (
@@ -89,18 +87,17 @@ export const ItemForm = ({
               id="name"
               value={item.name || ""}
               onChange={(e) => handleChange("name", e.target.value)}
+              disabled={isSubmitting}
             />
           </div>
           
-          {(activeCategory === "diagnosis" || activeCategory === "extremity" || 
-            activeCategory === "treatment" || activeCategory === "homecare" ||
-            activeCategory === "exercises") && 
-           availableSubcategories.length > 0 && (
+          {availableSubcategories.length > 0 && (
             <div className="grid gap-2">
               <Label htmlFor="subcategory">Subcategory</Label>
               <Select
                 value={item.subcategoryId}
                 onValueChange={(value) => handleChange("subcategoryId", value)}
+                disabled={isSubmitting}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a subcategory" />
@@ -122,6 +119,7 @@ export const ItemForm = ({
               id="description"
               value={item.description || ""}
               onChange={(e) => handleChange("description", e.target.value)}
+              disabled={isSubmitting}
             />
           </div>
           <div className="grid gap-2">
@@ -132,14 +130,26 @@ export const ItemForm = ({
               placeholder="https://example.com"
               value={item.infoLink || ""}
               onChange={(e) => handleChange("infoLink", e.target.value)}
+              disabled={isSubmitting}
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button className="bg-medical-600" onClick={handleSave}>
-              {editingItem ? "Save Changes" : "Add Item"}
+            <Button 
+              className="bg-medical-600" 
+              onClick={handleSave}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {editingItem ? "Saving..." : "Adding..."}
+                </>
+              ) : (
+                editingItem ? "Save Changes" : "Add Item"
+              )}
             </Button>
           </div>
         </div>

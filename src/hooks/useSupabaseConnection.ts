@@ -10,8 +10,16 @@ export const useSupabaseConnection = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Simple ping to verify connection
-        const { data } = await supabase.from("report_settings").select("count").limit(1);
+        // Try to ping the library_categories table as it's public
+        const { data, error } = await supabase
+          .from("library_categories")
+          .select("count")
+          .limit(1);
+          
+        if (error) {
+          throw error;
+        }
+        
         setConnectionStatus("connected");
       } catch (error) {
         console.error("Database connection error:", error);

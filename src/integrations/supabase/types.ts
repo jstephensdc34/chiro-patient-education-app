@@ -9,6 +9,110 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      library_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      library_items: {
+        Row: {
+          category_id: string
+          created_at: string
+          description: string
+          id: string
+          info_link: string | null
+          name: string
+          subcategory_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          description: string
+          id?: string
+          info_link?: string | null
+          name: string
+          subcategory_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          info_link?: string | null
+          name?: string
+          subcategory_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "library_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "library_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "library_items_subcategory_id_fkey"
+            columns: ["subcategory_id"]
+            isOneToOne: false
+            referencedRelation: "library_subcategories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      library_subcategories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          parent_category_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id: string
+          name: string
+          parent_category_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          parent_category_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "library_subcategories_parent_category_id_fkey"
+            columns: ["parent_category_id"]
+            isOneToOne: false
+            referencedRelation: "library_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       report_settings: {
         Row: {
           created_at: string
