@@ -4,6 +4,7 @@ import { CategoryType, MAIN_CATEGORIES, ReportItem, Subcategory } from "@/types"
 import { ItemsList } from "@/components/library/ItemsList";
 import { LoadingState } from "@/components/library/LoadingState";
 import { SubcategorySelector } from "@/components/library/SubcategorySelector";
+import { getOrderedSubcategories } from "@/utils/categoryUtils";
 
 interface LibraryContentProps {
   activeCategory: CategoryType;
@@ -30,49 +31,10 @@ export const LibraryContent = ({
   getCategoryName,
   getSubcategoriesForCategory
 }: LibraryContentProps) => {
-  // Special function to order subcategories for specific categories
-  const getOrderedSubcategories = (categoryId: string) => {
-    const categorySubs = getSubcategoriesForCategory(categoryId);
-    
-    // Special ordering for diagnosis subcategories
-    if (categoryId === "diagnosis") {
-      // Define the desired order
-      const diagnosisOrder = [
-        "general_diagnosis",
-        "cervical_diagnosis",
-        "thoracic_diagnosis",
-        "lumbopelvic_diagnosis"
-      ];
-      
-      // Sort according to the defined order
-      return categorySubs.sort((a, b) => {
-        const indexA = diagnosisOrder.indexOf(a.id);
-        const indexB = diagnosisOrder.indexOf(b.id);
-        return indexA - indexB;
-      });
-    }
-    
-    // Special ordering for extremity subcategories
-    if (categoryId === "extremity") {
-      // Define the desired order
-      const extremityOrder = [
-        "shoulder",
-        "elbow",
-        "wrist_hand",
-        "hip",
-        "knee",
-        "ankle_foot"
-      ];
-      
-      // Sort according to the defined order
-      return categorySubs.sort((a, b) => {
-        const indexA = extremityOrder.indexOf(a.id);
-        const indexB = extremityOrder.indexOf(b.id);
-        return indexA - indexB;
-      });
-    }
-    
-    return categorySubs;
+  // Get ordered subcategories for the active category
+  const getOrderedSubcategoriesForCategory = (categoryId: string) => {
+    const subcategories = getSubcategoriesForCategory(categoryId);
+    return getOrderedSubcategories(categoryId, subcategories);
   };
 
   return (
@@ -95,7 +57,7 @@ export const LibraryContent = ({
             category === "treatment" || category === "homecare" ||
             category === "exercises") && (
             <SubcategorySelector
-              subcategories={getOrderedSubcategories(category)}
+              subcategories={getOrderedSubcategoriesForCategory(category)}
               activeSubcategory={activeSubcategory}
               onSubcategoryClick={onSubcategoryClick}
             />

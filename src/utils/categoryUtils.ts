@@ -1,0 +1,72 @@
+
+// Mapping of category IDs to display names
+export const categoryNames: Record<string, string> = {
+  diagnosis: "Spinal Diagnosis",
+  extremity: "Extremity Diagnosis",
+  treatment: "Treatment Plan",
+  homecare: "Home Care",
+  exercises: "Therapeutic Exercises"
+};
+
+// Special ordering for diagnosis subcategories
+export const getOrderedSubcategories = (categoryId: string, subcategories: any[]) => {
+  const categorySubs = subcategories.filter(subcat => subcat.parentCategoryId === categoryId);
+  
+  // Special ordering for diagnosis subcategories
+  if (categoryId === "diagnosis") {
+    // Define the desired order
+    const diagnosisOrder = [
+      "general_diagnosis",
+      "cervical_diagnosis",
+      "thoracic_diagnosis",
+      "lumbopelvic_diagnosis"
+    ];
+    
+    // Sort according to the defined order
+    return categorySubs.sort((a, b) => {
+      const indexA = diagnosisOrder.indexOf(a.id);
+      const indexB = diagnosisOrder.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }
+  
+  // Special ordering for extremity subcategories
+  if (categoryId === "extremity") {
+    // Define the desired order
+    const extremityOrder = [
+      "shoulder",
+      "elbow",
+      "wrist_hand",
+      "hip",
+      "knee",
+      "ankle_foot"
+    ];
+    
+    // Sort according to the defined order
+    return categorySubs.sort((a, b) => {
+      const indexA = extremityOrder.indexOf(a.id);
+      const indexB = extremityOrder.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }
+  
+  return categorySubs;
+};
+
+// Get default subcategory based on category
+export const getDefaultSubcategory = (categoryId: string): string | null => {
+  switch (categoryId) {
+    case "diagnosis":
+      return "general_diagnosis";
+    case "extremity":
+      return "shoulder";
+    case "treatment":
+      return "care_plan_type";
+    case "homecare":
+      return "home_therapy";
+    case "exercises":
+      return "cervical_exercises";
+    default:
+      return null;
+  }
+};

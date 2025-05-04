@@ -1,20 +1,12 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { CategoryType, MAIN_CATEGORIES, ReportItem, Subcategory } from "@/types";
+import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-
-// Category name mapping
-const categoryNames: Record<string, string> = {
-  diagnosis: "Spinal Diagnosis",
-  extremity: "Extremity Diagnosis",
-  treatment: "Treatment Plan",
-  homecare: "Home Care",
-  exercises: "Therapeutic Exercises"
-};
+import { SubcategorySelector } from "./SubcategorySelector";
+import { ReportItemList } from "./ReportItemList";
+import { ReportLoadingState } from "./ReportLoadingState";
+import { categoryNames, getDefaultSubcategory } from "@/utils/categoryUtils";
 
 interface ReportItemsSelectorProps {
   items: ReportItem[];
@@ -23,7 +15,7 @@ interface ReportItemsSelectorProps {
   onCategoryChange: (category: CategoryType) => void;
   onToggleItem: (itemId: string) => void;
   isLoading?: boolean;
-  subcategories: Subcategory[];
+  subcategories: any[];
 }
 
 export const ReportItemsSelector = ({
@@ -36,29 +28,13 @@ export const ReportItemsSelector = ({
   subcategories = []
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
-    activeCategory === "diagnosis" ? "general_diagnosis" : 
-    activeCategory === "extremity" ? "shoulder" :
-    activeCategory === "treatment" ? "care_plan_type" :
-    activeCategory === "homecare" ? "home_therapy" :
-    activeCategory === "exercises" ? "cervical_exercises" : null
+    getDefaultSubcategory(activeCategory)
   );
 
   // When category changes, reset subcategory if needed
   const handleCategoryChange = (category: CategoryType) => {
     onCategoryChange(category);
-    if (category === "diagnosis") {
-      setActiveSubcategory("general_diagnosis");
-    } else if (category === "extremity") {
-      setActiveSubcategory("shoulder");
-    } else if (category === "treatment") {
-      setActiveSubcategory("care_plan_type");
-    } else if (category === "homecare") {
-      setActiveSubcategory("home_therapy");
-    } else if (category === "exercises") {
-      setActiveSubcategory("cervical_exercises");
-    } else {
-      setActiveSubcategory(null);
-    }
+    setActiveSubcategory(getDefaultSubcategory(category));
   };
 
   // Handle subcategory selection without causing the main tab to change
@@ -66,51 +42,6 @@ export const ReportItemsSelector = ({
     event.preventDefault();
     event.stopPropagation();
     setActiveSubcategory(subcategoryId);
-  };
-
-  // Get subcategories for the active category
-  const getSubcategoriesForCategory = (categoryId: string) => {
-    const categorySubs = subcategories.filter(subcat => subcat.parentCategoryId === categoryId);
-    
-    // Special ordering for diagnosis subcategories
-    if (categoryId === "diagnosis") {
-      // Define the desired order
-      const diagnosisOrder = [
-        "general_diagnosis",
-        "cervical_diagnosis",
-        "thoracic_diagnosis",
-        "lumbopelvic_diagnosis"
-      ];
-      
-      // Sort according to the defined order
-      return categorySubs.sort((a, b) => {
-        const indexA = diagnosisOrder.indexOf(a.id);
-        const indexB = diagnosisOrder.indexOf(b.id);
-        return indexA - indexB;
-      });
-    }
-    
-    // Special ordering for extremity subcategories
-    if (categoryId === "extremity") {
-      // Define the desired order
-      const extremityOrder = [
-        "shoulder",
-        "elbow",
-        "wrist_hand",
-        "hip",
-        "knee",
-        "ankle_foot"
-      ];
-      
-      // Sort according to the defined order
-      return categorySubs.sort((a, b) => {
-        const indexA = extremityOrder.indexOf(a.id);
-        const indexB = extremityOrder.indexOf(b.id);
-        return indexA - indexB;
-      });
-    }
-    
-    return categorySubs;
   };
 
   // Filter items based on subcategory if active
@@ -126,23 +57,7 @@ export const ReportItemsSelector = ({
   };
 
   if (isLoading) {
-    return (
-      <Card>
-        <CardHeader className="bg-medical-600">
-          <CardTitle className="text-white">Report Contents</CardTitle>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <div className="space-y-4">
-            <Skeleton className="h-10 w-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-14 w-full" />
-              <Skeleton className="h-14 w-full" />
-              <Skeleton className="h-14 w-full" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <ReportLoadingState />;
   }
 
   return (
@@ -171,49 +86,19 @@ export const ReportItemsSelector = ({
                 
                 {(category === "diagnosis" || category === "extremity" || category === "treatment" || 
                   category === "homecare" || category === "exercises") && (
-                  <div className="mb-4">
-                    <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
-                      {getSubcategoriesForCategory(category).map((subcategory) => (
-                        <button
-                          key={subcategory.id}
-                          onClick={(e) => handleSubcategoryClick(subcategory.id, e)}
-                          className={`px-4 py-2 text-sm rounded-md transition-colors ${
-                            activeSubcategory === subcategory.id 
-                              ? 'bg-medical-100 text-medical-700' 
-                              : 'bg-white text-gray-600 hover:bg-gray-100'
-                          }`}
-                        >
-                          {subcategory.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <SubcategorySelector
+                    category={category}
+                    activeSubcategory={activeSubcategory}
+                    subcategories={subcategories}
+                    onSubcategoryClick={handleSubcategoryClick}
+                  />
                 )}
                 
-                <div className="space-y-3">
-                  {getFilteredItems(category)
-                    .map(item => (
-                      <div key={item.id} className="flex items-center space-x-3 p-3 bg-white border border-gray-200 rounded-md">
-                        <Checkbox
-                          id={item.id}
-                          checked={selectedItems.includes(item.id)}
-                          onCheckedChange={() => onToggleItem(item.id)}
-                        />
-                        <Label
-                          htmlFor={item.id}
-                          className="font-medium cursor-pointer"
-                        >
-                          {item.name}
-                        </Label>
-                      </div>
-                    ))}
-                </div>
-                
-                {getFilteredItems(category).length === 0 && (
-                  <div className="p-4 text-center text-gray-500 bg-gray-50 border border-dashed border-gray-200 rounded-md">
-                    <p>No items available in this category. Add items in the Library.</p>
-                  </div>
-                )}
+                <ReportItemList
+                  items={getFilteredItems(category)}
+                  selectedItems={selectedItems}
+                  onToggleItem={onToggleItem}
+                />
               </div>
             </TabsContent>
           ))}
