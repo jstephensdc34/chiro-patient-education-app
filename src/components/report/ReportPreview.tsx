@@ -1,10 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
-import { mockSubcategories } from "@/services/libraryService";
 import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -20,13 +18,15 @@ interface ReportPreviewProps {
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
+  subcategories: any[];
 }
 
 export const ReportPreview = ({
   patient,
   items,
   selectedItems,
-  additionalNotes
+  additionalNotes,
+  subcategories = []
 }: ReportPreviewProps) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
@@ -35,7 +35,7 @@ export const ReportPreview = ({
   };
 
   const getSubcategoryName = (subcategoryId: string) => {
-    const subcategory = mockSubcategories.find(s => s.id === subcategoryId);
+    const subcategory = subcategories.find(s => s.id === subcategoryId);
     return subcategory ? subcategory.name : "";
   };
 

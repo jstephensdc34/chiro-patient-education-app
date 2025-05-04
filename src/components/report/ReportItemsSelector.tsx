@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
-import { mockSubcategories } from "@/services/libraryService";
+import { CategoryType, MAIN_CATEGORIES, ReportItem, Subcategory } from "@/types";
 import { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -22,6 +22,8 @@ interface ReportItemsSelectorProps {
   selectedItems: string[];
   onCategoryChange: (category: CategoryType) => void;
   onToggleItem: (itemId: string) => void;
+  isLoading?: boolean;
+  subcategories: Subcategory[];
 }
 
 export const ReportItemsSelector = ({
@@ -29,7 +31,9 @@ export const ReportItemsSelector = ({
   activeCategory,
   selectedItems,
   onCategoryChange,
-  onToggleItem
+  onToggleItem,
+  isLoading = false,
+  subcategories = []
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     activeCategory === "diagnosis" ? "general_diagnosis" : 
@@ -66,7 +70,7 @@ export const ReportItemsSelector = ({
 
   // Get subcategories for the active category
   const getSubcategoriesForCategory = (categoryId: string) => {
-    return mockSubcategories.filter(subcat => subcat.parentCategoryId === categoryId);
+    return subcategories.filter(subcat => subcat.parentCategoryId === categoryId);
   };
 
   // Filter items based on subcategory if active
@@ -80,6 +84,26 @@ export const ReportItemsSelector = ({
     }
     return items.filter(item => item.categoryId === categoryId);
   };
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader className="bg-medical-600">
+          <CardTitle className="text-white">Report Contents</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-4">
+            <Skeleton className="h-10 w-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-14 w-full" />
+              <Skeleton className="h-14 w-full" />
+              <Skeleton className="h-14 w-full" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

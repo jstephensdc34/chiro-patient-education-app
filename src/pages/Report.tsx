@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { CategoryType, PatientInfo } from "@/types";
+import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
@@ -9,11 +9,13 @@ import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
 import { ReportSettings } from "@/components/report/ReportSettings";
-import { mockItems } from "@/services/libraryService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchItemsByCategory, fetchSubcategories } from "@/services/libraryService";
+import { useAuth } from "@/components/auth/AuthContext";
 
 const Report = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [patient, setPatient] = useState<PatientInfo>({
     name: "",
@@ -24,6 +26,57 @@ const Report = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
+  const [items, setItems] = useState<ReportItem[]>([]);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  
+  // Fetch subcategories on component mount
+  useEffect(() => {
+    const loadSubcategories = async () => {
+      try {
+        const fetchedSubcategories = await fetchSubcategories();
+        setSubcategories(fetchedSubcategories);
+      } catch (error) {
+        console.error("Error loading subcategories:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load subcategories.",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    loadSubcategories();
+  }, [toast]);
+  
+  // Fetch items for all categories
+  useEffect(() => {
+    const loadAllItems = async () => {
+      setIsLoading(true);
+      try {
+        const allCategories: CategoryType[] = ["diagnosis", "extremity", "treatment", "homecare", "exercises"];
+        const promises = allCategories.map(category => fetchItemsByCategory(category));
+        const results = await Promise.all(promises);
+        
+        // Combine all items from all categories
+        const allItems = results.flat();
+        setItems(allItems);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load report items.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    if (user) {
+      loadAllItems();
+    }
+  }, [user, toast]);
   
   const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
@@ -66,7 +119,7 @@ const Report = () => {
     
     console.log({
       patient,
-      selectedItems: mockItems.filter(item => selectedItems.includes(item.id)),
+      selectedItems: items.filter(item => selectedItems.includes(item.id)),
       additionalNotes
     });
   };
@@ -106,18 +159,21 @@ const Report = () => {
               {/* Right Column - Report Items */}
               <div className="lg:col-span-2">
                 <ReportItemsSelector
-                  items={mockItems}
+                  items={items}
                   activeCategory={activeCategory}
                   selectedItems={selectedItems}
                   onCategoryChange={setActiveCategory}
                   onToggleItem={handleToggleItem}
+                  isLoading={isLoading}
+                  subcategories={subcategories}
                 />
                 
                 <ReportPreview
                   patient={patient}
-                  items={mockItems}
+                  items={items}
                   selectedItems={selectedItems}
                   additionalNotes={additionalNotes}
+                  subcategories={subcategories}
                 />
               </div>
             </div>
