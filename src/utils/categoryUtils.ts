@@ -68,6 +68,25 @@ export const getOrderedSubcategories = (categoryId: string, subcategories: any[]
     });
   }
   
+  // Special ordering for exercises subcategories
+  if (categoryId === "exercises") {
+    // Define the desired order
+    const exercisesOrder = [
+      "cervical_exercises",
+      "thoracic_exercises",
+      "lumbopelvic_exercises",
+      "upper_extremity_exercises",
+      "lower_extremity_exercises"
+    ];
+    
+    // Sort according to the defined order
+    return categorySubs.sort((a, b) => {
+      const indexA = exercisesOrder.indexOf(a.id);
+      const indexB = exercisesOrder.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }
+  
   return categorySubs;
 };
 
