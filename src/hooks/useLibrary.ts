@@ -24,7 +24,7 @@ export const useLibrary = (initialCategory: CategoryType = "diagnosis") => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   // Fetch categories and subcategories on component mount
   useEffect(() => {
@@ -101,12 +101,21 @@ export const useLibrary = (initialCategory: CategoryType = "diagnosis") => {
       return;
     }
     
+    if (!user || !user.id) {
+      toast({
+        title: "User Error",
+        description: "Could not determine user identity. Please log in again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
       if ('id' in item && item.id) {
         // Update existing item
-        const updatedItem = await updateItem(item as ReportItem);
+        const updatedItem = await updateItem(item as ReportItem, user.id);
         setItems(items.map(existingItem => 
           existingItem.id === updatedItem.id ? updatedItem : existingItem
         ));
@@ -129,7 +138,7 @@ export const useLibrary = (initialCategory: CategoryType = "diagnosis") => {
             : undefined
         };
         
-        const createdItem = await createItem(newItemData);
+        const createdItem = await createItem(newItemData, user.id);
         setItems([...items, createdItem]);
         
         toast({
@@ -245,3 +254,4 @@ export const useLibrary = (initialCategory: CategoryType = "diagnosis") => {
     handleAddNewItem
   };
 };
+
