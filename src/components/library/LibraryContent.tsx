@@ -30,7 +30,7 @@ export const LibraryContent = ({
   getCategoryName,
   getSubcategoriesForCategory
 }: LibraryContentProps) => {
-  // Special function to order subcategories for the diagnosis category
+  // Special function to order subcategories for specific categories
   const getOrderedSubcategories = (categoryId: string) => {
     const categorySubs = getSubcategoriesForCategory(categoryId);
     
@@ -48,6 +48,26 @@ export const LibraryContent = ({
       return categorySubs.sort((a, b) => {
         const indexA = diagnosisOrder.indexOf(a.id);
         const indexB = diagnosisOrder.indexOf(b.id);
+        return indexA - indexB;
+      });
+    }
+    
+    // Special ordering for extremity subcategories
+    if (categoryId === "extremity") {
+      // Define the desired order
+      const extremityOrder = [
+        "shoulder",
+        "elbow",
+        "wrist_hand",
+        "hip",
+        "knee",
+        "ankle_foot"
+      ];
+      
+      // Sort according to the defined order
+      return categorySubs.sort((a, b) => {
+        const indexA = extremityOrder.indexOf(a.id);
+        const indexB = extremityOrder.indexOf(b.id);
         return indexA - indexB;
       });
     }

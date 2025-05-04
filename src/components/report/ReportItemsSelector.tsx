@@ -90,6 +90,26 @@ export const ReportItemsSelector = ({
       });
     }
     
+    // Special ordering for extremity subcategories
+    if (categoryId === "extremity") {
+      // Define the desired order
+      const extremityOrder = [
+        "shoulder",
+        "elbow",
+        "wrist_hand",
+        "hip",
+        "knee",
+        "ankle_foot"
+      ];
+      
+      // Sort according to the defined order
+      return categorySubs.sort((a, b) => {
+        const indexA = extremityOrder.indexOf(a.id);
+        const indexB = extremityOrder.indexOf(b.id);
+        return indexA - indexB;
+      });
+    }
+    
     return categorySubs;
   };
 
