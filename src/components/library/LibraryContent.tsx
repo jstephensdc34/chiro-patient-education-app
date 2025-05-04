@@ -30,6 +30,31 @@ export const LibraryContent = ({
   getCategoryName,
   getSubcategoriesForCategory
 }: LibraryContentProps) => {
+  // Special function to order subcategories for the diagnosis category
+  const getOrderedSubcategories = (categoryId: string) => {
+    const categorySubs = getSubcategoriesForCategory(categoryId);
+    
+    // Special ordering for diagnosis subcategories
+    if (categoryId === "diagnosis") {
+      // Define the desired order
+      const diagnosisOrder = [
+        "general_diagnosis",
+        "cervical_diagnosis",
+        "thoracic_diagnosis",
+        "lumbopelvic_diagnosis"
+      ];
+      
+      // Sort according to the defined order
+      return categorySubs.sort((a, b) => {
+        const indexA = diagnosisOrder.indexOf(a.id);
+        const indexB = diagnosisOrder.indexOf(b.id);
+        return indexA - indexB;
+      });
+    }
+    
+    return categorySubs;
+  };
+
   return (
     <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as CategoryType)}>
       <TabsList className="mb-6 bg-white border border-gray-200">
@@ -50,7 +75,7 @@ export const LibraryContent = ({
             category === "treatment" || category === "homecare" ||
             category === "exercises") && (
             <SubcategorySelector
-              subcategories={getSubcategoriesForCategory(category)}
+              subcategories={getOrderedSubcategories(category)}
               activeSubcategory={activeSubcategory}
               onSubcategoryClick={onSubcategoryClick}
             />

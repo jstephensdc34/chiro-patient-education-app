@@ -70,7 +70,27 @@ export const ReportItemsSelector = ({
 
   // Get subcategories for the active category
   const getSubcategoriesForCategory = (categoryId: string) => {
-    return subcategories.filter(subcat => subcat.parentCategoryId === categoryId);
+    const categorySubs = subcategories.filter(subcat => subcat.parentCategoryId === categoryId);
+    
+    // Special ordering for diagnosis subcategories
+    if (categoryId === "diagnosis") {
+      // Define the desired order
+      const diagnosisOrder = [
+        "general_diagnosis",
+        "cervical_diagnosis",
+        "thoracic_diagnosis",
+        "lumbopelvic_diagnosis"
+      ];
+      
+      // Sort according to the defined order
+      return categorySubs.sort((a, b) => {
+        const indexA = diagnosisOrder.indexOf(a.id);
+        const indexB = diagnosisOrder.indexOf(b.id);
+        return indexA - indexB;
+      });
+    }
+    
+    return categorySubs;
   };
 
   // Filter items based on subcategory if active
