@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 interface ConnectionStatusProps {
   connectionStatus: "checking" | "connected" | "disconnected";
@@ -8,6 +9,8 @@ interface ConnectionStatusProps {
 }
 
 export const ConnectionStatus = ({ connectionStatus, isAuthenticated }: ConnectionStatusProps) => {
+  const { user } = useAuth();
+  
   return (
     <>
       <div className="text-sm font-normal">
@@ -27,9 +30,16 @@ export const ConnectionStatus = ({ connectionStatus, isAuthenticated }: Connecti
       </div>
       {!isAuthenticated && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-          <p className="text-yellow-700">
-            You are not authenticated. You can view settings, but you won't be able to create, update, or delete them.
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <p className="text-yellow-700 mb-2 md:mb-0">
+              You are not authenticated. You can view settings, but you won't be able to create, update, or delete them.
+            </p>
+            <Link to="/auth">
+              <Button className="bg-medical-600 hover:bg-medical-700 whitespace-nowrap">
+                Login / Sign Up
+              </Button>
+            </Link>
+          </div>
         </div>
       )}
     </>

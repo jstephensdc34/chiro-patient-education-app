@@ -28,6 +28,12 @@ export const createSetting = async (name: string, value: string): Promise<Report
     throw new Error("Setting name cannot be empty");
   }
   
+  // Check authentication before attempting to create
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) {
+    throw new Error("Authentication required to create settings");
+  }
+  
   const { data, error } = await supabase
     .from("report_settings")
     .insert({ name, value })
@@ -36,6 +42,9 @@ export const createSetting = async (name: string, value: string): Promise<Report
 
   if (error) {
     console.error("Error creating report setting:", error);
+    if (error.code === "PGRST301" || error.code === "42501") {
+      throw new Error("Authentication required to create settings");
+    }
     throw new Error(error.message);
   }
 
@@ -52,6 +61,12 @@ export const updateSetting = async (id: string, value: string): Promise<ReportSe
     throw new Error("Setting ID cannot be empty");
   }
   
+  // Check authentication before attempting to update
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) {
+    throw new Error("Authentication required to update settings");
+  }
+  
   const { data, error } = await supabase
     .from("report_settings")
     .update({ value })
@@ -61,6 +76,9 @@ export const updateSetting = async (id: string, value: string): Promise<ReportSe
 
   if (error) {
     console.error("Error updating report setting:", error);
+    if (error.code === "PGRST301" || error.code === "42501") {
+      throw new Error("Authentication required to update settings");
+    }
     throw new Error(error.message);
   }
 
@@ -76,6 +94,12 @@ export const deleteSetting = async (id: string): Promise<void> => {
     throw new Error("Setting ID cannot be empty");
   }
   
+  // Check authentication before attempting to delete
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) {
+    throw new Error("Authentication required to delete settings");
+  }
+  
   const { error } = await supabase
     .from("report_settings")
     .delete()
@@ -83,6 +107,9 @@ export const deleteSetting = async (id: string): Promise<void> => {
 
   if (error) {
     console.error("Error deleting report setting:", error);
+    if (error.code === "PGRST301" || error.code === "42501") {
+      throw new Error("Authentication required to delete settings");
+    }
     throw new Error(error.message);
   }
 };

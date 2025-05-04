@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthContext";
 
 export const useSupabaseConnection = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
   const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "disconnected">("checking");
 
   useEffect(() => {
@@ -12,10 +13,6 @@ export const useSupabaseConnection = () => {
         // Simple ping to verify connection
         const { data } = await supabase.from("report_settings").select("count").limit(1);
         setConnectionStatus("connected");
-        
-        // Check authentication status
-        const { data: sessionData } = await supabase.auth.getSession();
-        setIsAuthenticated(!!sessionData.session);
       } catch (error) {
         console.error("Database connection error:", error);
         setConnectionStatus("disconnected");
@@ -23,13 +20,6 @@ export const useSupabaseConnection = () => {
     };
 
     checkConnection();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   return { isAuthenticated, connectionStatus };
