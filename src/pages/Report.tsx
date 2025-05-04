@@ -12,10 +12,14 @@ import { ReportSettings } from "@/components/report/ReportSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchItemsByCategory, fetchSubcategories } from "@/services/libraryService";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useReportSettings } from "@/hooks/useReportSettings";
+import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 
 const Report = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { connectionStatus } = useSupabaseConnection();
+  const { settings } = useReportSettings(connectionStatus);
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [patient, setPatient] = useState<PatientInfo>({
     name: "",
@@ -174,6 +178,7 @@ const Report = () => {
                   selectedItems={selectedItems}
                   additionalNotes={additionalNotes}
                   subcategories={subcategories}
+                  settings={settings}
                 />
               </div>
             </div>

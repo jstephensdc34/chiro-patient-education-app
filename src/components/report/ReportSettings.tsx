@@ -8,6 +8,7 @@ import { CreateSettingForm } from "./settings/CreateSettingForm";
 import { SettingsList } from "./settings/SettingsList";
 import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 import { useReportSettings } from "@/hooks/useReportSettings";
+import { ClinicInfoForm } from "./settings/ClinicInfoForm";
 
 export const ReportSettings = () => {
   const { isAuthenticated, connectionStatus } = useSupabaseConnection();
@@ -41,6 +42,7 @@ export const ReportSettings = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full mb-4">
             <TabsTrigger value="view" className="flex-1">View Settings</TabsTrigger>
+            <TabsTrigger value="clinic" className="flex-1">Clinic Information</TabsTrigger>
             <TabsTrigger value="create" className="flex-1">Create Setting</TabsTrigger>
           </TabsList>
 
@@ -58,6 +60,15 @@ export const ReportSettings = () => {
                 onSettingDeleted={handleSettingDeleted}
               />
             )}
+          </TabsContent>
+          
+          <TabsContent value="clinic">
+            <ClinicInfoForm
+              settings={settings}
+              onSettingUpdated={handleSettingUpdated}
+              isAuthenticated={isAuthenticated}
+              loading={loading}
+            />
           </TabsContent>
 
           <TabsContent value="create">

@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
 import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ReportHeader } from "./ReportHeader";
+import { ReportSetting } from "@/services/reportSettingsService";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -19,6 +21,7 @@ interface ReportPreviewProps {
   selectedItems: string[];
   additionalNotes: string;
   subcategories: any[];
+  settings?: ReportSetting[];
 }
 
 export const ReportPreview = ({
@@ -26,7 +29,8 @@ export const ReportPreview = ({
   items,
   selectedItems,
   additionalNotes,
-  subcategories = []
+  subcategories = [],
+  settings = []
 }: ReportPreviewProps) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
@@ -93,6 +97,9 @@ export const ReportPreview = ({
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
           <div className="space-y-6">
+            {/* Report Header */}
+            <ReportHeader settings={settings} />
+            
             {patient.name && (
               <div className="pb-2 border-b border-gray-200">
                 <h2 className="text-lg font-bold">{patient.name}</h2>
