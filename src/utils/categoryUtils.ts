@@ -50,6 +50,24 @@ export const getOrderedSubcategories = (categoryId: string, subcategories: any[]
     });
   }
   
+  // Special ordering for treatment subcategories
+  if (categoryId === "treatment") {
+    // Define the desired order
+    const treatmentOrder = [
+      "care_plan_type",
+      "treatment_modalities",
+      "treatment_goals",
+      "estimated_cost"
+    ];
+    
+    // Sort according to the defined order
+    return categorySubs.sort((a, b) => {
+      const indexA = treatmentOrder.indexOf(a.id);
+      const indexB = treatmentOrder.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }
+  
   return categorySubs;
 };
 
