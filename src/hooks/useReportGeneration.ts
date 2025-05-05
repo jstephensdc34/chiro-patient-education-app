@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
-import { generatePDF } from "@/utils/pdfGenerator";
+import { generatePDF } from "@/utils/pdf";
 import { ReportSetting } from "@/services/reportSettingsService";
 
 export const useReportGeneration = (
