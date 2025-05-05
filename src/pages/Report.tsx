@@ -14,6 +14,7 @@ import { fetchItemsByCategory, fetchSubcategories } from "@/services/libraryServ
 import { useAuth } from "@/components/auth/AuthContext";
 import { useReportSettings } from "@/hooks/useReportSettings";
 import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
+import { generatePDF } from "@/utils/pdfGenerator";
 
 const Report = () => {
   const { toast } = useToast();
@@ -33,6 +34,7 @@ const Report = () => {
   const [items, setItems] = useState<ReportItem[]>([]);
   const [subcategories, setSubcategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   
   // Fetch subcategories on component mount
   useEffect(() => {
@@ -101,7 +103,7 @@ const Report = () => {
     );
   };
   
-  const handleGenerateReport = () => {
+  const handleGenerateReport = async () => {
     // Validation
     if (!patient.name) {
       toast({
@@ -121,19 +123,34 @@ const Report = () => {
       return;
     }
     
-    // In a real app, this would call a PDF generation service
-    // For now, we'll just show a success message
-    toast({
-      title: "Report Generated",
-      description: `Report for ${patient.name} has been created successfully!`
-    });
+    setIsGeneratingPDF(true);
     
-    console.log({
-      patient,
-      selectedItems: items.filter(item => selectedItems.includes(item.id)),
-      additionalNotes,
-      settings
-    });
+    try {
+      const selectedItemsData = items.filter(item => selectedItems.includes(item.id));
+      
+      // Generate PDF
+      await generatePDF({
+        patient,
+        selectedItems: selectedItemsData,
+        notes: additionalNotes,
+        settings,
+        subcategories
+      });
+      
+      toast({
+        title: "Report Generated",
+        description: `Report for ${patient.name} has been downloaded successfully!`
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   return (
@@ -163,8 +180,9 @@ const Report = () => {
                 <Button 
                   className="w-full mt-6 bg-medical-700 hover:bg-medical-800 text-lg py-6"
                   onClick={handleGenerateReport}
+                  disabled={isGeneratingPDF}
                 >
-                  Generate PDF Report
+                  {isGeneratingPDF ? "Generating PDF..." : "Generate PDF Report"}
                 </Button>
               </div>
               
@@ -187,6 +205,7 @@ const Report = () => {
                   additionalNotes={additionalNotes}
                   subcategories={subcategories}
                   settings={settings}
+                  settingsLoading={settingsLoading}
                 />
               </div>
             </div>

@@ -35,6 +35,14 @@ export interface ReportData {
   notes?: string;
 }
 
+export interface PDFReportData {
+  patient: PatientInfo;
+  selectedItems: ReportItem[];
+  notes: string;
+  settings: ReportSetting[];
+  subcategories: Subcategory[];
+}
+
 export type CategoryType = 'diagnosis' | 'extremity' | 'treatment' | 'homecare' | 'exercises';
 
 export const MAIN_CATEGORIES: CategoryType[] = ['diagnosis', 'extremity', 'treatment', 'homecare', 'exercises'];
