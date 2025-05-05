@@ -70,6 +70,7 @@ export const FormFields = ({
           onChange={(value) => handleChange("description", value)}
           disabled={isSubmitting}
           placeholder="Enter a detailed description..."
+          key={`editor-${item.id || 'new'}`} // Add a key to force re-initialization when item changes
         />
       </div>
       <div className="grid gap-2">

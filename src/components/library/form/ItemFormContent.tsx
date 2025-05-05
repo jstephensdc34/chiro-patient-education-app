@@ -31,7 +31,11 @@ export const ItemFormContent = ({
   // Update the item when editingItem changes or when activeCategory changes and not editing
   useEffect(() => {
     if (editingItem) {
-      setItem(editingItem);
+      // Make sure to use the complete editingItem including the description
+      setItem({
+        ...editingItem,
+        description: editingItem.description || "" // Ensure description is never undefined
+      });
     } else {
       setItem({ categoryId: activeCategory });
     }

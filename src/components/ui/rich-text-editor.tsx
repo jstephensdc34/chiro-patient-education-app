@@ -42,6 +42,13 @@ export function RichTextEditor({
     },
   });
 
+  // When the value prop changes externally, update the editor content
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
+
   // Wait until client-side to render to avoid hydration issues
   if (!isMounted) {
     return <div className={`min-h-[120px] ${className} border border-input rounded-md bg-background px-3 py-2`} />;
