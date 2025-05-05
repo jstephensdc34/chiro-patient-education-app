@@ -1,7 +1,7 @@
 
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { 
   Select,
   SelectContent,
@@ -65,11 +65,11 @@ export const FormFields = ({
       
       <div className="grid gap-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
+        <RichTextEditor
           value={item.description || ""}
-          onChange={(e) => handleChange("description", e.target.value)}
+          onChange={(value) => handleChange("description", value)}
           disabled={isSubmitting}
+          placeholder="Enter a detailed description..."
         />
       </div>
       <div className="grid gap-2">

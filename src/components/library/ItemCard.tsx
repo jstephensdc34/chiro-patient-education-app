@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ReportItem } from "@/types";
+import { sanitizeHtml } from "@/components/ui/rich-text-editor";
 
 interface ItemCardProps {
   item: ReportItem;
@@ -24,7 +25,10 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
         </div>
       </CardHeader>
       <CardContent className="pt-4">
-        <p className="text-gray-600 mb-4">{item.description}</p>
+        <div 
+          className="text-gray-600 mb-4 prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+        />
         <div className="flex space-x-2">
           {item.infoLink && (
             <Button variant="outline" size="sm" className="text-medical-600" asChild>

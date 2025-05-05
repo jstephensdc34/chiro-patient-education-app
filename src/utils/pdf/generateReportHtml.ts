@@ -1,6 +1,7 @@
 
 import { PatientInfo, ReportItem } from '@/types';
 import { ReportSetting } from '@/services/reportSettingsService';
+import { sanitizeHtml } from '@/components/ui/rich-text-editor';
 
 interface GenerateReportHtmlParams {
   patient: PatientInfo;
@@ -159,7 +160,7 @@ function renderReportItem(item: ReportItem): string {
   return `
     <li style="margin-bottom: 5px;">
       <div style="font-weight: bold;">${item.name}</div>
-      ${item.description ? `<div style="font-size: 13px; color: #666; margin-left: 10px;">${item.description}</div>` : ''}
+      ${item.description ? `<div style="font-size: 13px; color: #666; margin-left: 10px;">${sanitizeHtml(item.description)}</div>` : ''}
     </li>
   `;
 }

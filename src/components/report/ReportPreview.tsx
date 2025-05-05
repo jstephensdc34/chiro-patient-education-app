@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ReportHeader } from "./ReportHeader";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { LoadingState } from "@/components/library/LoadingState";
+import { sanitizeHtml } from "@/components/ui/rich-text-editor";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -92,8 +93,6 @@ export const ReportPreview = ({
     </TooltipProvider>
   );
 
-  console.log("ReportPreview settings:", settings);
-
   return (
     <Card className="mt-6">
       <CardHeader className="bg-gray-100 border-b border-gray-200">
@@ -138,7 +137,10 @@ export const ReportPreview = ({
                                   {item.infoLink && <InfoLink link={item.infoLink} />}
                                 </div>
                                 {item.description && (
-                                  <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
+                                  <div 
+                                    className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
+                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+                                  />
                                 )}
                               </li>
                             ))}
@@ -155,7 +157,10 @@ export const ReportPreview = ({
                             {item.infoLink && <InfoLink link={item.infoLink} />}
                           </div>
                           {item.description && (
-                            <div className="text-gray-600 mt-1 ml-4 text-sm">{item.description}</div>
+                            <div 
+                              className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
+                              dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+                            />
                           )}
                         </li>
                       ))}
