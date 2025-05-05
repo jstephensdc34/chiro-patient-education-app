@@ -99,14 +99,25 @@ export const useLibraryDialog = (
     }
     
     const itemToDelete = items.find(item => item.id === id);
+    if (!itemToDelete) {
+      toast({
+        title: "Error",
+        description: "Item not found. It may have already been deleted.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     try {
+      // Make sure to await the deleteItem operation
       await deleteItem(id);
-      setItems(items.filter(item => item.id !== id));
+      
+      // Only update state after successful deletion from Supabase
+      setItems(prevItems => prevItems.filter(item => item.id !== id));
       
       toast({
         title: "Item Deleted",
-        description: `${itemToDelete?.name} has been removed.`,
+        description: `${itemToDelete.name} has been removed.`,
         variant: "destructive"
       });
     } catch (error) {
@@ -116,6 +127,8 @@ export const useLibraryDialog = (
         description: "Failed to delete the item. Please try again.",
         variant: "destructive",
       });
+      // Re-throw the error so the component can handle it
+      throw error;
     }
   };
 

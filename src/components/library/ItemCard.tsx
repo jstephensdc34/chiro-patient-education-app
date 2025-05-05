@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ReportItem } from "@/types";
 import { sanitizeHtml } from "@/components/ui/rich-text-editor";
+import { useState } from "react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 interface ItemCardProps {
   item: ReportItem;
@@ -12,6 +14,19 @@ interface ItemCardProps {
 }
 
 export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete(item.id);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <CardHeader className="bg-gray-50 border-b border-gray-100">
@@ -45,14 +60,36 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
           >
             Edit
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-red-600"
-            onClick={() => onDelete(item.id)}
-          >
-            Delete
-          </Button>
+          
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-red-600"
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete "{item.name}" from your library.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardContent>
     </Card>
