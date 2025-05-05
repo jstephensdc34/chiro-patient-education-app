@@ -100,12 +100,11 @@ export const updateItem = async (
   };
 };
 
-// Delete an item - simplified to handle only database items
+// Delete an item
 export const deleteItem = async (id: string): Promise<void> => {
   console.log("ItemService: Starting deletion of item with ID:", id);
   
   try {
-    // Proceed with deletion directly
     const { error } = await supabase
       .from("library_items")
       .delete()
