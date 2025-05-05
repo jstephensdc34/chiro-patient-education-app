@@ -2,7 +2,6 @@
 import { CategoryType } from "@/types";
 import { useLibraryCategories } from './useLibraryCategories';
 import { useLibraryItems } from './useLibraryItems';
-import { useLibrarySubcategories } from './useLibrarySubcategories';
 import { useLibraryDialog } from './useLibraryDialog';
 
 export const useLibrary = (initialCategory: CategoryType = "diagnosis") => {
