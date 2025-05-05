@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ReportItem, CategoryType } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
@@ -110,16 +111,26 @@ export const useLibraryDialog = (
     console.log("useLibraryDialog: Starting delete operation for item:", id);
     
     try {
-      // Important: Delete from database BEFORE updating local state
-      await deleteItem(id);
-      console.log("useLibraryDialog: Database deletion successful for item:", id);
+      // For pre-existing mock items (with numeric IDs like "1", "2", etc.)
+      const isMockItem = id.length <= 2 && !isNaN(Number(id));
       
-      // After successful deletion, update the local state
-      setItems(prevItems => {
-        const newItems = prevItems.filter(item => item.id !== id);
-        console.log(`useLibraryDialog: Updated state. Removed item ${id}. Items count before: ${prevItems.length}, after: ${newItems.length}`);
-        return newItems;
-      });
+      if (isMockItem) {
+        console.log("useLibraryDialog: Detected mock item, removing from UI only:", id);
+        // Just update the UI for mock items, no database call needed
+        setItems(prevItems => prevItems.filter(item => item.id !== id));
+        console.log(`useLibraryDialog: Mock item ${id} removed from UI state`);
+      } else {
+        // Important: Delete from database BEFORE updating local state for real items
+        await deleteItem(id);
+        console.log("useLibraryDialog: Database deletion successful for item:", id);
+        
+        // After successful deletion, update the local state
+        setItems(prevItems => {
+          const newItems = prevItems.filter(item => item.id !== id);
+          console.log(`useLibraryDialog: Updated state. Removed item ${id}. Items count before: ${prevItems.length}, after: ${newItems.length}`);
+          return newItems;
+        });
+      }
       
       console.log("useLibraryDialog: Delete operation completed successfully");
     } catch (error) {
