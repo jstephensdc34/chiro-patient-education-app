@@ -6,6 +6,7 @@ import { ReportItem } from "@/types";
 import { sanitizeHtml } from "@/components/ui/rich-text-editor";
 import { useState } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ItemCardProps {
   item: ReportItem;
@@ -16,15 +17,29 @@ interface ItemCardProps {
 export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleDelete = async () => {
+    if (isDeleting) return;
+    
     setIsDeleting(true);
     try {
       console.log("ItemCard: Deleting item with ID:", item.id);
       await onDelete(item.id);
-      console.log("ItemCard: Delete completed");
+      console.log("ItemCard: Delete completed successfully");
+      
+      toast({
+        title: "Item Deleted",
+        description: `${item.name} has been removed.`,
+      });
     } catch (error) {
-      console.error("Error deleting item:", error);
+      console.error("Error in handleDelete:", error);
+      
+      toast({
+        title: "Error",
+        description: "Failed to delete item. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsDeleting(false);
       setIsDialogOpen(false);
@@ -88,8 +103,9 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
                 <AlertDialogAction 
                   onClick={handleDelete}
                   className="bg-red-600 hover:bg-red-700"
+                  disabled={isDeleting}
                 >
-                  Delete
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

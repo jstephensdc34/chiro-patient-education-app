@@ -102,20 +102,42 @@ export const updateItem = async (
 
 // Delete an item
 export const deleteItem = async (id: string): Promise<void> => {
-  console.log("Deleting item with ID:", id);
+  console.log("ItemService: Starting deletion of item with ID:", id);
   
-  // Use a more direct approach to ensure deletion goes through
-  const { error } = await supabase
-    .from("library_items")
-    .delete()
-    .eq("id", id);
+  try {
+    // First verify if the item exists before attempting to delete
+    const { data: existingItem, error: fetchError } = await supabase
+      .from("library_items")
+      .select("id")
+      .eq("id", id)
+      .single();
+      
+    if (fetchError) {
+      console.error("Error verifying item exists:", fetchError);
+      throw new Error(`Failed to verify item exists: ${fetchError.message}`);
+    }
+    
+    if (!existingItem) {
+      console.error("Item not found for deletion:", id);
+      throw new Error(`Item with ID ${id} not found`);
+    }
+    
+    // Proceed with deletion if item exists
+    const { error } = await supabase
+      .from("library_items")
+      .delete()
+      .eq("id", id);
 
-  if (error) {
-    console.error("Error deleting item:", error);
+    if (error) {
+      console.error("Supabase error deleting item:", error);
+      throw new Error(`Failed to delete item: ${error.message}`);
+    }
+    
+    console.log("ItemService: Item successfully deleted from database:", id);
+  } catch (error) {
+    console.error("Error in deleteItem function:", error);
     throw error;
   }
-  
-  console.log("Item successfully deleted from database");
 };
 
 // Mock items data

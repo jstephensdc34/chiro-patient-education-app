@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ReportItem, CategoryType } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
@@ -108,32 +107,23 @@ export const useLibraryDialog = (
       return;
     }
     
+    console.log("useLibraryDialog: Starting delete operation for item:", id);
+    
     try {
-      console.log("Starting delete operation for item:", id);
-      
-      // First update the local state to give immediate UI feedback
-      setItems(prevItems => prevItems.filter(item => item.id !== id));
-      
-      // Then delete from the database
+      // Important: Delete from database BEFORE updating local state
       await deleteItem(id);
+      console.log("useLibraryDialog: Database deletion successful for item:", id);
       
-      toast({
-        title: "Item Deleted",
-        description: `${itemToDelete.name} has been removed.`,
-        variant: "destructive"
-      });
-      
-      console.log("Delete operation completed successfully");
-    } catch (error) {
-      console.error("Error deleting item:", error);
-      
-      // If deletion fails, revert the state change to show the item again
+      // After successful deletion, update the local state
       setItems(prevItems => {
-        if (!prevItems.some(item => item.id === id) && itemToDelete) {
-          return [...prevItems, itemToDelete];
-        }
-        return prevItems;
+        const newItems = prevItems.filter(item => item.id !== id);
+        console.log(`useLibraryDialog: Updated state. Removed item ${id}. Items count before: ${prevItems.length}, after: ${newItems.length}`);
+        return newItems;
       });
+      
+      console.log("useLibraryDialog: Delete operation completed successfully");
+    } catch (error) {
+      console.error("useLibraryDialog: Error deleting item:", error);
       
       toast({
         title: "Error",
