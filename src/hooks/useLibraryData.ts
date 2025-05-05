@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { CategoryType, Category, Subcategory, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
-import { fetchCategories, fetchSubcategories, fetchItemsByCategory } from "@/services/libraryService";
+import { fetchCategories, fetchSubcategories, fetchItemsByCategory } from "@/services/library";
 
 export const useLibraryData = (initialCategory: CategoryType = "diagnosis") => {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(initialCategory);

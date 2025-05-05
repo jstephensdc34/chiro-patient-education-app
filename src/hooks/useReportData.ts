@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ReportItem } from "@/types";
-import { fetchItemsByCategory, fetchSubcategories } from "@/services/libraryService";
+import { fetchItemsByCategory, fetchSubcategories } from "@/services/library";
 import { useAuth } from "@/components/auth/AuthContext";
 
 export const useReportData = () => {

@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { ReportItem, CategoryType } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/auth/AuthContext";
-import { createItem, updateItem, deleteItem } from "@/services/libraryService";
+import { createItem, updateItem, deleteItem } from "@/services/library";
 
 export const useLibraryActions = (
   items: ReportItem[],
