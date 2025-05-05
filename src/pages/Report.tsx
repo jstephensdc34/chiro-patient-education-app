@@ -20,6 +20,7 @@ const Report = () => {
     additionalNotes,
     activeCategory,
     isGeneratingPDF,
+    pdfProgress,
     handlePatientInfoChange,
     handleToggleItem,
     handleGenerateReport,
@@ -56,6 +57,7 @@ const Report = () => {
               settingsLoading={settingsLoading}
               isLoading={isLoading}
               isGeneratingPDF={isGeneratingPDF}
+              pdfProgress={pdfProgress}
               subcategories={subcategories}
               activeCategory={activeCategory}
               onPatientInfoChange={handlePatientInfoChange}

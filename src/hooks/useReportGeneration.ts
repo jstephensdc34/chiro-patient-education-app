@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
-import { generatePDF } from "@/utils/pdf";
+import { generatePDF, RenderPdfProgress } from "@/utils/pdf";
 import { ReportSetting } from "@/services/reportSettingsService";
 
 export const useReportGeneration = (
@@ -21,6 +21,7 @@ export const useReportGeneration = (
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
+  const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
 
   const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
@@ -55,17 +56,21 @@ export const useReportGeneration = (
     }
     
     setIsGeneratingPDF(true);
+    setPdfProgress({ status: 'preparing', percentage: 0 });
     
     try {
       const selectedItemsData = items.filter(item => selectedItems.includes(item.id));
       
-      // Generate PDF
+      // Generate PDF with progress updates
       await generatePDF({
         patient,
         selectedItems: selectedItemsData,
         notes: additionalNotes,
         settings,
-        subcategories
+        subcategories,
+        onProgress: (progress) => {
+          setPdfProgress(progress);
+        }
       });
       
       toast({
@@ -76,7 +81,7 @@ export const useReportGeneration = (
       console.error("Error generating PDF:", error);
       toast({
         title: "Error",
-        description: "Failed to generate PDF. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to generate PDF. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -90,6 +95,7 @@ export const useReportGeneration = (
     additionalNotes,
     activeCategory,
     isGeneratingPDF,
+    pdfProgress,
     handlePatientInfoChange,
     handleToggleItem,
     handleGenerateReport,

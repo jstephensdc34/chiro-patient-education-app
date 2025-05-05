@@ -7,6 +7,8 @@ import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
+import { RenderPdfProgress } from "@/utils/pdf";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -17,6 +19,7 @@ interface ReportBuilderProps {
   settingsLoading: boolean;
   isLoading: boolean;
   isGeneratingPDF: boolean;
+  pdfProgress: RenderPdfProgress;
   subcategories: any[];
   activeCategory: CategoryType;
   onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
@@ -35,6 +38,7 @@ export const ReportBuilder = ({
   settingsLoading,
   isLoading,
   isGeneratingPDF,
+  pdfProgress,
   subcategories,
   activeCategory,
   onPatientInfoChange,
@@ -57,13 +61,17 @@ export const ReportBuilder = ({
           onChange={onNotesChange}
         />
         
-        <Button 
-          className="w-full mt-6 bg-medical-700 hover:bg-medical-800 text-lg py-6"
-          onClick={onGeneratePDF}
-          disabled={isGeneratingPDF}
-        >
-          {isGeneratingPDF ? "Generating PDF..." : "Generate PDF Report"}
-        </Button>
+        {isGeneratingPDF ? (
+          <PDFGenerationProgress progress={pdfProgress} />
+        ) : (
+          <Button 
+            className="w-full mt-6 bg-medical-700 hover:bg-medical-800 text-lg py-6"
+            onClick={onGeneratePDF}
+            disabled={isGeneratingPDF}
+          >
+            Generate PDF Report
+          </Button>
+        )}
       </div>
       
       {/* Right Column - Report Items */}

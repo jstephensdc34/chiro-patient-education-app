@@ -1,10 +1,17 @@
 
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { toast } from '@/components/ui/use-toast';
+
+export interface RenderPdfProgress {
+  status: 'preparing' | 'rendering' | 'generating' | 'finalizing' | 'complete';
+  percentage: number;
+}
 
 export const renderPdfFromHtml = async (
   htmlContent: string,
-  patientName: string
+  patientName: string,
+  onProgress?: (progress: RenderPdfProgress) => void
 ): Promise<void> => {
   // Create a temporary div to render the report
   const reportContainer = document.createElement('div');
@@ -17,18 +24,57 @@ export const renderPdfFromHtml = async (
   document.body.appendChild(reportContainer);
   
   try {
+    // Update progress
+    onProgress?.({ status: 'preparing', percentage: 10 });
+    
     // Set the HTML content
     reportContainer.innerHTML = htmlContent;
     
-    // Wait for images to load
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Wait for images to load and report progress
+    onProgress?.({ status: 'rendering', percentage: 30 });
     
-    // Convert HTML to canvas
+    // Load all images in the container
+    const imgElements = reportContainer.querySelectorAll('img');
+    if (imgElements.length > 0) {
+      await Promise.all(
+        Array.from(imgElements).map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              if (img.complete) {
+                resolve();
+              } else {
+                img.onload = () => resolve();
+                img.onerror = () => {
+                  console.error(`Failed to load image: ${img.src}`);
+                  // Replace with placeholder or continue without the image
+                  img.src = '/placeholder.svg';
+                  resolve();
+                };
+              }
+            })
+        )
+      );
+    }
+    
+    // Final preparation before canvas rendering
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    onProgress?.({ status: 'rendering', percentage: 50 });
+    
+    // Convert HTML to canvas with better error handling
     const canvas = await html2canvas(reportContainer, {
       scale: 2,
       useCORS: true,
-      logging: false
+      logging: false,
+      onclone: (doc) => {
+        // Additional handling for cloned document if needed
+        return Promise.resolve();
+      }
+    }).catch(error => {
+      console.error('HTML to canvas conversion failed:', error);
+      throw new Error('Failed to render the report. Please try again.');
     });
+    
+    onProgress?.({ status: 'generating', percentage: 70 });
     
     // Create PDF
     const pdf = new jsPDF({
@@ -52,10 +98,22 @@ export const renderPdfFromHtml = async (
       pdf.text(`Page ${i} of ${pageCount}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
     }
     
+    onProgress?.({ status: 'finalizing', percentage: 90 });
+    
     // Download the PDF with a clean filename
     const cleanPatientName = patientName.replace(/[^a-zA-Z0-9]/g, '_');
     const filename = `${cleanPatientName}_Report_${new Date().toISOString().split('T')[0]}.pdf`;
-    pdf.save(filename);
+    
+    try {
+      pdf.save(filename);
+      onProgress?.({ status: 'complete', percentage: 100 });
+    } catch (error) {
+      console.error('PDF save failed:', error);
+      throw new Error('Failed to download the PDF. Please try again.');
+    }
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    throw error;
   } finally {
     // Clean up - remove the temporary div
     if (reportContainer && reportContainer.parentNode) {
