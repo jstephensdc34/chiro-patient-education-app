@@ -1,4 +1,3 @@
-
 export interface ReportItem {
   id: string;
   name: string;
@@ -84,3 +83,10 @@ export const EXERCISES_SUBCATEGORIES = [
   'lower_extremity_exercises',
   'upper_extremity_exercises'
 ];
+
+export interface ReportSetting {
+  id: string;
+  name: string;
+  value: string;
+  created_at?: string;
+}
