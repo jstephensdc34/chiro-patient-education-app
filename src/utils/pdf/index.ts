@@ -2,4 +2,5 @@
 import { generatePDF } from './generatePDF';
 import { RenderPdfProgress } from './renderPdf';
 
-export { generatePDF, RenderPdfProgress };
+export { generatePDF };
+export type { RenderPdfProgress };
