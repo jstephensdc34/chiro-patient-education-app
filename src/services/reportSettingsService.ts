@@ -55,10 +55,10 @@ export const createSetting = async (name: string, value: string): Promise<Report
   return data;
 };
 
-export const updateSetting = async (id: string, value: string): Promise<ReportSetting> => {
+export const updateSetting = async (nameOrId: string, value: string): Promise<ReportSetting> => {
   // Validate inputs
-  if (!id.trim()) {
-    throw new Error("Setting ID cannot be empty");
+  if (!nameOrId.trim()) {
+    throw new Error("Setting name or ID cannot be empty");
   }
   
   // Check authentication before attempting to update
@@ -67,26 +67,59 @@ export const updateSetting = async (id: string, value: string): Promise<ReportSe
     throw new Error("Authentication required to update settings");
   }
   
-  const { data, error } = await supabase
+  // First, try to get the setting by name
+  const { data: existingSettings } = await supabase
     .from("report_settings")
-    .update({ value })
-    .eq("id", id)
-    .select()
-    .single();
+    .select("*")
+    .eq("name", nameOrId);
+    
+  if (existingSettings && existingSettings.length > 0) {
+    // If found by name, update using the ID
+    const settingId = existingSettings[0].id;
+    
+    const { data, error } = await supabase
+      .from("report_settings")
+      .update({ value })
+      .eq("id", settingId)
+      .select()
+      .single();
 
-  if (error) {
-    console.error("Error updating report setting:", error);
-    if (error.code === "PGRST301" || error.code === "42501") {
-      throw new Error("Authentication required to update settings");
+    if (error) {
+      console.error("Error updating report setting:", error);
+      if (error.code === "PGRST301" || error.code === "42501") {
+        throw new Error("Authentication required to update settings");
+      }
+      throw new Error(error.message);
     }
-    throw new Error(error.message);
-  }
 
-  if (!data) {
-    throw new Error("Failed to update setting: No data returned");
-  }
+    if (!data) {
+      throw new Error("Failed to update setting: No data returned");
+    }
 
-  return data;
+    return data;
+  } else {
+    // If not found by name, try to update by ID (in case nameOrId is actually an ID)
+    const { data, error } = await supabase
+      .from("report_settings")
+      .update({ value })
+      .eq("id", nameOrId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error updating report setting:", error);
+      if (error.code === "PGRST301" || error.code === "42501") {
+        throw new Error("Authentication required to update settings");
+      }
+      throw new Error(`Setting with name or ID "${nameOrId}" not found`);
+    }
+
+    if (!data) {
+      throw new Error("Failed to update setting: No data returned");
+    }
+
+    return data;
+  }
 };
 
 export const deleteSetting = async (id: string): Promise<void> => {

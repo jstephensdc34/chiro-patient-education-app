@@ -147,6 +147,7 @@ export const LogoUpload = ({
         
         <div className="flex flex-col space-y-2">
           <Input
+            id="logoInput"
             type="file"
             accept="image/*"
             onChange={handleFileChange}
