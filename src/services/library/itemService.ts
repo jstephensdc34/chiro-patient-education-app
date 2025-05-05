@@ -102,6 +102,9 @@ export const updateItem = async (
 
 // Delete an item
 export const deleteItem = async (id: string): Promise<void> => {
+  console.log("Deleting item with ID:", id);
+  
+  // Use a more direct approach to ensure deletion goes through
   const { error } = await supabase
     .from("library_items")
     .delete()
@@ -111,6 +114,8 @@ export const deleteItem = async (id: string): Promise<void> => {
     console.error("Error deleting item:", error);
     throw error;
   }
+  
+  console.log("Item successfully deleted from database");
 };
 
 // Mock items data

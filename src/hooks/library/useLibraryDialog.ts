@@ -109,24 +109,38 @@ export const useLibraryDialog = (
     }
     
     try {
-      // Make sure to await the deleteItem operation
-      await deleteItem(id);
+      console.log("Starting delete operation for item:", id);
       
-      // Only update state after successful deletion from Supabase
+      // First update the local state to give immediate UI feedback
       setItems(prevItems => prevItems.filter(item => item.id !== id));
+      
+      // Then delete from the database
+      await deleteItem(id);
       
       toast({
         title: "Item Deleted",
         description: `${itemToDelete.name} has been removed.`,
         variant: "destructive"
       });
+      
+      console.log("Delete operation completed successfully");
     } catch (error) {
       console.error("Error deleting item:", error);
+      
+      // If deletion fails, revert the state change to show the item again
+      setItems(prevItems => {
+        if (!prevItems.some(item => item.id === id) && itemToDelete) {
+          return [...prevItems, itemToDelete];
+        }
+        return prevItems;
+      });
+      
       toast({
         title: "Error",
         description: "Failed to delete the item. Please try again.",
         variant: "destructive",
       });
+      
       // Re-throw the error so the component can handle it
       throw error;
     }

@@ -15,15 +15,19 @@ interface ItemCardProps {
 
 export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
+      console.log("ItemCard: Deleting item with ID:", item.id);
       await onDelete(item.id);
+      console.log("ItemCard: Delete completed");
     } catch (error) {
       console.error("Error deleting item:", error);
     } finally {
       setIsDeleting(false);
+      setIsDialogOpen(false);
     }
   };
 
@@ -61,7 +65,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
             Edit
           </Button>
           
-          <AlertDialog>
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <AlertDialogTrigger asChild>
               <Button 
                 variant="outline" 
