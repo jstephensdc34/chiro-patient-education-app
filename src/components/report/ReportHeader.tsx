@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ReportHeaderProps {
-  settings: ReportSetting[];
+  settings?: ReportSetting[];
+  loading?: boolean;
 }
 
-export const ReportHeader = ({ settings }: ReportHeaderProps) => {
+export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderProps) => {
   const [clinicInfo, setClinicInfo] = useState({
     name: "My Chiropractic Clinic",
     address: "123 Health Street, Medical City, CA 90210",
@@ -30,6 +32,21 @@ export const ReportHeader = ({ settings }: ReportHeaderProps) => {
       setClinicInfo(info);
     }
   }, [settings]);
+
+  if (loading) {
+    return (
+      <Card className="mb-6 bg-gray-50 border border-gray-200">
+        <CardContent className="pt-4 flex items-center gap-6">
+          <Skeleton className="w-16 h-16" />
+          <div className="flex-grow space-y-2">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="mb-6 bg-gray-50 border border-gray-200">

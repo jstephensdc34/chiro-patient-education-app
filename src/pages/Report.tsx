@@ -19,7 +19,7 @@ const Report = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const { connectionStatus } = useSupabaseConnection();
-  const { settings } = useReportSettings(connectionStatus);
+  const { settings, loading: settingsLoading, reloadSettings } = useReportSettings(connectionStatus);
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [patient, setPatient] = useState<PatientInfo>({
     name: "",
@@ -82,6 +82,13 @@ const Report = () => {
     }
   }, [user, toast]);
   
+  // Reload settings when active tab changes to report
+  useEffect(() => {
+    if (activeTab === "report") {
+      reloadSettings();
+    }
+  }, [activeTab, reloadSettings]);
+  
   const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
   };
@@ -124,7 +131,8 @@ const Report = () => {
     console.log({
       patient,
       selectedItems: items.filter(item => selectedItems.includes(item.id)),
-      additionalNotes
+      additionalNotes,
+      settings
     });
   };
 
@@ -185,7 +193,7 @@ const Report = () => {
           </TabsContent>
           
           <TabsContent value="settings">
-            <ReportSettings />
+            <ReportSettings onSettingsUpdated={reloadSettings} />
           </TabsContent>
         </Tabs>
       </div>

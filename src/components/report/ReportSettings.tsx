@@ -10,21 +10,28 @@ import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 import { useReportSettings } from "@/hooks/useReportSettings";
 import { ClinicInfoForm } from "./settings/ClinicInfoForm";
 
-export const ReportSettings = () => {
+interface ReportSettingsProps {
+  onSettingsUpdated?: () => void;
+}
+
+export const ReportSettings = ({ onSettingsUpdated }: ReportSettingsProps) => {
   const { isAuthenticated, connectionStatus } = useSupabaseConnection();
   const { settings, loading, error, setSettings, reloadSettings } = useReportSettings(connectionStatus);
   const [activeTab, setActiveTab] = useState("view");
 
   const handleSettingCreated = (newSetting: ReportSetting) => {
     setSettings(prev => [...prev, newSetting]);
+    if (onSettingsUpdated) onSettingsUpdated();
   };
 
   const handleSettingUpdated = (updatedSetting: ReportSetting) => {
     setSettings(prev => prev.map(s => s.id === updatedSetting.id ? updatedSetting : s));
+    if (onSettingsUpdated) onSettingsUpdated();
   };
 
   const handleSettingDeleted = (id: string) => {
     setSettings(prev => prev.filter(s => s.id !== id));
+    if (onSettingsUpdated) onSettingsUpdated();
   };
 
   return (

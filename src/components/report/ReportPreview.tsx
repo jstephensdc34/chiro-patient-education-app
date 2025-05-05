@@ -5,6 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ReportHeader } from "./ReportHeader";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { LoadingState } from "@/components/library/LoadingState";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -22,6 +23,7 @@ interface ReportPreviewProps {
   additionalNotes: string;
   subcategories: any[];
   settings?: ReportSetting[];
+  settingsLoading?: boolean;
 }
 
 export const ReportPreview = ({
@@ -30,7 +32,8 @@ export const ReportPreview = ({
   selectedItems,
   additionalNotes,
   subcategories = [],
-  settings = []
+  settings = [],
+  settingsLoading = false
 }: ReportPreviewProps) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
@@ -89,6 +92,8 @@ export const ReportPreview = ({
     </TooltipProvider>
   );
 
+  console.log("ReportPreview settings:", settings);
+
   return (
     <Card className="mt-6">
       <CardHeader className="bg-gray-100 border-b border-gray-200">
@@ -98,7 +103,7 @@ export const ReportPreview = ({
         {selectedItems.length > 0 ? (
           <div className="space-y-6">
             {/* Report Header */}
-            <ReportHeader settings={settings} />
+            <ReportHeader settings={settings} loading={settingsLoading} />
             
             {patient.name && (
               <div className="pb-2 border-b border-gray-200">
