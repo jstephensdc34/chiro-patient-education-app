@@ -1,13 +1,12 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PatientInfo, ReportItem } from "@/types";
+import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
-import { ReportSetting } from "@/types";
-import { useReportGeneration } from "@/hooks/useReportGeneration";
+import { ReportSetting } from "@/services/reportSettingsService";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -19,10 +18,10 @@ interface ReportBuilderProps {
   isLoading: boolean;
   isGeneratingPDF: boolean;
   subcategories: any[];
-  activeCategory: string;
+  activeCategory: CategoryType;
   onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
   onToggleItem: (itemId: string) => void;
-  onCategoryChange: (category: any) => void;
+  onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
   onGeneratePDF: () => void;
 }

@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { CategoryType, PatientInfo } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { ReportSettings } from "@/components/report/ReportSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +8,7 @@ import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 import { useReportData } from "@/hooks/useReportData";
 import { useReportGeneration } from "@/hooks/useReportGeneration";
 import { ReportBuilder } from "@/components/report/ReportBuilder";
+import { CategoryType } from "@/types";
 
 const Report = () => {
   const { connectionStatus } = useSupabaseConnection();
@@ -60,7 +60,7 @@ const Report = () => {
               activeCategory={activeCategory}
               onPatientInfoChange={handlePatientInfoChange}
               onToggleItem={handleToggleItem}
-              onCategoryChange={setActiveCategory}
+              onCategoryChange={setActiveCategory as (category: CategoryType) => void}
               onNotesChange={setAdditionalNotes}
               onGeneratePDF={handleGenerateReport}
             />

@@ -1,3 +1,4 @@
+
 export interface ReportItem {
   id: string;
   name: string;
@@ -84,9 +85,10 @@ export const EXERCISES_SUBCATEGORIES = [
   'upper_extremity_exercises'
 ];
 
+// Updated ReportSetting interface to match the one in reportSettingsService.ts
 export interface ReportSetting {
   id: string;
   name: string;
   value: string;
-  created_at?: string;
+  created_at: string;
 }

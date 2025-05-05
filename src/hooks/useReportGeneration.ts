@@ -3,10 +3,11 @@ import { useState } from "react";
 import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePDF } from "@/utils/pdfGenerator";
+import { ReportSetting } from "@/services/reportSettingsService";
 
 export const useReportGeneration = (
   items: ReportItem[],
-  settings: any[],
+  settings: ReportSetting[],
   subcategories: any[]
 ) => {
   const { toast } = useToast();
