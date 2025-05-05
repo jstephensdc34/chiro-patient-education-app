@@ -19,9 +19,6 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  // Check if this is a mock item (with short numeric ID)
-  const isMockItem = item.id.length <= 2 && !isNaN(Number(item.id));
-
   const handleDelete = async () => {
     if (isDeleting) return;
     
@@ -60,11 +57,6 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
             </Badge>
           )}
         </div>
-        {isMockItem && (
-          <Badge variant="outline" className="bg-gray-100 text-gray-600">
-            Sample Item
-          </Badge>
-        )}
       </CardHeader>
       <CardContent className="pt-4">
         <div 
@@ -104,7 +96,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete "{item.name}" 
-                  {isMockItem ? " (Sample Item)" : " from your library"}.
+                  from your library.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
