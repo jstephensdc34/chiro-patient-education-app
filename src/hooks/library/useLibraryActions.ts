@@ -1,9 +1,8 @@
 
-// This file is kept for backward compatibility
-// It imports from the new refactored hook structure
+// This file is for backward compatibility and redirects to the refactored hooks
 
 import { ReportItem, CategoryType } from "@/types";
-import { useLibraryActions as useRefactoredLibraryActions } from "./library";
+import { useLibraryDialog } from './useLibraryDialog';
 
 export const useLibraryActions = (
   items: ReportItem[],
@@ -12,5 +11,5 @@ export const useLibraryActions = (
   activeSubcategory: string | null,
   getCategoryName: (categoryId: string) => string
 ) => {
-  return useRefactoredLibraryActions(items, setItems, activeCategory, activeSubcategory, getCategoryName);
+  return useLibraryDialog(items, setItems, activeCategory, activeSubcategory, getCategoryName);
 };
