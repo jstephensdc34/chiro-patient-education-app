@@ -17,6 +17,7 @@ export const getReportStyles = (): string => {
       li { margin-bottom: 5px; }
       .item-name { font-weight: bold; }
       .item-description { font-size: 13px; color: #666; margin-left: 10px; }
+      .item-link { font-size: 11px; color: #1890ff; margin-left: 10px; font-style: italic; }
       .notes-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
       .notes-title { font-size: 16px; color: #1890ff; margin-bottom: 10px; font-weight: bold; }
       .notes-content { white-space: pre-wrap; font-size: 14px; }

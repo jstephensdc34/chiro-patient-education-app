@@ -2,6 +2,7 @@
 import { ReportItem as ReportItemType } from "@/types";
 import { ReportSubcategory } from "./ReportSubcategory";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
+import { ReportItem } from "./ReportItem";
 
 interface ReportCategoryProps {
   categoryId: string;

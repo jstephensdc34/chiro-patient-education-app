@@ -20,6 +20,11 @@ export const ReportItem = ({ item }: ReportItemProps) => {
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
         />
       )}
+      {item.infoLink && (
+        <div className="text-xs text-medical-500 italic mt-1 ml-4">
+          For more detailed information go to: {item.infoLink}
+        </div>
+      )}
     </li>
   );
 };

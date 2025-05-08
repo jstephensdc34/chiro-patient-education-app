@@ -1,5 +1,4 @@
 
-import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface InfoLinkProps {
@@ -10,14 +9,7 @@ export const InfoLink = ({ link }: InfoLinkProps) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
-        <a 
-          href={link} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center ml-2 text-medical-600 hover:text-medical-800"
-        >
-          <ExternalLink size={14} />
-        </a>
+        <span className="text-xs text-medical-600 cursor-pointer ml-1">[info]</span>
       </TooltipTrigger>
       <TooltipContent>
         <p>View more information</p>
