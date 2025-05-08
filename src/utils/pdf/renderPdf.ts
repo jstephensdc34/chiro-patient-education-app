@@ -56,10 +56,6 @@ export const renderPdfFromHtml = async (
       );
     }
     
-    // Apply Tailwind styles by injecting them into the container
-    // Note: This doesn't actually work for Tailwind since it uses classes,
-    // but we've included actual CSS styles in the HTML itself
-    
     // Final preparation before canvas rendering
     await new Promise((resolve) => setTimeout(resolve, 500));
     onProgress?.({ status: 'rendering', percentage: 50 });
@@ -81,7 +77,7 @@ export const renderPdfFromHtml = async (
     
     onProgress?.({ status: 'generating', percentage: 70 });
     
-    // Create PDF
+    // Create PDF with hyperlink support
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -111,6 +107,9 @@ export const renderPdfFromHtml = async (
       heightLeft -= pageHeight;
       pageCount++;
     }
+    
+    // Process links in the document and add them to the PDF
+    processLinksForPdf(reportContainer, pdf, imgWidth, imgHeight);
     
     // Add page numbers
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
@@ -142,4 +141,39 @@ export const renderPdfFromHtml = async (
       reportContainer.parentNode.removeChild(reportContainer);
     }
   }
+};
+
+// Function to process links and add them to the PDF
+const processLinksForPdf = (
+  container: HTMLElement, 
+  pdf: jsPDF, 
+  pdfWidth: number, 
+  pdfHeight: number
+) => {
+  // Get all links in the container
+  const links = container.querySelectorAll('a');
+  
+  // Calculate the scale factor between HTML and PDF dimensions
+  const rect = container.getBoundingClientRect();
+  const scaleX = pdfWidth / rect.width;
+  const scaleY = pdfHeight / rect.height;
+  
+  // Process each link
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    
+    // Get link position relative to the container
+    const linkRect = link.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    
+    // Calculate position in PDF coordinates
+    const x = (linkRect.left - containerRect.left) * scaleX;
+    const y = (linkRect.top - containerRect.top) * scaleY;
+    const width = linkRect.width * scaleX;
+    const height = linkRect.height * scaleY;
+    
+    // Add link annotation to the PDF (jsPDF)
+    pdf.link(x, y, width, height, { url: href });
+  });
 };
