@@ -7,6 +7,7 @@ import { ReportHeader } from "./ReportHeader";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { LoadingState } from "@/components/library/LoadingState";
 import { sanitizeHtml } from "@/components/ui/rich-text-editor";
+import { getOrderedSubcategories } from "@/utils/categoryUtils";
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
@@ -47,26 +48,6 @@ export const ReportPreview = ({
     return subcategory ? subcategory.name : "";
   };
 
-  const groupItemsBySubcategory = (items: ReportItem[]) => {
-    const grouped: Record<string, ReportItem[]> = {};
-    
-    items.forEach(item => {
-      if (item.subcategoryId) {
-        if (!grouped[item.subcategoryId]) {
-          grouped[item.subcategoryId] = [];
-        }
-        grouped[item.subcategoryId].push(item);
-      } else {
-        if (!grouped["uncategorized"]) {
-          grouped["uncategorized"] = [];
-        }
-        grouped["uncategorized"].push(item);
-      }
-    });
-    
-    return grouped;
-  };
-  
   const hasSelectedItemsInCategory = (categoryId: string) => {
     return items.some(item => 
       item.categoryId === categoryId && selectedItems.includes(item.id)
@@ -93,6 +74,79 @@ export const ReportPreview = ({
     </TooltipProvider>
   );
 
+  // Render subcategories and their items in the correct order
+  const renderSubcategoryItems = (categoryId: string) => {
+    const orderedSubcategories = getOrderedSubcategories(categoryId, subcategories);
+    return (
+      <div className="space-y-4 pl-4">
+        {orderedSubcategories.map(subcategory => {
+          const subcategoryItems = getSelectedItems(categoryId).filter(
+            item => item.subcategoryId === subcategory.id
+          );
+          
+          if (subcategoryItems.length === 0) return null;
+          
+          return (
+            <div key={subcategory.id} className="ml-2">
+              <h4 className="font-medium text-medical-600 mb-2">
+                {getSubcategoryName(subcategory.id)}
+              </h4>
+              <ul className="space-y-3 ml-4">
+                {subcategoryItems.map(item => (
+                  <li key={item.id} className="ml-4">
+                    <div className="font-medium">
+                      • {item.name}
+                      {item.infoLink && <InfoLink link={item.infoLink} />}
+                    </div>
+                    {item.description && (
+                      <div 
+                        className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+        
+        {/* Render uncategorized items */}
+        {(() => {
+          const uncategorizedItems = getSelectedItems(categoryId).filter(
+            item => !item.subcategoryId
+          );
+          
+          if (uncategorizedItems.length === 0) return null;
+          
+          return (
+            <div className="ml-2">
+              <h4 className="font-medium text-medical-600 mb-2">
+                Other
+              </h4>
+              <ul className="space-y-3 ml-4">
+                {uncategorizedItems.map(item => (
+                  <li key={item.id} className="ml-4">
+                    <div className="font-medium">
+                      • {item.name}
+                      {item.infoLink && <InfoLink link={item.infoLink} />}
+                    </div>
+                    {item.description && (
+                      <div 
+                        className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })()}
+      </div>
+    );
+  };
+
   return (
     <Card className="mt-6">
       <CardHeader className="bg-gray-100 border-b border-gray-200">
@@ -116,38 +170,17 @@ export const ReportPreview = ({
             )}
             
             <div className="space-y-8">
+              {/* Render categories in the same order as MAIN_CATEGORIES */}
               {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
                 <div key={category} className="border-b pb-4">
                   <h3 className="text-medical-700 font-medium text-lg mb-3">
                     {categoryNames[category]}
                   </h3>
                   
-                  {category === "diagnosis" || category === "extremity" ? (
-                    <div className="space-y-4 pl-4">
-                      {Object.entries(groupItemsBySubcategory(getSelectedItems(category))).map(([subcategoryId, items]) => (
-                        <div key={subcategoryId} className="ml-2">
-                          <h4 className="font-medium text-medical-600 mb-2">
-                            {subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
-                          </h4>
-                          <ul className="space-y-3 ml-4">
-                            {items.map(item => (
-                              <li key={item.id} className="ml-4">
-                                <div className="font-medium">
-                                  • {item.name}
-                                  {item.infoLink && <InfoLink link={item.infoLink} />}
-                                </div>
-                                {item.description && (
-                                  <div 
-                                    className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
-                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
-                                  />
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
+                  {(category === "diagnosis" || category === "extremity" || 
+                    category === "treatment" || category === "homecare" || 
+                    category === "exercises") ? (
+                    renderSubcategoryItems(category)
                   ) : (
                     <ul className="space-y-3 ml-8">
                       {getSelectedItems(category).map(item => (

@@ -1,7 +1,8 @@
 
-import { PatientInfo, ReportItem } from '@/types';
+import { PatientInfo, ReportItem, MAIN_CATEGORIES } from '@/types';
 import { ReportSetting } from '@/services/reportSettingsService';
 import { sanitizeHtml } from '@/components/ui/rich-text-editor';
+import { getOrderedSubcategories } from '@/utils/categoryUtils';
 
 interface GenerateReportHtmlParams {
   patient: PatientInfo;
@@ -62,20 +63,14 @@ export const generateReportHtml = ({
       </p>
   `;
   
-  // Group items by category
-  const itemsByCategory: Record<string, ReportItem[]> = {};
-  selectedItems.forEach(item => {
-    if (!itemsByCategory[item.categoryId]) {
-      itemsByCategory[item.categoryId] = [];
-    }
-    itemsByCategory[item.categoryId].push(item);
-  });
-
-  // Add each category to the report
-  Object.keys(itemsByCategory).forEach(categoryId => {
-    const categoryItems = itemsByCategory[categoryId];
+  // Process categories in the correct order from MAIN_CATEGORIES
+  MAIN_CATEGORIES.forEach(categoryId => {
+    // Get items for this category
+    const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
     
-    reportHTML += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
+    if (categoryItems.length > 0) {
+      reportHTML += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
+    }
   });
   
   // Add additional notes
@@ -109,29 +104,45 @@ function renderCategorySection(
   `;
   
   if (categoryId === "diagnosis" || categoryId === "extremity") {
-    // Group items by subcategory for diagnosis and extremity
-    const itemsBySubcategory: Record<string, ReportItem[]> = {};
-    categoryItems.forEach(item => {
-      const subcategoryId = item.subcategoryId || "uncategorized";
-      if (!itemsBySubcategory[subcategoryId]) {
-        itemsBySubcategory[subcategoryId] = [];
+    // Get ordered subcategories for this category
+    const orderedSubcategories = getOrderedSubcategories(categoryId, subcategories);
+    
+    // Render items by subcategory in the correct order
+    orderedSubcategories.forEach(subcategory => {
+      const subcategoryItems = categoryItems.filter(item => item.subcategoryId === subcategory.id);
+      
+      if (subcategoryItems.length > 0) {
+        html += `
+          <div style="margin-bottom: 10px;">
+            <h4 style="font-size: 15px; margin-bottom: 5px; color: #445566;">
+              ${getSubcategoryName(subcategory.id)}
+            </h4>
+            <ul style="margin: 0; padding-left: 20px;">
+        `;
+        
+        subcategoryItems.forEach(item => {
+          html += renderReportItem(item);
+        });
+        
+        html += `
+            </ul>
+          </div>
+        `;
       }
-      itemsBySubcategory[subcategoryId].push(item);
     });
     
-    // Add each subcategory to the report
-    Object.keys(itemsBySubcategory).forEach(subcategoryId => {
-      const subcategoryItems = itemsBySubcategory[subcategoryId];
-      
+    // Handle items without a subcategory
+    const uncategorizedItems = categoryItems.filter(item => !item.subcategoryId);
+    if (uncategorizedItems.length > 0) {
       html += `
         <div style="margin-bottom: 10px;">
           <h4 style="font-size: 15px; margin-bottom: 5px; color: #445566;">
-            ${subcategoryId !== "uncategorized" ? getSubcategoryName(subcategoryId) : "Other"}
+            Other
           </h4>
           <ul style="margin: 0; padding-left: 20px;">
       `;
       
-      subcategoryItems.forEach(item => {
+      uncategorizedItems.forEach(item => {
         html += renderReportItem(item);
       });
       
@@ -139,16 +150,67 @@ function renderCategorySection(
           </ul>
         </div>
       `;
-    });
+    }
   } else {
-    // For other categories, just list all items
-    html += `<ul style="margin: 0; padding-left: 20px;">`;
-    
-    categoryItems.forEach(item => {
-      html += renderReportItem(item);
-    });
-    
-    html += `</ul>`;
+    // For categories like treatment, homecare, exercises that have subcategories but don't need special ordering
+    if (["treatment", "homecare", "exercises"].includes(categoryId)) {
+      // Get ordered subcategories for this category
+      const orderedSubcategories = getOrderedSubcategories(categoryId, subcategories);
+      
+      // Render items by subcategory in the correct order
+      orderedSubcategories.forEach(subcategory => {
+        const subcategoryItems = categoryItems.filter(item => item.subcategoryId === subcategory.id);
+        
+        if (subcategoryItems.length > 0) {
+          html += `
+            <div style="margin-bottom: 10px;">
+              <h4 style="font-size: 15px; margin-bottom: 5px; color: #445566;">
+                ${getSubcategoryName(subcategory.id)}
+              </h4>
+              <ul style="margin: 0; padding-left: 20px;">
+          `;
+          
+          subcategoryItems.forEach(item => {
+            html += renderReportItem(item);
+          });
+          
+          html += `
+              </ul>
+            </div>
+          `;
+        }
+      });
+      
+      // Handle items without a subcategory
+      const uncategorizedItems = categoryItems.filter(item => !item.subcategoryId);
+      if (uncategorizedItems.length > 0) {
+        html += `
+          <div style="margin-bottom: 10px;">
+            <h4 style="font-size: 15px; margin-bottom: 5px; color: #445566;">
+              Other
+            </h4>
+            <ul style="margin: 0; padding-left: 20px;">
+        `;
+        
+        uncategorizedItems.forEach(item => {
+          html += renderReportItem(item);
+        });
+        
+        html += `
+            </ul>
+          </div>
+        `;
+      }
+    } else {
+      // For other categories, just list all items
+      html += `<ul style="margin: 0; padding-left: 20px;">`;
+      
+      categoryItems.forEach(item => {
+        html += renderReportItem(item);
+      });
+      
+      html += `</ul>`;
+    }
   }
   
   html += `</div>`;
