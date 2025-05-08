@@ -22,7 +22,7 @@ export const ReportItem = ({ item }: ReportItemProps) => {
       )}
       {item.infoLink && (
         <div className="text-xs text-medical-500 italic mt-1 ml-4">
-          For more detailed information go to: {item.infoLink}
+          For more detailed information go to: {item.infoLink} or click the info link above
         </div>
       )}
     </li>
