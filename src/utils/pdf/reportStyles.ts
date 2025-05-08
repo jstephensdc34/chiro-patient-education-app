@@ -16,8 +16,12 @@ export const getReportStyles = (): string => {
       ul { margin: 0; padding-left: 20px; }
       li { margin-bottom: 5px; }
       .item-name { font-weight: bold; }
+      .info-link { font-size: 11px; color: #1890ff; text-decoration: none; margin-left: 5px; cursor: pointer; }
+      .info-link:hover { text-decoration: underline; }
       .item-description { font-size: 13px; color: #666; margin-left: 10px; }
       .item-link { font-size: 11px; color: #1890ff; margin-left: 10px; font-style: italic; }
+      .item-link a { color: #1890ff; text-decoration: none; }
+      .item-link a:hover { text-decoration: underline; }
       .notes-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
       .notes-title { font-size: 16px; color: #1890ff; margin-bottom: 10px; font-weight: bold; }
       .notes-content { white-space: pre-wrap; font-size: 14px; }
