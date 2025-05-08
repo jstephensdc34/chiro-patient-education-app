@@ -56,15 +56,20 @@ export const renderPdfFromHtml = async (
       );
     }
     
+    // Apply Tailwind styles by injecting them into the container
+    // Note: This doesn't actually work for Tailwind since it uses classes,
+    // but we've included actual CSS styles in the HTML itself
+    
     // Final preparation before canvas rendering
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     onProgress?.({ status: 'rendering', percentage: 50 });
     
     // Convert HTML to canvas with better error handling
     const canvas = await html2canvas(reportContainer, {
-      scale: 2,
+      scale: 2, // Higher resolution
       useCORS: true,
       logging: false,
+      backgroundColor: '#ffffff', // Ensure white background
       onclone: (doc) => {
         // Additional handling for cloned document if needed
         return Promise.resolve();
@@ -85,17 +90,34 @@ export const renderPdfFromHtml = async (
     
     const imgData = canvas.toDataURL('image/png');
     const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
     const imgHeight = canvas.height * imgWidth / canvas.width;
     
-    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    // Handle multi-page content
+    let heightLeft = imgHeight;
+    let position = 0;
+    let pageCount = 0;
     
-    // Add page numbers if the report is multiple pages
-    const pageCount = pdf.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
+    // First page
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    pageCount++;
+    
+    // Add more pages if needed
+    while (heightLeft > 0) {
+      position = -pageHeight * pageCount;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      pageCount++;
+    }
+    
+    // Add page numbers
+    for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFontSize(10);
-      pdf.setTextColor(150);
-      pdf.text(`Page ${i} of ${pageCount}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
+      pdf.setTextColor(100);
+      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
