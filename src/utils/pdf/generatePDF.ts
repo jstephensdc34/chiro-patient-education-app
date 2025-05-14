@@ -1,7 +1,7 @@
 
 import { PatientInfo, ReportItem } from '@/types';
 import { ReportSetting } from '@/services/reportSettingsService';
-import { generateReportHtml } from './generateReportHtml';
+import { generateReportHtml } from './report-html';
 import { renderPdfFromHtml, RenderPdfProgress } from './renderPdf';
 
 interface GeneratePDFParams {

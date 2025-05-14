@@ -3,7 +3,6 @@ import { ReportItem } from '@/types';
 import { sanitizeHtml } from '@/components/ui/rich-text-editor';
 
 export const renderReportItem = (item: ReportItem): string => {
-  // Add a specific class to track and ensure links are working properly
   return `
     <li>
       <div class="item-name">
