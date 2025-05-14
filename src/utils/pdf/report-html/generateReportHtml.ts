@@ -54,7 +54,6 @@ export const generateReportHtml = ({
     <body>
       <div class="container">
         ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
-        ${createReportFooter(clinicPhone, clinicEmail, clinicWebsite)}
         ${createPatientInfo(patient)}
   `;
   
@@ -65,6 +64,9 @@ export const generateReportHtml = ({
   if (notes) {
     reportHTML += createAdditionalNotes(notes);
   }
+  
+  // Add footer at the bottom before closing the container
+  reportHTML += createReportFooter(clinicPhone, clinicEmail, clinicWebsite);
   
   // Close the main div and HTML tags
   reportHTML += `
