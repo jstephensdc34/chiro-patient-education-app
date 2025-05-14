@@ -93,7 +93,8 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
     const nameElement = item.querySelector('.item-name');
     if (nameElement) {
       doc.setFontSize(11);
-      doc.setFontType('bold');
+      // Replace setFontType with the correct method setFont with style parameter
+      doc.setFont(undefined, 'bold');
       doc.setTextColor(0);
       
       const nameText = nameElement.textContent || '';
@@ -105,7 +106,8 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
         const href = infoLink.getAttribute('href');
         if (href) {
           // Position the link annotation right after the text
-          const textWidth = doc.getStringUnitWidth(nameText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+          // Fix the internal reference to getFontSize
+          const textWidth = doc.getStringUnitWidth(nameText) * doc.getFontSize() / doc.internal.scaleFactor;
           doc.setTextColor(24, 144, 255); // #1890ff
           doc.setFontSize(9);
           doc.text('[info]', x + 10 + textWidth + 2, currentY);
@@ -122,7 +124,8 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
     const descriptionElement = item.querySelector('.item-description');
     if (descriptionElement) {
       doc.setFontSize(10);
-      doc.setFontType('normal');
+      // Replace setFontType with the correct method setFont with style parameter
+      doc.setFont(undefined, 'normal');
       doc.setTextColor(102, 102, 102); // #666666
       
       const descText = descriptionElement.textContent || '';
@@ -145,7 +148,8 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
       doc.setFontSize(9);
-      doc.setFontType('italic');
+      // Replace setFontType with the correct method setFont with style parameter
+      doc.setFont(undefined, 'italic');
       doc.setTextColor(24, 144, 255); // #1890ff
       
       const linkText = linkElement.textContent || '';
@@ -160,8 +164,10 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
           const urlStartIndex = linkText.indexOf(href);
           if (urlStartIndex > -1) {
             const beforeText = linkText.substring(0, urlStartIndex);
-            const beforeTextWidth = doc.getStringUnitWidth(beforeText) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-            const urlWidth = doc.getStringUnitWidth(href) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+            // Fix the internal reference to getFontSize
+            const beforeTextWidth = doc.getStringUnitWidth(beforeText) * doc.getFontSize() / doc.internal.scaleFactor;
+            // Fix the internal reference to getFontSize
+            const urlWidth = doc.getStringUnitWidth(href) * doc.getFontSize() / doc.internal.scaleFactor;
             
             doc.link(x + 15 + beforeTextWidth, currentY - 3, urlWidth, 5, { url: href });
           }
