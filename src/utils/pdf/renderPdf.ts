@@ -88,9 +88,9 @@ export const renderPdfFromHtml = async (
     const imgWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
     
-    // Define margins (in mm)
-    const marginTop = 15;
-    const marginBottom = 20;
+    // Define margins (in mm) - adding 1 inch (25.4mm) margins to top and bottom
+    const marginTop = 25.4;
+    const marginBottom = 25.4;
     const contentHeight = pageHeight - marginTop - marginBottom;
     
     // Calculate scaled image height
@@ -103,7 +103,7 @@ export const renderPdfFromHtml = async (
     
     // First page with top margin
     pdf.addImage(imgData, 'PNG', 0, marginTop, imgWidth, imgHeight);
-    heightLeft -= (contentHeight);
+    heightLeft -= contentHeight;
     pageCount++;
     
     // Add more pages if needed, with proper margins
