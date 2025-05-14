@@ -1,7 +1,7 @@
 
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 export interface RenderPdfProgress {
   status: 'preparing' | 'rendering' | 'generating' | 'finalizing' | 'complete';
