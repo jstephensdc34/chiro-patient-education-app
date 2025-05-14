@@ -44,7 +44,7 @@ export const generateReportHtml = ({
   // Get styles
   const styles = getReportStyles();
 
-  // Build report HTML content with header
+  // Build report HTML content with header, structured for our PDF renderer
   let reportHTML = `
     <!DOCTYPE html>
     <html>
@@ -53,23 +53,42 @@ export const generateReportHtml = ({
     </head>
     <body>
       <div class="container">
-        ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
-        ${createPatientInfo(patient)}
+        <!-- Header Section with clinic info -->
+        <div class="header">
+          ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
+          
+          <!-- Add hidden spans with clinic info for PDF parser to extract -->
+          <span class="clinic-name" style="display: none;">${clinicName}</span>
+          <span class="clinic-website" style="display: none;">${clinicWebsite}</span>
+          <span class="clinic-phone" style="display: none;">${clinicPhone}</span>
+          <span class="clinic-email" style="display: none;">${clinicEmail}</span>
+        </div>
+        
+        <!-- Patient info section -->
+        <div class="section patient-info">
+          ${createPatientInfo(patient)}
+        </div>
   `;
   
-  // Process categories
-  reportHTML += renderCategorySections(MAIN_CATEGORIES, selectedItems, reportContext);
+  // Process categories - each as a separate section for pagination
+  const categorySections = renderCategorySections(MAIN_CATEGORIES, selectedItems, reportContext);
+  reportHTML += categorySections;
   
-  // Add additional notes
+  // Add additional notes as a section if present
   if (notes) {
-    reportHTML += createAdditionalNotes(notes);
+    reportHTML += `
+      <div class="section notes">
+        ${createAdditionalNotes(notes)}
+      </div>
+    `;
   }
   
-  // Add footer at the bottom before closing the container
-  reportHTML += createReportFooter(clinicPhone, clinicEmail, clinicWebsite);
-  
-  // Close the main div and HTML tags
+  // Add footer
   reportHTML += `
+        <!-- Footer Section -->
+        <div class="footer">
+          ${createReportFooter(clinicPhone, clinicEmail, clinicWebsite)}
+        </div>
       </div>
     </body>
     </html>

@@ -16,13 +16,18 @@ export const renderCategorySections = (
     const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
     
     if (categoryItems.length > 0) {
-      sectionsHtml += renderCategorySection(
-        categoryId, 
-        categoryItems, 
-        context.categoryNames, 
-        context.subcategories, 
-        context.getSubcategoryName
-      );
+      // Wrap each category in a section div for pagination
+      sectionsHtml += `
+        <div class="section category-${categoryId}">
+          ${renderCategorySection(
+            categoryId, 
+            categoryItems, 
+            context.categoryNames, 
+            context.subcategories, 
+            context.getSubcategoryName
+          )}
+        </div>
+      `;
     }
   });
   

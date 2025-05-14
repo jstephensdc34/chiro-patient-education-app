@@ -17,7 +17,7 @@ export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
   const { patient, selectedItems, notes, settings, subcategories, onProgress } = params;
   
   try {
-    // Generate the HTML content
+    // Generate the HTML content with the new structure
     const htmlContent = generateReportHtml({
       patient,
       selectedItems,
@@ -26,7 +26,7 @@ export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
       subcategories
     });
     
-    // Render the PDF from the HTML content
+    // Render the PDF from the HTML content using our new direct jsPDF approach
     await renderPdfFromHtml(htmlContent, patient.name, onProgress);
   } catch (error) {
     console.error("Error in PDF generation:", error);
