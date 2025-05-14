@@ -54,15 +54,13 @@ export const generateReportHtml = ({
     <body>
       <div class="container">
         <!-- Header Section with clinic info -->
-        <div class="header">
-          ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
-          
-          <!-- Add hidden spans with clinic info for PDF parser to extract -->
-          <span class="clinic-name" style="display: none;">${clinicName}</span>
-          <span class="clinic-website" style="display: none;">${clinicWebsite}</span>
-          <span class="clinic-phone" style="display: none;">${clinicPhone}</span>
-          <span class="clinic-email" style="display: none;">${clinicEmail}</span>
-        </div>
+        ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
+        
+        <!-- Hidden spans with clinic info for PDF parser -->
+        <span class="clinic-name" style="display: none;">${clinicName}</span>
+        <span class="clinic-website" style="display: none;">${clinicWebsite}</span>
+        <span class="clinic-phone" style="display: none;">${clinicPhone}</span>
+        <span class="clinic-email" style="display: none;">${clinicEmail}</span>
         
         <!-- Patient info section -->
         <div class="section patient-info">
@@ -83,7 +81,7 @@ export const generateReportHtml = ({
     `;
   }
   
-  // Add footer
+  // Add footer at the bottom of the page
   reportHTML += `
         <!-- Footer Section -->
         <div class="footer">

@@ -3,14 +3,25 @@ export const getReportStyles = (): string => {
   return `
     <style>
       body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; }
-      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-      .header-content { flex-grow: 1; margin-left: 20px; }
-      .clinic-name { font-size: 20px; margin: 0; color: #333; font-weight: bold; }
-      .clinic-info { font-size: 14px; margin: 5px 0; color: #666; }
+      
+      /* Header styles updated to match ReportPreview */
+      .header { margin-bottom: 20px; }
+      .header-container { display: flex; align-items: center; gap: 20px; }
+      .logo-container { width: 64px; height: 64px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+      .logo { max-width: 64px; max-height: 64px; object-fit: contain; }
+      .logo-placeholder { width: 100%; height: 100%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+      .logo-placeholder span { font-size: 12px; color: #888; }
+      .header-content { flex-grow: 1; }
+      .clinic-name { font-size: 20px; margin: 0 0 5px 0; color: #00528c; font-weight: bold; }
+      .clinic-website { font-size: 14px; margin: 0; color: #666; }
+
+      /* Patient info styles */      
       .patient-name { font-size: 18px; margin-bottom: 10px; font-weight: bold; }
       .patient-info { font-size: 14px; margin-bottom: 20px; color: #666; }
+      
+      /* Report content styles */
       .category-section { margin-bottom: 20px; }
-      .category-title { font-size: 16px; color: #1890ff; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; }
+      .category-title { font-size: 16px; color: #00528c; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; }
       .subcategory { margin-bottom: 10px; }
       .subcategory-title { font-size: 15px; margin-bottom: 5px; color: #096dd9; font-weight: bold; }
       ul { margin: 0; padding-left: 20px; }
@@ -22,29 +33,18 @@ export const getReportStyles = (): string => {
       .item-link { font-size: 11px; color: #1890ff; margin-left: 10px; font-style: italic; }
       .item-link a { color: #1890ff; text-decoration: none; background-color: transparent; }
       .item-link a:hover { text-decoration: underline; }
-      .notes-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
-      .notes-title { font-size: 16px; color: #1890ff; margin-bottom: 10px; font-weight: bold; }
-      .notes-content { white-space: pre-wrap; font-size: 14px; }
-      .logo { max-height: 80px; max-width: 200px; }
       
-      /* Ensure links are clearly visible and interactive */
+      /* Notes section */
+      .notes-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+      .notes-title { font-size: 16px; color: #00528c; margin-bottom: 10px; font-weight: bold; }
+      .notes-content { white-space: pre-wrap; font-size: 14px; }
+      
+      /* Links */
       a { color: #1890ff; text-decoration: none; background-color: rgba(24, 144, 255, 0.1); padding: 0 3px; }
       a[target="_blank"]::after { content: ""; margin-left: 3px; }
       
-      /* Header on each page */
-      @page {
-        @top-center {
-          content: element(header);
-        }
-        @bottom-center {
-          content: element(footer);
-        }
-      }
-      .header {
-        position: running(header);
-      }
+      /* Footer */
       .footer {
-        position: running(footer);
         border-top: 1px solid #eee;
         padding-top: 8px;
         margin-top: 20px;
@@ -57,8 +57,15 @@ export const getReportStyles = (): string => {
       .footer-item {
         margin: 0 10px;
       }
+      
+      /* Container */
       .container {
-        margin-top: 2rem;
+        margin: 2rem auto;
+        max-width: 800px;
+      }
+      
+      /* Section */
+      .section {
         margin-bottom: 2rem;
       }
     </style>

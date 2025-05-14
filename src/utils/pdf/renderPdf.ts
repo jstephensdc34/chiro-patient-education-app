@@ -1,4 +1,3 @@
-
 import { jsPDF } from 'jspdf';
 import { toast } from '@/hooks/use-toast';
 import { PatientInfo, ReportItem } from '@/types';
@@ -116,7 +115,7 @@ function parseHtmlContent(htmlContent: string): ParsedHtmlContent {
   const clinicWebsite = doc.querySelector('.clinic-website')?.textContent || '';
   const clinicPhone = doc.querySelector('.clinic-phone')?.textContent || '';
   const clinicEmail = doc.querySelector('.clinic-email')?.textContent || '';
-  const logoUrl = doc.querySelector('.clinic-logo img')?.getAttribute('src') || '';
+  const logoUrl = doc.querySelector('.logo')?.getAttribute('src') || '';
   
   return {
     headerContent: headerNode?.outerHTML || '',
@@ -177,8 +176,9 @@ function renderDocumentContent(doc: jsPDF, content: DocumentContent): void {
     const startY = margins.top + headerHeight;
     addPageContent(doc, pageContent, margins.left, startY, contentWidth);
     
-    // Add footer to each page
-    addFooter(doc, pageIndex + 1, contentPages.length, clinicInfo, margins, pageSize, footerHeight);
+    // Add footer to each page - positioning at bottom of page
+    const footerY = pageSize.height - margins.bottom - footerHeight;
+    addFooter(doc, pageIndex + 1, contentPages.length, clinicInfo, margins, footerY, contentWidth);
   });
 }
 
@@ -215,24 +215,50 @@ function addHeader(
   const { name, website, logoUrl } = clinicInfo;
   
   // Position parameters
-  const headerY = margins.top + 5;
+  const headerY = margins.top;
   const headerX = margins.left;
   
-  // Add clinic name
+  // Create header container
+  const headerHeight = 16; // Adjust based on ReportPreview appearance
+  
+  // Add logo or placeholder
+  if (logoUrl) {
+    try {
+      // If we have a logo URL, add the image
+      doc.addImage(logoUrl, 'JPEG', headerX, headerY, 16, 16);
+    } catch (error) {
+      console.warn('Failed to add logo image:', error);
+      // Add a placeholder rectangle if image fails
+      doc.setFillColor(240, 240, 240); // Light gray
+      doc.rect(headerX, headerY, 16, 16, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text('Logo', headerX + 8, headerY + 10, { align: 'center' });
+    }
+  } else {
+    // Create a placeholder for the logo
+    doc.setFillColor(240, 240, 240); // Light gray
+    doc.rect(headerX, headerY, 16, 16, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Logo', headerX + 8, headerY + 9, { align: 'center' });
+  }
+  
+  // Add clinic name with styling that matches the ReportPreview
   doc.setFontSize(16);
   doc.setTextColor(0, 82, 156); // Medical blue color
-  doc.text(name, headerX, headerY);
+  doc.text(name, headerX + 20, headerY + 8);
   
   // Add website if available
   if (website) {
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text(website, headerX + contentWidth - doc.getTextWidth(website), headerY);
+    doc.text(website, headerX + 20, headerY + 14);
   }
   
   // Add a separator line
-  doc.setDrawColor(200);
-  doc.line(headerX, headerY + 5, headerX + contentWidth, headerY + 5);
+  doc.setDrawColor(220, 220, 220);
+  doc.line(headerX, headerY + headerHeight + 3, headerX + contentWidth, headerY + headerHeight + 3);
 }
 
 /**
@@ -294,7 +320,7 @@ function addPageContent(
 }
 
 /**
- * Adds footer to the page
+ * Adds footer to the page at the specified position
  */
 function addFooter(
   doc: jsPDF,
@@ -302,17 +328,14 @@ function addFooter(
   totalPages: number,
   clinicInfo: DocumentContent['clinicInfo'],
   margins: PdfRenderingOptions['margins'],
-  pageSize: PdfRenderingOptions['pageSize'],
-  footerHeight: number
+  footerY: number,
+  contentWidth: number
 ): void {
   const { phone, email, website } = clinicInfo;
   
-  const footerY = pageSize.height - margins.bottom + 5;
-  const contentWidth = pageSize.width - margins.left - margins.right;
-  
   // Add a separator line
-  doc.setDrawColor(200);
-  doc.line(margins.left, footerY - 10, margins.left + contentWidth, footerY - 10);
+  doc.setDrawColor(220, 220, 220);
+  doc.line(margins.left, footerY, margins.left + contentWidth, footerY);
   
   // Add contact info
   doc.setFontSize(9);
@@ -323,15 +346,17 @@ function addFooter(
   if (email) contactInfo += `Email: ${email} `;
   if (website) contactInfo += `Website: ${website}`;
   
+  const footerTextY = footerY + 6;
+  
   if (contactInfo) {
-    doc.text(contactInfo, pageSize.width / 2, footerY - 5, { align: 'center' });
+    doc.text(contactInfo, margins.left + contentWidth/2, footerTextY, { align: 'center' });
   }
   
   // Add page numbers
   doc.text(
     `Page ${pageNum} of ${totalPages}`,
-    pageSize.width / 2,
-    footerY + 5, 
+    margins.left + contentWidth/2,
+    footerTextY + 6, 
     { align: 'center' }
   );
 }
