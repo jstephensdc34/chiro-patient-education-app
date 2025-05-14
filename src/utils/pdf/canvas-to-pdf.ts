@@ -1,8 +1,8 @@
 
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { processLinksForPdf } from './links';
-import { addPageNumbers } from './paging';
+import { processLinksForPdf } from './pdf-utils/links';
+import { addPageNumbers } from './pdf-utils/paging';
 
 export interface CanvasToPdfOptions {
   marginTop: number;
