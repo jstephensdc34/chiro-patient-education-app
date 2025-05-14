@@ -1,6 +1,6 @@
 
 import { generatePDF } from './generatePDF';
-import { RenderPdfProgress } from './renderPdf';
+import { RenderPdfProgress } from './pdf-utils';
 import { generateReportHtml } from './generateReportHtml';
 
 export { generatePDF, generateReportHtml };
