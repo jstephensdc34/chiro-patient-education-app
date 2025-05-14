@@ -84,53 +84,62 @@ export const renderPdfFromHtml = async (
       format: 'a4'
     });
     
-    const imgData = canvas.toDataURL('image/png');
-    
     // A4 dimensions
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
     
     // Define margins (in mm) - 1 inch = 25.4mm
-    const marginTop = 25.4;
-    const marginBottom = 25.4;
-    const marginLeft = 0; // Keep left margin at 0 as per current design
+    const marginTop = 25.4; // 1 inch top margin
+    const marginBottom = 25.4; // 1 inch bottom margin
+    const marginLeft = 0; // No left margin
     
     // Calculate available content area dimensions
     const contentWidth = pageWidth - (marginLeft * 2);
     const contentHeight = pageHeight - marginTop - marginBottom;
     
-    // Scale canvas to fit width of content area
+    // Get image data from canvas
+    const imgData = canvas.toDataURL('image/png');
+    
+    // Calculate image dimensions to fit within content area
     const imgWidth = contentWidth;
-    const imgHeight = canvas.height * contentWidth / canvas.width;
+    const imgHeight = (canvas.height * contentWidth) / canvas.width;
     
-    let heightLeft = imgHeight;
-    let position = 0;
-    let pageCount = 0;
+    // Calculate how many pages we need
+    const pageCount = Math.ceil(imgHeight / contentHeight);
     
-    // Add first page
-    pdf.addPage();
-    
-    // Position image with respect to top margin
-    position = marginTop;
-    pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
-    heightLeft -= (contentHeight);
-    pageCount = 1;
-    
-    // Add more pages if needed
-    while (heightLeft > 0) {
-      // Add a new page
-      pdf.addPage();
-      pageCount++;
+    // For each page
+    for (let i = 0; i < pageCount; i++) {
+      // Add a page (but not for the first one as jsPDF automatically creates the first page)
+      if (i > 0) {
+        pdf.addPage();
+      }
       
-      // Calculate position for next portion of the image
-      // Move up by the height of content already shown
-      position = marginTop - (contentHeight * (pageCount - 1));
+      // Calculate which portion of the image to show on this page
+      const sourceY = i * (canvas.height / imgHeight) * contentHeight;
+      const sourceHeight = Math.min(
+        (canvas.height / imgHeight) * contentHeight,
+        canvas.height - sourceY
+      );
       
-      // Add the image at the calculated position
-      pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      // Calculate destination position and height
+      const destY = marginTop; // Start from top margin
+      const destHeight = Math.min(contentHeight, (sourceHeight * imgWidth) / (canvas.width / imgHeight));
       
-      // Reduce remaining height
-      heightLeft -= contentHeight;
+      // Add the portion of the image to the page
+      pdf.addImage(
+        canvas,
+        'PNG',
+        marginLeft,
+        destY,
+        imgWidth,
+        imgHeight,
+        undefined,
+        'FAST',
+        0,
+        i * contentHeight / (imgHeight / canvas.height),
+        canvas.width,
+        sourceHeight
+      );
     }
     
     // Process links in the document and add them to the PDF
@@ -141,19 +150,17 @@ export const renderPdfFromHtml = async (
       pdf.setPage(i);
       pdf.setFontSize(10);
       pdf.setTextColor(100);
+      
       // Position the page number in the center, above the bottom margin
       pdf.text(
-        `Page ${i} of ${pdf.getNumberOfPages()}`, 
-        pageWidth / 2, 
-        pageHeight - (marginBottom / 2), 
+        `Page ${i} of ${pdf.getNumberOfPages()}`,
+        pageWidth / 2,
+        pageHeight - (marginBottom / 2),
         { align: 'center' }
       );
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
-    
-    // Remove the first blank page that was automatically added
-    pdf.deletePage(1);
     
     // Download the PDF with a clean filename
     const cleanPatientName = patientName.replace(/[^a-zA-Z0-9]/g, '_');
