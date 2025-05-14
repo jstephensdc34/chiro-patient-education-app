@@ -87,36 +87,43 @@ export const renderPdfFromHtml = async (
     const imgData = canvas.toDataURL('image/png');
     const imgWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
+    
+    // Define margins (in mm)
+    const marginTop = 15;
+    const marginBottom = 20;
+    const contentHeight = pageHeight - marginTop - marginBottom;
+    
+    // Calculate scaled image height
     const imgHeight = canvas.height * imgWidth / canvas.width;
     
-    // Handle multi-page content
+    // Handle multi-page content with proper margins
     let heightLeft = imgHeight;
-    let position = 0;
+    let position = -marginTop; // Start position accounting for top margin
     let pageCount = 0;
     
-    // First page
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    // First page with top margin
+    pdf.addImage(imgData, 'PNG', 0, marginTop, imgWidth, imgHeight);
+    heightLeft -= (contentHeight);
     pageCount++;
     
-    // Add more pages if needed
+    // Add more pages if needed, with proper margins
     while (heightLeft > 0) {
-      position = -pageHeight * pageCount;
+      position = -(pageHeight * pageCount) + marginTop; // Apply top margin to each page
       pdf.addPage();
       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      heightLeft -= contentHeight;
       pageCount++;
     }
     
     // Process links in the document and add them to the PDF
     processLinksForPdf(reportContainer, pdf, imgWidth, imgHeight);
     
-    // Add page numbers
+    // Add page numbers - position them to respect the bottom margin
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFontSize(10);
       pdf.setTextColor(100);
-      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
+      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - marginBottom/2, { align: 'center' });
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
