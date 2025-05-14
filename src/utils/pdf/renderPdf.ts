@@ -123,11 +123,12 @@ export const renderPdfFromHtml = async (
       
       // Calculate destination position and height
       const destY = marginTop; // Start from top margin
-      const destHeight = Math.min(contentHeight, (sourceHeight * imgWidth) / (canvas.width / imgHeight));
       
-      // Add the portion of the image to the page
+      // Fix: Use the correct addImage syntax with proper parameters
+      // The standard format for jsPDF addImage is:
+      // addImage(imageData|canvas, format, x, y, width, height, alias, compression, rotation)
       pdf.addImage(
-        canvas,
+        imgData,
         'PNG',
         marginLeft,
         destY,
@@ -135,11 +136,17 @@ export const renderPdfFromHtml = async (
         imgHeight,
         undefined,
         'FAST',
-        0,
-        i * contentHeight / (imgHeight / canvas.height),
-        canvas.width,
-        sourceHeight
+        0
       );
+      
+      // Specify the clipping rectangle to only show the relevant part of the image
+      if (i < pageCount - 1) {
+        pdf.setPage(i + 1);
+        const yPos = (i * contentHeight) - sourceY;
+        pdf.internal.write('q');
+        pdf.internal.write(`${marginLeft} ${destY} ${imgWidth} ${contentHeight} re`);
+        pdf.internal.write('W n');
+      }
     }
     
     // Process links in the document and add them to the PDF
