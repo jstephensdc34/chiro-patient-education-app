@@ -27,15 +27,37 @@ export const processLinksForPdf = (
     const href = link.getAttribute('href');
     if (!href) return;
     
+    // Special handling for info links that appear inline with text
+    const isInfoLink = link.classList.contains('info-link');
+    
     // Get link position relative to the container
     const linkRect = link.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
     
     // Calculate position in PDF coordinates
-    const x = (linkRect.left - containerRect.left) * scaleX;
-    const y = (linkRect.top - containerRect.top) * scaleY;
-    const width = linkRect.width * scaleX;
-    const height = linkRect.height * scaleY;
+    let x = (linkRect.left - containerRect.left) * scaleX;
+    let y = (linkRect.top - containerRect.top) * scaleY;
+    let width = linkRect.width * scaleX;
+    let height = linkRect.height * scaleY;
+    
+    // Additional adjustments for info links
+    if (isInfoLink) {
+      // Make info links more clickable by slightly expanding the area
+      width = Math.max(width, 15);
+      height = Math.max(height, 10);
+      
+      // Ensure info links are positioned correctly relative to text
+      const parentText = link.parentElement?.textContent?.replace(link.textContent || '', '');
+      if (parentText) {
+        // Calculate text width (approximate)
+        const textWidth = pdf.getStringUnitWidth(parentText) * 10 / pdf.internal.scaleFactor;
+        
+        // Adjust link position to be right after the text
+        if (textWidth > 0) {
+          x = Math.max(x, textWidth + 2);
+        }
+      }
+    }
     
     // Add link annotation to the PDF (jsPDF)
     pdf.link(x, y, width, height, { url: href });
