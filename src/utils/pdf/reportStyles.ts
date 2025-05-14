@@ -1,4 +1,3 @@
-
 export const getReportStyles = (): string => {
   return `
     <style>
@@ -7,13 +6,13 @@ export const getReportStyles = (): string => {
       /* Header styles updated to match ReportPreview */
       .header { margin-bottom: 20px; }
       .header-container { display: flex; align-items: center; gap: 20px; }
-      .logo-container { width: 64px; height: 64px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-      .logo { max-width: 64px; max-height: 64px; object-fit: contain; }
+      .logo-container { width: 128px; height: 128px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+      .logo { max-width: 128px; max-height: 128px; object-fit: contain; }
       .logo-placeholder { width: 100%; height: 100%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
-      .logo-placeholder span { font-size: 12px; color: #888; }
+      .logo-placeholder span { font-size: 16px; color: #888; }
       .header-content { flex-grow: 1; }
-      .clinic-name { font-size: 20px; margin: 0 0 5px 0; color: #00528c; font-weight: bold; }
-      .clinic-website { font-size: 14px; margin: 0; color: #666; }
+      .clinic-name { font-size: 24px; margin: 0 0 8px 0; color: #00528c; font-weight: bold; }
+      .clinic-website { font-size: 16px; margin: 0; color: #666; }
 
       /* Patient info styles */      
       .patient-name { font-size: 18px; margin-bottom: 10px; font-weight: bold; }

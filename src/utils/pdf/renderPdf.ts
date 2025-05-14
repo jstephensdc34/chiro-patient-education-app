@@ -155,7 +155,7 @@ function renderDocumentContent(doc: jsPDF, content: DocumentContent): void {
   
   // Calculate available content area dimensions
   const contentWidth = pageSize.width - margins.left - margins.right;
-  const headerHeight = 20; // Estimate header height in mm
+  const headerHeight = 40; // Increased header height to accommodate larger logo (in mm)
   const footerHeight = 15; // Estimate footer height in mm
   const contentHeight = pageSize.height - margins.top - margins.bottom - headerHeight - footerHeight;
   
@@ -219,41 +219,42 @@ function addHeader(
   const headerX = margins.left;
   
   // Create header container
-  const headerHeight = 16; // Adjust based on ReportPreview appearance
+  const headerHeight = 32; // Doubled height to match ReportPreview appearance
+  const logoSize = 32; // Doubled logo size (in mm)
   
   // Add logo or placeholder
   if (logoUrl) {
     try {
       // If we have a logo URL, add the image
-      doc.addImage(logoUrl, 'JPEG', headerX, headerY, 16, 16);
+      doc.addImage(logoUrl, 'JPEG', headerX, headerY, logoSize, logoSize);
     } catch (error) {
       console.warn('Failed to add logo image:', error);
       // Add a placeholder rectangle if image fails
       doc.setFillColor(240, 240, 240); // Light gray
-      doc.rect(headerX, headerY, 16, 16, 'F');
-      doc.setFontSize(8);
+      doc.rect(headerX, headerY, logoSize, logoSize, 'F');
+      doc.setFontSize(10);
       doc.setTextColor(150, 150, 150);
-      doc.text('Logo', headerX + 8, headerY + 10, { align: 'center' });
+      doc.text('Logo', headerX + logoSize/2, headerY + logoSize/2, { align: 'center' });
     }
   } else {
     // Create a placeholder for the logo
     doc.setFillColor(240, 240, 240); // Light gray
-    doc.rect(headerX, headerY, 16, 16, 'F');
-    doc.setFontSize(8);
+    doc.rect(headerX, headerY, logoSize, logoSize, 'F');
+    doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text('Logo', headerX + 8, headerY + 9, { align: 'center' });
+    doc.text('Logo', headerX + logoSize/2, headerY + logoSize/2, { align: 'center' });
   }
   
-  // Add clinic name with styling that matches the ReportPreview
-  doc.setFontSize(16);
+  // Add clinic name with styling that matches the ReportPreview - increased font size
+  doc.setFontSize(18);
   doc.setTextColor(0, 82, 156); // Medical blue color
-  doc.text(name, headerX + 20, headerY + 8);
+  doc.text(name, headerX + logoSize + 5, headerY + 12);
   
-  // Add website if available
+  // Add website if available - increased font size
   if (website) {
-    doc.setFontSize(10);
+    doc.setFontSize(12);
     doc.setTextColor(100);
-    doc.text(website, headerX + 20, headerY + 14);
+    doc.text(website, headerX + logoSize + 5, headerY + 20);
   }
   
   // Add a separator line
