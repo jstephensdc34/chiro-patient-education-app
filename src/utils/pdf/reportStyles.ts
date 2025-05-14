@@ -36,12 +36,30 @@ export const getReportStyles = (): string => {
         @top-center {
           content: element(header);
         }
+        @bottom-center {
+          content: element(footer);
+        }
       }
       .header {
         position: running(header);
       }
+      .footer {
+        position: running(footer);
+        border-top: 1px solid #eee;
+        padding-top: 8px;
+        margin-top: 20px;
+      }
+      .footer-content {
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+      }
+      .footer-item {
+        margin: 0 10px;
+      }
       .container {
         margin-top: 2rem;
+        margin-bottom: 2rem;
       }
     </style>
   `;

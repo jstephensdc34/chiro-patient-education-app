@@ -6,6 +6,7 @@ import { GenerateReportHtmlParams, ReportContext } from './types';
 import { createReportHeader } from './sections/reportHeader';
 import { createPatientInfo } from './sections/patientInfo';
 import { createAdditionalNotes } from './sections/additionalNotes';
+import { createReportFooter } from './sections/reportFooter';
 
 export const generateReportHtml = ({
   patient,
@@ -18,6 +19,8 @@ export const generateReportHtml = ({
   const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
   const clinicWebsite = settings.find(s => s.name === "clinic_website")?.value || "";
   const logoUrl = settings.find(s => s.name === "logo_url")?.value || "";
+  const clinicPhone = settings.find(s => s.name === "clinic_phone")?.value || "";
+  const clinicEmail = settings.find(s => s.name === "clinic_email")?.value || "";
   
   // Category name mapping
   const categoryNames: Record<string, string> = {
@@ -51,6 +54,7 @@ export const generateReportHtml = ({
     <body>
       <div class="container">
         ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
+        ${createReportFooter(clinicPhone, clinicEmail, clinicWebsite)}
         ${createPatientInfo(patient)}
   `;
   
