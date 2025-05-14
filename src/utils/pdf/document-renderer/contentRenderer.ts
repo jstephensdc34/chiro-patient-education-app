@@ -7,7 +7,7 @@ import { renderFooter } from './footerRenderer';
 import { renderPageContent } from './pageContentRenderer';
 import { DocumentContent, PdfRenderingOptions } from './types';
 
-export { PdfRenderingOptions };
+export type { PdfRenderingOptions };
 
 /**
  * Renders the content into the PDF document with proper pagination
