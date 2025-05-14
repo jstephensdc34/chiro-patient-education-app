@@ -12,9 +12,6 @@ interface ReportHeaderProps {
 export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderProps) => {
   const [clinicInfo, setClinicInfo] = useState({
     name: "My Chiropractic Clinic",
-    address: "123 Health Street, Medical City, CA 90210",
-    phone: "(555) 123-4567",
-    email: "contact@mychiropractic.com",
     website: "www.mychiropractic.com",
     logoUrl: ""
   });
@@ -23,9 +20,6 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
     if (settings.length > 0) {
       const info = {
         name: settings.find(s => s.name === "clinic_name")?.value || clinicInfo.name,
-        address: settings.find(s => s.name === "clinic_address")?.value || clinicInfo.address,
-        phone: settings.find(s => s.name === "clinic_phone")?.value || clinicInfo.phone,
-        email: settings.find(s => s.name === "clinic_email")?.value || clinicInfo.email,
         website: settings.find(s => s.name === "clinic_website")?.value || clinicInfo.website,
         logoUrl: settings.find(s => s.name === "logo_url")?.value || clinicInfo.logoUrl
       };
@@ -40,8 +34,7 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
           <Skeleton className="w-16 h-16" />
           <div className="flex-grow space-y-2">
             <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-4 w-1/3" />
           </div>
         </CardContent>
       </Card>
@@ -66,14 +59,7 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
         </div>
         <div className="flex-grow">
           <h2 className="text-xl font-bold text-medical-700">{clinicInfo.name}</h2>
-          <div className="text-sm text-gray-600">
-            <p>{clinicInfo.address}</p>
-            <p className="flex flex-wrap gap-x-4">
-              <span>{clinicInfo.phone}</span>
-              <span>{clinicInfo.email}</span>
-              <span>{clinicInfo.website}</span>
-            </p>
-          </div>
+          <p className="text-sm text-gray-600">{clinicInfo.website}</p>
         </div>
       </CardContent>
     </Card>

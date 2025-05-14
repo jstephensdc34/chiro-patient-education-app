@@ -16,9 +16,6 @@ export const generateReportHtml = ({
 }: GenerateReportHtmlParams): string => {
   // Get clinic info from settings
   const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
-  const clinicAddress = settings.find(s => s.name === "clinic_address")?.value || "";
-  const clinicPhone = settings.find(s => s.name === "clinic_phone")?.value || "";
-  const clinicEmail = settings.find(s => s.name === "clinic_email")?.value || "";
   const clinicWebsite = settings.find(s => s.name === "clinic_website")?.value || "";
   const logoUrl = settings.find(s => s.name === "logo_url")?.value || "";
   
@@ -44,7 +41,7 @@ export const generateReportHtml = ({
   // Get styles
   const styles = getReportStyles();
 
-  // Build report HTML content
+  // Build report HTML content with header
   let reportHTML = `
     <!DOCTYPE html>
     <html>
@@ -53,7 +50,7 @@ export const generateReportHtml = ({
     </head>
     <body>
       <div class="container">
-        ${createReportHeader(clinicName, clinicAddress, clinicPhone, clinicEmail, clinicWebsite, logoUrl)}
+        ${createReportHeader(clinicName, clinicWebsite, logoUrl)}
         ${createPatientInfo(patient)}
   `;
   

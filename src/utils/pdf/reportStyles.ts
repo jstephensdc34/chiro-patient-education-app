@@ -30,6 +30,19 @@ export const getReportStyles = (): string => {
       /* Ensure links are clearly visible and interactive */
       a { color: #1890ff; text-decoration: none; background-color: rgba(24, 144, 255, 0.1); padding: 0 3px; }
       a[target="_blank"]::after { content: ""; margin-left: 3px; }
+      
+      /* Header on each page */
+      @page {
+        @top-center {
+          content: element(header);
+        }
+      }
+      .header {
+        position: running(header);
+      }
+      .container {
+        margin-top: 2rem;
+      }
     </style>
   `;
 };
