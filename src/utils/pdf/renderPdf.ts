@@ -77,7 +77,7 @@ export const renderPdfFromHtml = async (
     
     onProgress?.({ status: 'generating', percentage: 70 });
     
-    // Create PDF with hyperlink support
+    // Create PDF with proper margins
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -85,48 +85,75 @@ export const renderPdfFromHtml = async (
     });
     
     const imgData = canvas.toDataURL('image/png');
-    const imgWidth = 210; // A4 width in mm
+    
+    // A4 dimensions
+    const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
     
-    // Define margins (in mm) - adding 1 inch (25.4mm) margins to top and bottom
+    // Define margins (in mm) - 1 inch = 25.4mm
     const marginTop = 25.4;
     const marginBottom = 25.4;
+    const marginLeft = 0; // Keep left margin at 0 as per current design
+    
+    // Calculate available content area dimensions
+    const contentWidth = pageWidth - (marginLeft * 2);
     const contentHeight = pageHeight - marginTop - marginBottom;
     
-    // Calculate scaled image height
-    const imgHeight = canvas.height * imgWidth / canvas.width;
+    // Scale canvas to fit width of content area
+    const imgWidth = contentWidth;
+    const imgHeight = canvas.height * contentWidth / canvas.width;
     
-    // Handle multi-page content with proper margins
     let heightLeft = imgHeight;
-    let position = -marginTop; // Start position accounting for top margin
+    let position = 0;
     let pageCount = 0;
     
-    // First page with top margin
-    pdf.addImage(imgData, 'PNG', 0, marginTop, imgWidth, imgHeight);
-    heightLeft -= contentHeight;
-    pageCount++;
+    // Add first page
+    pdf.addPage();
     
-    // Add more pages if needed, with proper margins
+    // Position image with respect to top margin
+    position = marginTop;
+    pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+    heightLeft -= (contentHeight);
+    pageCount = 1;
+    
+    // Add more pages if needed
     while (heightLeft > 0) {
-      position = -(pageHeight * pageCount) + marginTop; // Apply top margin to each page
+      // Add a new page
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= contentHeight;
       pageCount++;
+      
+      // Calculate position for next portion of the image
+      // Move up by the height of content already shown
+      position = marginTop - (contentHeight * (pageCount - 1));
+      
+      // Add the image at the calculated position
+      pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      
+      // Reduce remaining height
+      heightLeft -= contentHeight;
     }
     
     // Process links in the document and add them to the PDF
-    processLinksForPdf(reportContainer, pdf, imgWidth, imgHeight);
+    processLinksForPdf(reportContainer, pdf, contentWidth, imgHeight);
     
-    // Add page numbers - position them to respect the bottom margin
+    // Add page numbers at the bottom of each page (respecting bottom margin)
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFontSize(10);
       pdf.setTextColor(100);
-      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - marginBottom/2, { align: 'center' });
+      // Position the page number in the center, above the bottom margin
+      pdf.text(
+        `Page ${i} of ${pdf.getNumberOfPages()}`, 
+        pageWidth / 2, 
+        pageHeight - (marginBottom / 2), 
+        { align: 'center' }
+      );
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
+    
+    // Remove the first blank page that was automatically added
+    pdf.deletePage(1);
     
     // Download the PDF with a clean filename
     const cleanPatientName = patientName.replace(/[^a-zA-Z0-9]/g, '_');
