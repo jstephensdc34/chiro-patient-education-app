@@ -8,7 +8,7 @@ export const renderUncategorizedItems = (items: ReportItem[]): string => {
       <h4 class="subcategory-title">
         Other
       </h4>
-      <ul>
+      <ul class="items-list">
         ${items.map(item => renderReportItem(item)).join('')}
       </ul>
     </div>

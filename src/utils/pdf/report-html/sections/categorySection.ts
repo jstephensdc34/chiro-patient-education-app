@@ -32,7 +32,7 @@ export const renderCategorySection = (
     }
   } else {
     // For other categories, just list all items
-    html += `<ul>`;
+    html += `<ul class="items-list">`;
     categoryItems.forEach(item => {
       html += renderReportItem(item);
     });

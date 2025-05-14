@@ -30,7 +30,7 @@ export const renderSubcategoryItems = (
       <h4 class="subcategory-title">
         ${getSubcategoryName(subcategoryId)}
       </h4>
-      <ul>
+      <ul class="items-list">
         ${items.map(item => renderReportItem(item)).join('')}
       </ul>
     </div>

@@ -1,6 +1,7 @@
 
 import { jsPDF } from 'jspdf';
 import { paginateContent } from './pagination';
+import { processLinksForPdf } from '../pdf-utils/links';
 
 interface DocumentContent {
   header: string;
@@ -43,8 +44,23 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   const footerHeight = 15; // Estimate footer height in mm
   const contentHeight = pageSize.height - margins.top - margins.bottom - headerHeight - footerHeight;
   
+  // Create a temporary HTML container to render content for proper link processing
+  const container = document.createElement('div');
+  container.innerHTML = content.header + content.body.join('') + content.footer;
+  document.body.appendChild(container);
+  
   // Split content into pages
   const contentPages = paginateContent(content.body, contentHeight);
+  
+  // Process links for proper PDF hyperlinks
+  try {
+    processLinksForPdf(container, doc, contentWidth, contentHeight);
+  } catch (error) {
+    console.error('Error processing links:', error);
+  }
+  
+  // Clean up temporary container
+  document.body.removeChild(container);
   
   // Render each page
   contentPages.forEach((pageContent, pageIndex) => {
