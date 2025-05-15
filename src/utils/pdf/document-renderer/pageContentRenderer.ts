@@ -15,6 +15,9 @@ export function renderPageContent(
 ): void {
   let currentY = startY + 5; // Reduced spacing after header to prevent overlap
   
+  // Track which elements have been processed to prevent duplicates
+  const processedLists = new Set<string>();
+  
   // Process each content block
   contentItems.forEach(html => {
     // Parse HTML content
@@ -41,23 +44,38 @@ export function renderPageContent(
       // Find the following list for this subcategory
       let nextElement = subcategoryTitle.nextElementSibling;
       if (nextElement && nextElement.classList.contains('items-list')) {
-        currentY = renderItemsList(doc, nextElement as HTMLElement, x, width, currentY);
+        // Generate a unique ID for this list
+        const listId = `list-${nextElement.textContent?.trim()}-${Math.random().toString(36).slice(2, 10)}`;
+        
+        // Only process if not already processed
+        if (!processedLists.has(listId)) {
+          processedLists.add(listId);
+          currentY = renderItemsList(doc, nextElement as HTMLElement, x, width, currentY);
+        }
       }
     });
     
-    // Handle direct item lists (not under subcategories)
+    // Handle direct item lists (not under subcategories) - skip any that have already been processed
     const directItemLists = contentDoc.querySelectorAll('ul.items-list:not([data-processed="true"])');
     directItemLists.forEach(itemsList => {
       // Only process lists that aren't already processed as part of subcategories
       if (!itemsList.previousElementSibling || !itemsList.previousElementSibling.classList.contains('subcategory-title')) {
-        currentY = renderItemsList(doc, itemsList as HTMLElement, x, width, currentY);
-        // Mark as processed
+        // Generate a unique ID for this list
+        const listId = `direct-list-${itemsList.textContent?.trim()}-${Math.random().toString(36).slice(2, 10)}`;
+        
+        // Only process if not already processed
+        if (!processedLists.has(listId)) {
+          processedLists.add(listId);
+          currentY = renderItemsList(doc, itemsList as HTMLElement, x, width, currentY);
+        }
+        
+        // Mark as processed in the DOM
         itemsList.setAttribute('data-processed', 'true');
       }
     });
     
     // Handle notes and other paragraphs - explicitly exclude ALL item-related elements
-    const paragraphs = contentDoc.querySelectorAll('p:not(.item-description):not([data-pdf-content="true"]):not(.item-link):not([class*="item"])');
+    const paragraphs = contentDoc.querySelectorAll('p:not([class*="item"]):not([data-pdf-content])');
     
     paragraphs.forEach(p => {
       const text = p.textContent || '';

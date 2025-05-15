@@ -10,6 +10,7 @@ import {
   createPdfFilename,
   PdfRenderingOptions
 } from './document-renderer';
+import { resetProcessedDescriptions } from './document-renderer/renderers/itemRenderer';
 
 export interface RenderPdfProgress {
   status: 'preparing' | 'rendering' | 'generating' | 'finalizing' | 'complete';
@@ -38,6 +39,9 @@ export const renderPdfFromHtml = async (
   try {
     // Update progress
     reportProgress('preparing', 10, onProgress);
+    
+    // Reset the tracking of processed descriptions
+    resetProcessedDescriptions();
     
     // Create new PDF document
     const doc = new jsPDF({

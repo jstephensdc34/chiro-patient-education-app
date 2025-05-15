@@ -2,6 +2,16 @@
 import { jsPDF } from 'jspdf';
 import { renderText, getTextWidth, createLinkAnnotation } from './textRenderer';
 
+// Create a global Set to track processed descriptions across PDF generation
+let processedDescriptionIds = new Set<string>();
+
+/**
+ * Resets the tracking of processed descriptions - should be called before each PDF generation
+ */
+export function resetProcessedDescriptions(): void {
+  processedDescriptionIds.clear();
+}
+
 /**
  * Processes a list of report items with proper formatting
  */
@@ -15,10 +25,10 @@ export function renderItemsList(
   let currentY = startY;
   const items = itemsList.querySelectorAll('li.report-item');
   
-  // Track which descriptions have been processed to prevent duplicates
-  const processedDescriptions = new Set();
-  
   items.forEach(item => {
+    // Generate a unique ID for this item based on content and position in DOM
+    const itemUniqueId = `item-${item.textContent?.trim()}-${item.getAttribute('data-item-id') || Math.random().toString(36).substring(2, 15)}`;
+    
     // Check if we need a new page before starting a new item
     if (currentY > 250) {
       doc.addPage();
@@ -57,20 +67,15 @@ export function renderItemsList(
       currentY += 6; // Reduced spacing after item name to match preview
     }
     
-    // Get a unique identifier for this item (combining name and description)
-    const itemId = item.textContent?.trim();
-    
-    // Only process description if we haven't seen this item before
-    if (itemId && !processedDescriptions.has(itemId)) {
-      processedDescriptions.add(itemId);
+    // Only process description if we haven't already processed this exact description
+    if (!processedDescriptionIds.has(itemUniqueId)) {
+      // Mark this item as processed
+      processedDescriptionIds.add(itemUniqueId);
       
-      // Find the description element - try with data attribute first
-      let descriptionElement = item.querySelector('.item-description[data-pdf-content="true"]');
-      
-      // If not found with data attribute, try any item description as fallback
-      if (!descriptionElement) {
-        descriptionElement = item.querySelector('.item-description');
-      }
+      // Find description with data attribute first, then fallback to any description
+      const descriptionElement = 
+        item.querySelector('.item-description[data-pdf-content="true"]') || 
+        item.querySelector('.item-description');
       
       if (descriptionElement) {
         // Check space for description
@@ -87,7 +92,7 @@ export function renderItemsList(
           indent: 15
         });
         
-        currentY += 3; // Reduced spacing after description to match preview
+        currentY += 3; // Reduced spacing after description
       }
     }
     

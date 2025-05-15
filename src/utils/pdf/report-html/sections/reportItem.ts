@@ -4,7 +4,7 @@ import { sanitizeHtml } from '@/components/ui/rich-text-editor';
 
 export const renderReportItem = (item: ReportItem): string => {
   return `
-    <li class="report-item">
+    <li class="report-item" data-item-id="${item.id}">
       <div class="item-name">
         ${item.name}
         ${item.infoLink ? `<a href="${item.infoLink}" class="info-link" target="_blank" rel="noopener">[info]</a>` : ''}
