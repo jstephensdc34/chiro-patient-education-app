@@ -16,8 +16,7 @@ export const ReportItem = ({ item }: ReportItemProps) => {
       </div>
       {item.description && (
         <div 
-          className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm primary-description"
-          data-pdf-content="true"
+          className="prose prose-sm text-gray-600 mt-1 ml-4 text-sm"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
         />
       )}

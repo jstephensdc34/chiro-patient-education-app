@@ -1,7 +1,7 @@
 
 import { PatientInfo, ReportItem } from '@/types';
 import { ReportSetting } from '@/services/reportSettingsService';
-import { generateReportHtml } from './report-html';
+import { generateReportHtml } from './generateReportHtml';
 import { renderPdfFromHtml, RenderPdfProgress } from './renderPdf';
 
 interface GeneratePDFParams {
@@ -17,7 +17,7 @@ export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
   const { patient, selectedItems, notes, settings, subcategories, onProgress } = params;
   
   try {
-    // Generate the HTML content with the new structure
+    // Generate the HTML content
     const htmlContent = generateReportHtml({
       patient,
       selectedItems,
@@ -26,7 +26,7 @@ export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
       subcategories
     });
     
-    // Render the PDF from the HTML content using our new direct jsPDF approach
+    // Render the PDF from the HTML content
     await renderPdfFromHtml(htmlContent, patient.name, onProgress);
   } catch (error) {
     console.error("Error in PDF generation:", error);
