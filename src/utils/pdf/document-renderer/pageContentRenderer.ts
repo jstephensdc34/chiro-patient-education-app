@@ -48,13 +48,14 @@ export function renderPageContent(
     // Handle direct item lists (not under subcategories)
     const directItemLists = contentDoc.querySelectorAll('ul.items-list');
     directItemLists.forEach(itemsList => {
+      // Only process lists that aren't already processed as part of subcategories
       if (!itemsList.previousElementSibling || !itemsList.previousElementSibling.classList.contains('subcategory-title')) {
         currentY = renderItemsList(doc, itemsList as HTMLElement, x, width, currentY);
       }
     });
     
-    // Handle notes and other paragraphs
-    const paragraphs = contentDoc.querySelectorAll('p:not(.item-description):not(.item-link)');
+    // Handle notes and other paragraphs - explicitly exclude item descriptions
+    const paragraphs = contentDoc.querySelectorAll('p:not(.item-description):not([data-pdf-content="true"]):not(.item-link)');
     
     paragraphs.forEach(p => {
       const text = p.textContent || '';

@@ -54,9 +54,8 @@ export function renderItemsList(
       currentY += 6; // Reduced spacing after item name to match preview
     }
     
-    // Item description - only process primary descriptions, NOT any other descriptions
-    // that may be duplicated in the HTML
-    const descriptionElement = item.querySelector('.item-description.primary-description');
+    // ONLY process descriptions with the data-pdf-content attribute to prevent duplicates
+    const descriptionElement = item.querySelector('.item-description[data-pdf-content="true"]');
     if (descriptionElement) {
       // Check space for description
       if (currentY > 240) {
