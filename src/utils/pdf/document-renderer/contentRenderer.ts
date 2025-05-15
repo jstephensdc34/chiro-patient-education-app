@@ -20,7 +20,10 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   const contentWidth = pageSize.width - margins.left - margins.right;
   const headerHeight = 40; // Increased header height to accommodate larger logo (in mm)
   const footerHeight = 15; // Estimate footer height in mm
-  const contentHeight = pageSize.height - margins.top - margins.bottom - headerHeight - footerHeight;
+  
+  // Reduce top margin by 0.5 inch (12.7mm) to prevent overlap with header
+  const adjustedMarginTop = Math.max(10, margins.top - 12.7);
+  const contentHeight = pageSize.height - adjustedMarginTop - margins.bottom - headerHeight - footerHeight;
   
   // Create a temporary HTML container to render content for proper link processing
   const container = document.createElement('div');
@@ -44,6 +47,12 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   // Clean up temporary container
   document.body.removeChild(container);
   
+  // Skip rendering if all pages are empty
+  if (contentPages.length === 0 || (contentPages.length === 1 && contentPages[0].length === 0)) {
+    console.warn('No content to render in PDF');
+    return;
+  }
+  
   // Render each page
   contentPages.forEach((pageContent, pageIndex) => {
     // Skip rendering if page content is empty
@@ -55,10 +64,10 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
     }
     
     // Add header to each page
-    renderHeader(doc, clinicInfo, margins, contentWidth);
+    renderHeader(doc, clinicInfo, { ...margins, top: adjustedMarginTop }, contentWidth);
     
     // Add content for this page - using improved starting Y position
-    const startY = margins.top + headerHeight / 2; // Adjusted to prevent overlapping with header
+    const startY = adjustedMarginTop + headerHeight; // Adjusted to prevent overlapping with header
     renderPageContent(doc, pageContent, margins.left, startY, contentWidth);
     
     // Add footer to each page - positioning at bottom of page

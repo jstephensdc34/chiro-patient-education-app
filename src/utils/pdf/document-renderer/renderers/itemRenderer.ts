@@ -51,7 +51,7 @@ export function renderItemsList(
         }
       }
       
-      currentY += 8; // Increased spacing after item name
+      currentY += 6; // Reduced spacing after item name to match preview
     }
     
     // Item description - only process once
@@ -71,10 +71,10 @@ export function renderItemsList(
         indent: 15
       });
       
-      currentY += 4; // Add more space after description
+      currentY += 3; // Reduced spacing after description to match preview
     }
     
-    // Info link text
+    // Info link text - we only show this once now, no duplicates
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
       // Check space for link
@@ -107,10 +107,10 @@ export function renderItemsList(
         }
       }
       
-      currentY += 8; // Increase spacing after link
+      currentY += 6; // Reduced spacing after link
     }
     
-    currentY += 5; // Space between items
+    currentY += 3; // Reduced space between items to match preview
   });
   
   return currentY;

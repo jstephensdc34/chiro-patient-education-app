@@ -13,7 +13,7 @@ export function renderPageContent(
   startY: number,
   width: number
 ): void {
-  let currentY = startY + 10; // Start position after header
+  let currentY = startY + 5; // Reduced spacing after header to prevent overlap
   
   // Process each content block
   contentItems.forEach(html => {
@@ -62,6 +62,6 @@ export function renderPageContent(
     });
     
     // Add spacing between sections
-    currentY += 10;
+    currentY += 5; // Reduced spacing between sections
   });
 }
