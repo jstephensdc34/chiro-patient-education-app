@@ -27,7 +27,7 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   container.innerHTML = content.header + content.body.join('') + content.footer;
   document.body.appendChild(container);
   
-  // Split content into pages
+  // Split content into pages with improved algorithm
   const contentPages = paginateContent(content.body, contentHeight);
   
   // Process links for proper PDF hyperlinks
@@ -50,8 +50,8 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
     // Add header to each page
     renderHeader(doc, clinicInfo, margins, contentWidth);
     
-    // Add content for this page
-    const startY = margins.top + headerHeight;
+    // Add content for this page - using improved starting Y position
+    const startY = margins.top + headerHeight / 2; // Adjusted to prevent overlapping with header
     renderPageContent(doc, pageContent, margins.left, startY, contentWidth);
     
     // Add footer to each page - positioning at bottom of page

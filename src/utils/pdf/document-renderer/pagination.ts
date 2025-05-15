@@ -3,13 +3,39 @@
  * Splits content into pages based on estimated content height
  */
 export function paginateContent(bodyContent: string[], contentHeight: number): string[][] {
-  // This is a simplified pagination - in a real implementation, 
-  // you would need to calculate actual content heights
-  const contentPerPage = Math.max(1, Math.floor(contentHeight / 40)); // Rough estimate of content elements per page
+  // Improved pagination algorithm that estimates content density
+  const estimateContentHeight = (content: string): number => {
+    // Rough estimation based on content length and HTML tags
+    const textLength = content.length;
+    const headingCount = (content.match(/<h[3-4]/g) || []).length;
+    const listItemCount = (content.match(/<li/g) || []).length;
+    
+    // Each heading takes ~20 units, each list item ~15 units, text takes 1 unit per 20 chars
+    return headingCount * 20 + listItemCount * 15 + textLength / 20;
+  };
   
+  // Improved algorithm that considers content density
   const pages: string[][] = [];
-  for (let i = 0; i < bodyContent.length; i += contentPerPage) {
-    pages.push(bodyContent.slice(i, i + contentPerPage));
+  let currentPage: string[] = [];
+  let currentPageHeight = 0;
+  
+  for (const content of bodyContent) {
+    const contentEstimatedHeight = estimateContentHeight(content);
+    
+    // If adding this content would exceed page height, start a new page
+    if (currentPageHeight > 0 && currentPageHeight + contentEstimatedHeight > contentHeight) {
+      pages.push(currentPage);
+      currentPage = [content];
+      currentPageHeight = contentEstimatedHeight;
+    } else {
+      currentPage.push(content);
+      currentPageHeight += contentEstimatedHeight;
+    }
+  }
+  
+  // Add the last page if not empty
+  if (currentPage.length > 0) {
+    pages.push(currentPage);
   }
   
   // Ensure we have at least one page

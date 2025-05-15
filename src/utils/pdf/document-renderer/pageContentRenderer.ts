@@ -22,6 +22,12 @@ export function renderPageContent(
     // Get heading
     const heading = contentDoc.querySelector('h3');
     if (heading) {
+      // Check if we need a new page
+      if (currentY > 260) {
+        doc.addPage();
+        currentY = startY;
+      }
+      
       doc.setFontSize(16);
       doc.setTextColor(0, 82, 156); // #00528c medical-700
       doc.text(heading.textContent || '', x, currentY);
@@ -31,6 +37,12 @@ export function renderPageContent(
     // Handle subcategory titles
     const subcategoryTitles = contentDoc.querySelectorAll('h4.subcategory-title');
     subcategoryTitles.forEach(subcategoryTitle => {
+      // Check if we need a new page
+      if (currentY > 260) {
+        doc.addPage();
+        currentY = startY;
+      }
+      
       doc.setFontSize(14);
       doc.setTextColor(9, 109, 217); // #096dd9 medical-600
       doc.text(subcategoryTitle.textContent || '', x + 5, currentY);
@@ -39,8 +51,7 @@ export function renderPageContent(
       // Find the following list for this subcategory
       let nextElement = subcategoryTitle.nextElementSibling;
       if (nextElement && nextElement.classList.contains('items-list')) {
-        processItemsList(nextElement as HTMLElement, doc, x, width, currentY);
-        currentY += 6 * (nextElement.children.length + 1); // Adjust based on number of items
+        currentY = processItemsList(nextElement as HTMLElement, doc, x, width, currentY);
       }
     });
     
@@ -48,8 +59,7 @@ export function renderPageContent(
     const directItemLists = contentDoc.querySelectorAll('ul.items-list');
     directItemLists.forEach(itemsList => {
       if (!itemsList.previousElementSibling || !itemsList.previousElementSibling.classList.contains('subcategory-title')) {
-        processItemsList(itemsList as HTMLElement, doc, x, width, currentY);
-        currentY += 6 * (itemsList.children.length + 1);
+        currentY = processItemsList(itemsList as HTMLElement, doc, x, width, currentY);
       }
     });
     
@@ -64,7 +74,8 @@ export function renderPageContent(
       const textLines = doc.splitTextToSize(text, width - 10);
       
       textLines.forEach(line => {
-        if (currentY > 270) { // Near bottom of page
+        // Check if we need a new page
+        if (currentY > 260) {
           doc.addPage();
           currentY = startY;
         }
@@ -89,6 +100,12 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
   const items = itemsList.querySelectorAll('li.report-item');
   
   items.forEach(item => {
+    // Check if we need a new page before starting a new item
+    if (currentY > 260) {
+      doc.addPage();
+      currentY = 40; // Reset to top of new page with some margin
+    }
+    
     // Item name with bullet point
     const nameElement = item.querySelector('.item-name');
     if (nameElement) {
@@ -97,7 +114,7 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
       doc.setTextColor(0);
       
       const nameText = nameElement.textContent || '';
-      doc.text(nameText, x + 10, currentY);
+      doc.text('• ' + nameText.trim(), x + 10, currentY);
       
       // Add link annotation for info link if present
       const infoLink = nameElement.querySelector('.info-link');
@@ -105,7 +122,7 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
         const href = infoLink.getAttribute('href');
         if (href) {
           // Position the link annotation right after the text
-          const textWidth = doc.getStringUnitWidth(nameText) * doc.getFontSize() / doc.internal.scaleFactor;
+          const textWidth = doc.getStringUnitWidth(nameText.trim()) * doc.getFontSize() / doc.internal.scaleFactor;
           doc.setTextColor(24, 144, 255); // #1890ff
           doc.setFontSize(9);
           doc.text('[info]', x + 10 + textWidth + 2, currentY);
@@ -121,6 +138,12 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
     // Item description
     const descriptionElement = item.querySelector('.item-description');
     if (descriptionElement) {
+      // Check space for description
+      if (currentY > 250) {
+        doc.addPage();
+        currentY = 40; // Reset to top of new page with some margin
+      }
+      
       doc.setFontSize(10);
       doc.setFont(undefined, 'normal');
       doc.setTextColor(102, 102, 102); // #666666
@@ -129,9 +152,9 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
       const descLines = doc.splitTextToSize(descText, width - 30);
       
       descLines.forEach(line => {
-        if (currentY > 270) {
+        if (currentY > 260) {
           doc.addPage();
-          currentY = startY;
+          currentY = 40; // Reset to top of new page with some margin
         }
         
         doc.text(line, x + 15, currentY);
@@ -144,6 +167,12 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
     // Info link text
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
+      // Check space for link
+      if (currentY > 260) {
+        doc.addPage();
+        currentY = 40; // Reset to top of new page with some margin
+      }
+      
       doc.setFontSize(9);
       doc.setFont(undefined, 'italic');
       doc.setTextColor(24, 144, 255); // #1890ff
