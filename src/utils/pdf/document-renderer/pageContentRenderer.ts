@@ -23,30 +23,30 @@ export function renderPageContent(
     const heading = contentDoc.querySelector('h3');
     if (heading) {
       // Check if we need a new page
-      if (currentY > 260) {
+      if (currentY > 250) {
         doc.addPage();
-        currentY = startY;
+        currentY = 40; // Reset Y position on new page
       }
       
       doc.setFontSize(16);
       doc.setTextColor(0, 82, 156); // #00528c medical-700
       doc.text(heading.textContent || '', x, currentY);
-      currentY += 10;
+      currentY += 12; // Increased spacing after heading
     }
     
     // Handle subcategory titles
     const subcategoryTitles = contentDoc.querySelectorAll('h4.subcategory-title');
     subcategoryTitles.forEach(subcategoryTitle => {
       // Check if we need a new page
-      if (currentY > 260) {
+      if (currentY > 250) {
         doc.addPage();
-        currentY = startY;
+        currentY = 40;
       }
       
       doc.setFontSize(14);
       doc.setTextColor(9, 109, 217); // #096dd9 medical-600
       doc.text(subcategoryTitle.textContent || '', x + 5, currentY);
-      currentY += 8;
+      currentY += 10; // Increased spacing after subcategory
       
       // Find the following list for this subcategory
       let nextElement = subcategoryTitle.nextElementSibling;
@@ -75,9 +75,9 @@ export function renderPageContent(
       
       textLines.forEach(line => {
         // Check if we need a new page
-        if (currentY > 260) {
+        if (currentY > 250) {
           doc.addPage();
-          currentY = startY;
+          currentY = 40;
         }
         
         doc.text(line, x + 5, currentY);
@@ -101,7 +101,7 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
   
   items.forEach(item => {
     // Check if we need a new page before starting a new item
-    if (currentY > 260) {
+    if (currentY > 250) {
       doc.addPage();
       currentY = 40; // Reset to top of new page with some margin
     }
@@ -114,34 +114,35 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
       doc.setTextColor(0);
       
       const nameText = nameElement.textContent || '';
-      doc.text('• ' + nameText.trim(), x + 10, currentY);
+      const cleanNameText = nameText.replace('[info]', '').trim(); // Remove info text for cleaner output
+      doc.text('• ' + cleanNameText, x + 10, currentY);
       
       // Add link annotation for info link if present
-      const infoLink = nameElement.querySelector('.info-link');
+      const infoLink = item.querySelector('.info-link');
       if (infoLink) {
         const href = infoLink.getAttribute('href');
         if (href) {
           // Position the link annotation right after the text
-          const textWidth = doc.getStringUnitWidth(nameText.trim()) * doc.getFontSize() / doc.internal.scaleFactor;
+          const textWidth = doc.getStringUnitWidth(cleanNameText) * doc.getFontSize() / doc.internal.scaleFactor;
           doc.setTextColor(24, 144, 255); // #1890ff
           doc.setFontSize(9);
-          doc.text('[info]', x + 10 + textWidth + 2, currentY);
+          doc.text('[info]', x + 10 + textWidth + 5, currentY);
           
           // Add clickable link
-          doc.link(x + 10 + textWidth + 2, currentY - 3, 15, 5, { url: href });
+          doc.link(x + 10 + textWidth + 5, currentY - 3, 15, 5, { url: href });
         }
       }
       
-      currentY += 6;
+      currentY += 8; // Increased spacing after item name
     }
     
-    // Item description
+    // Item description - only process once
     const descriptionElement = item.querySelector('.item-description');
     if (descriptionElement) {
       // Check space for description
-      if (currentY > 250) {
+      if (currentY > 240) {
         doc.addPage();
-        currentY = 40; // Reset to top of new page with some margin
+        currentY = 40;
       }
       
       doc.setFontSize(10);
@@ -152,25 +153,25 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
       const descLines = doc.splitTextToSize(descText, width - 30);
       
       descLines.forEach(line => {
-        if (currentY > 260) {
+        if (currentY > 250) {
           doc.addPage();
-          currentY = 40; // Reset to top of new page with some margin
+          currentY = 40;
         }
         
         doc.text(line, x + 15, currentY);
         currentY += 5;
       });
       
-      currentY += 2;
+      currentY += 4; // Add more space after description
     }
     
     // Info link text
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
       // Check space for link
-      if (currentY > 260) {
+      if (currentY > 250) {
         doc.addPage();
-        currentY = 40; // Reset to top of new page with some margin
+        currentY = 40;
       }
       
       doc.setFontSize(9);
@@ -197,10 +198,10 @@ function processItemsList(itemsList: HTMLElement, doc: jsPDF, x: number, width: 
         }
       }
       
-      currentY += 6;
+      currentY += 8; // Increase spacing after link
     }
     
-    currentY += 4; // Space between items
+    currentY += 5; // Space between items
   });
   
   return currentY;

@@ -24,11 +24,15 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   
   // Create a temporary HTML container to render content for proper link processing
   const container = document.createElement('div');
-  container.innerHTML = content.header + content.body.join('') + content.footer;
+  
+  // Filter out empty content to prevent blank pages
+  const filteredBody = content.body.filter(item => item && item.trim() !== '');
+  
+  container.innerHTML = content.header + filteredBody.join('') + content.footer;
   document.body.appendChild(container);
   
   // Split content into pages with improved algorithm
-  const contentPages = paginateContent(content.body, contentHeight);
+  const contentPages = paginateContent(filteredBody, contentHeight);
   
   // Process links for proper PDF hyperlinks
   try {
@@ -42,6 +46,9 @@ export function renderDocumentContent(doc: jsPDF, content: DocumentContent): voi
   
   // Render each page
   contentPages.forEach((pageContent, pageIndex) => {
+    // Skip rendering if page content is empty
+    if (pageContent.length === 0) return;
+    
     // Add a new page for all pages after the first
     if (pageIndex > 0) {
       doc.addPage();

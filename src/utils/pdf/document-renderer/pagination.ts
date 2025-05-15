@@ -10,8 +10,8 @@ export function paginateContent(bodyContent: string[], contentHeight: number): s
     const headingCount = (content.match(/<h[3-4]/g) || []).length;
     const listItemCount = (content.match(/<li/g) || []).length;
     
-    // Each heading takes ~20 units, each list item ~15 units, text takes 1 unit per 20 chars
-    return headingCount * 20 + listItemCount * 15 + textLength / 20;
+    // Each heading takes ~25 units, each list item ~20 units, text takes 1 unit per 15 chars
+    return headingCount * 25 + listItemCount * 20 + textLength / 15;
   };
   
   // Improved algorithm that considers content density
@@ -20,11 +20,16 @@ export function paginateContent(bodyContent: string[], contentHeight: number): s
   let currentPageHeight = 0;
   
   for (const content of bodyContent) {
+    // Skip empty content sections which might cause blank pages
+    if (!content || content.trim() === '') continue;
+    
     const contentEstimatedHeight = estimateContentHeight(content);
     
     // If adding this content would exceed page height, start a new page
     if (currentPageHeight > 0 && currentPageHeight + contentEstimatedHeight > contentHeight) {
-      pages.push(currentPage);
+      if (currentPage.length > 0) {
+        pages.push(currentPage);
+      }
       currentPage = [content];
       currentPageHeight = contentEstimatedHeight;
     } else {

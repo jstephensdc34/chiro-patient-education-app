@@ -68,12 +68,17 @@ export const generateReportHtml = ({
         </div>
   `;
   
+  // Only include categories with items to prevent empty sections
+  const categoriesWithItems = MAIN_CATEGORIES.filter(categoryId => 
+    selectedItems.some(item => item.categoryId === categoryId)
+  );
+  
   // Process categories - each as a separate section for pagination
-  const categorySections = renderCategorySections(MAIN_CATEGORIES, selectedItems, reportContext);
+  const categorySections = renderCategorySections(categoriesWithItems, selectedItems, reportContext);
   reportHTML += categorySections;
   
   // Add additional notes as a section if present
-  if (notes) {
+  if (notes && notes.trim()) {
     reportHTML += `
       <div class="section notes">
         ${createAdditionalNotes(notes)}
