@@ -46,16 +46,18 @@ export function renderPageContent(
     });
     
     // Handle direct item lists (not under subcategories)
-    const directItemLists = contentDoc.querySelectorAll('ul.items-list');
+    const directItemLists = contentDoc.querySelectorAll('ul.items-list:not([data-processed="true"])');
     directItemLists.forEach(itemsList => {
       // Only process lists that aren't already processed as part of subcategories
       if (!itemsList.previousElementSibling || !itemsList.previousElementSibling.classList.contains('subcategory-title')) {
         currentY = renderItemsList(doc, itemsList as HTMLElement, x, width, currentY);
+        // Mark as processed
+        itemsList.setAttribute('data-processed', 'true');
       }
     });
     
-    // Handle notes and other paragraphs - explicitly exclude item descriptions
-    const paragraphs = contentDoc.querySelectorAll('p:not(.item-description):not([data-pdf-content="true"]):not(.item-link)');
+    // Handle notes and other paragraphs - explicitly exclude ALL item-related elements
+    const paragraphs = contentDoc.querySelectorAll('p:not(.item-description):not([data-pdf-content="true"]):not(.item-link):not([class*="item"])');
     
     paragraphs.forEach(p => {
       const text = p.textContent || '';

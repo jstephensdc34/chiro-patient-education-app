@@ -15,6 +15,9 @@ export function renderItemsList(
   let currentY = startY;
   const items = itemsList.querySelectorAll('li.report-item');
   
+  // Track which descriptions have been processed to prevent duplicates
+  const processedDescriptions = new Set();
+  
   items.forEach(item => {
     // Check if we need a new page before starting a new item
     if (currentY > 250) {
@@ -54,27 +57,41 @@ export function renderItemsList(
       currentY += 6; // Reduced spacing after item name to match preview
     }
     
-    // ONLY process descriptions with the data-pdf-content attribute to prevent duplicates
-    const descriptionElement = item.querySelector('.item-description[data-pdf-content="true"]');
-    if (descriptionElement) {
-      // Check space for description
-      if (currentY > 240) {
-        doc.addPage();
-        currentY = 40;
+    // Get a unique identifier for this item (combining name and description)
+    const itemId = item.textContent?.trim();
+    
+    // Only process description if we haven't seen this item before
+    if (itemId && !processedDescriptions.has(itemId)) {
+      processedDescriptions.add(itemId);
+      
+      // Find the description element - try with data attribute first
+      let descriptionElement = item.querySelector('.item-description[data-pdf-content="true"]');
+      
+      // If not found with data attribute, try any item description as fallback
+      if (!descriptionElement) {
+        descriptionElement = item.querySelector('.item-description');
       }
       
-      const descText = descriptionElement.textContent || '';
-      currentY = renderText(doc, descText, x, currentY, width, {
-        fontSize: 10,
-        fontStyle: 'normal',
-        color: [102, 102, 102],
-        indent: 15
-      });
-      
-      currentY += 3; // Reduced spacing after description to match preview
+      if (descriptionElement) {
+        // Check space for description
+        if (currentY > 240) {
+          doc.addPage();
+          currentY = 40;
+        }
+        
+        const descText = descriptionElement.textContent || '';
+        currentY = renderText(doc, descText, x, currentY, width, {
+          fontSize: 10,
+          fontStyle: 'normal',
+          color: [102, 102, 102],
+          indent: 15
+        });
+        
+        currentY += 3; // Reduced spacing after description to match preview
+      }
     }
     
-    // Info link text
+    // Info link text - always process this
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
       // Check space for link
