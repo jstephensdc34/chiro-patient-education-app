@@ -54,8 +54,9 @@ export function renderItemsList(
       currentY += 6; // Reduced spacing after item name to match preview
     }
     
-    // Item description - only process once
-    const descriptionElement = item.querySelector('.item-description');
+    // Item description - only process primary descriptions, NOT any other descriptions
+    // that may be duplicated in the HTML
+    const descriptionElement = item.querySelector('.item-description.primary-description');
     if (descriptionElement) {
       // Check space for description
       if (currentY > 240) {
@@ -74,7 +75,7 @@ export function renderItemsList(
       currentY += 3; // Reduced spacing after description to match preview
     }
     
-    // Info link text - we only show this once now, no duplicates
+    // Info link text
     const linkElement = item.querySelector('.item-link');
     if (linkElement) {
       // Check space for link
