@@ -77,47 +77,31 @@ export const renderPdfFromHtml = async (
     
     onProgress?.({ status: 'generating', percentage: 70 });
     
-    // Create PDF with hyperlink support
+    // Custom page dimensions: 210mm x 2970mm (A4 width x 10x A4 height)
+    const pageWidth = 210; // mm
+    const pageHeight = 2970; // mm (10x standard A4 height)
+    
+    // Create PDF with custom dimensions
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4'
+      format: [pageWidth, pageHeight] // Custom page size
     });
     
     const imgData = canvas.toDataURL('image/png');
-    const imgWidth = 210; // A4 width in mm
-    const pageHeight = 297; // A4 height in mm
+    const imgWidth = pageWidth; // PDF page width
     const imgHeight = canvas.height * imgWidth / canvas.width;
     
-    // Handle multi-page content
-    let heightLeft = imgHeight;
-    let position = 0;
-    let pageCount = 0;
-    
-    // First page
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-    pageCount++;
-    
-    // Add more pages if needed
-    while (heightLeft > 0) {
-      position = -pageHeight * pageCount;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-      pageCount++;
-    }
+    // No need for multi-page content with this extended page height
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
     
     // Process links in the document and add them to the PDF
     processLinksForPdf(reportContainer, pdf, imgWidth, imgHeight);
     
-    // Add page numbers
-    for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(10);
-      pdf.setTextColor(100);
-      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
-    }
+    // Add page number
+    pdf.setFontSize(10);
+    pdf.setTextColor(100);
+    pdf.text(`Page 1 of 1`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
     
