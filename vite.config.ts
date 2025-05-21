@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -19,4 +20,22 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      // External packages that should not be bundled
+      external: [
+        /^@tiptap\/pm\/.*/
+      ]
+    }
+  },
+  optimizeDeps: {
+    include: [
+      '@tiptap/core',
+      '@tiptap/pm/state',
+      '@tiptap/pm/view',
+      '@tiptap/pm/model',
+      '@tiptap/pm/transform',
+      '@tiptap/starter-kit'
+    ]
+  }
 }));
