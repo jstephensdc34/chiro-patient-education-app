@@ -92,9 +92,11 @@ export const renderPdfFromHtml = async (
     
     const imgData = canvas.toDataURL('image/png');
     
-    // Calculate content dimensions with margins
+    // A4 dimensions in mm
     const pdfWidth = 210; // A4 width in mm
     const pdfHeight = 297; // A4 height in mm
+    
+    // Calculate content dimensions considering margins
     const contentWidth = pdfWidth - marginLeft - marginRight;
     const contentHeight = pdfHeight - marginTop - marginBottom;
     
@@ -104,21 +106,21 @@ export const renderPdfFromHtml = async (
     
     // Handle multi-page content
     let heightLeft = imgHeight;
-    let position = 0;
-    let pageCount = 0;
+    let pageCount = 1; // Start at page 1
     
-    // First page
-    pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
+    // First page - add image with top margin
+    pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
     heightLeft -= contentHeight;
-    pageCount++;
     
     // Add more pages if needed
     while (heightLeft > 0) {
-      position = -(contentHeight * pageCount);
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
-      heightLeft -= contentHeight;
       pageCount++;
+      // Position is negative to show the continuation of the image
+      // We need to adjust by the top margin on each page
+      const position = -((pageCount - 1) * contentHeight) + marginTop;
+      pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      heightLeft -= contentHeight;
     }
     
     // Process links in the document and add them to the PDF with margin adjustments
