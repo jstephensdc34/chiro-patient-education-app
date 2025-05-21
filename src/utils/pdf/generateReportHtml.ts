@@ -43,8 +43,86 @@ export const generateReportHtml = ({
 
   // Get styles
   const styles = getReportStyles();
+  
+  // Start building report content sections
+  let headerContent = `
+    <div class="header">
+      ${logoUrl ? `<img src="${logoUrl}" alt="Clinic Logo" class="logo" />` : ''}
+      <div class="header-content">
+        <h1 class="clinic-name">${clinicName}</h1>
+        <p class="clinic-info">
+          ${clinicAddress}<br/>
+          ${clinicPhone} | ${clinicEmail} | ${clinicWebsite}
+        </p>
+      </div>
+    </div>
+    
+    <h2 class="patient-name">${patient.name}</h2>
+    <p class="patient-info">
+      ${patient.age ? `Age: ${patient.age} | ` : ''}
+      ${patient.gender ? `Gender: ${patient.gender} | ` : ''}
+      Date: ${new Date(patient.date).toLocaleDateString()}
+    </p>
+  `;
 
-  // Build report HTML content
+  // Generate category content sections
+  let categorySections = '';
+  
+  MAIN_CATEGORIES.forEach(categoryId => {
+    // Get items for this category
+    const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
+    
+    if (categoryItems.length > 0) {
+      categorySections += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
+    }
+  });
+  
+  // Add additional notes section
+  let notesContent = '';
+  if (notes) {
+    notesContent = `
+      <div class="notes-section">
+        <h3 class="notes-title">Additional Notes</h3>
+        <p class="notes-content">${notes}</p>
+      </div>
+    `;
+  }
+
+  // Build the page content with pagination
+  // First page always contains the header
+  let pageContents = [`${headerContent}`];
+  
+  // Simple content distribution algorithm - could be enhanced with more sophisticated content calculations
+  // Split categories by estimated content size
+  const categoryContentParts = categorySections.split('<div class="category-section">');
+  
+  // First part is empty due to split
+  categoryContentParts.shift();
+  
+  // Process each category part and distribute across pages
+  let currentPageContent = pageContents[0];
+  const ESTIMATED_CHARS_PER_PAGE = 3000; // Rough estimate - can be adjusted
+  
+  categoryContentParts.forEach(part => {
+    const categoryContent = `<div class="category-section">${part}`;
+    
+    // If adding this category would likely exceed a page, start a new page
+    if (currentPageContent.length + categoryContent.length > ESTIMATED_CHARS_PER_PAGE) {
+      pageContents.push(''); // Start a new page
+      currentPageContent = ''; // Reset current page content
+    }
+    
+    // Append this category to the current page
+    pageContents[pageContents.length - 1] += categoryContent;
+    currentPageContent += categoryContent;
+  });
+  
+  // Add notes to the last page
+  if (notesContent) {
+    pageContents[pageContents.length - 1] += notesContent;
+  }
+  
+  // Build final HTML with pages
   let reportHTML = `
     <!DOCTYPE html>
     <html>
@@ -52,49 +130,20 @@ export const generateReportHtml = ({
       ${styles}
     </head>
     <body>
-      <div class="container">
-        <div class="header">
-          ${logoUrl ? `<img src="${logoUrl}" alt="Clinic Logo" class="logo" />` : ''}
-          <div class="header-content">
-            <h1 class="clinic-name">${clinicName}</h1>
-            <p class="clinic-info">
-              ${clinicAddress}<br/>
-              ${clinicPhone} | ${clinicEmail} | ${clinicWebsite}
-            </p>
-          </div>
-        </div>
-        
-        <h2 class="patient-name">${patient.name}</h2>
-        <p class="patient-info">
-          ${patient.age ? `Age: ${patient.age} | ` : ''}
-          ${patient.gender ? `Gender: ${patient.gender} | ` : ''}
-          Date: ${new Date(patient.date).toLocaleDateString()}
-        </p>
   `;
   
-  // Process categories in the correct order from MAIN_CATEGORIES
-  MAIN_CATEGORIES.forEach(categoryId => {
-    // Get items for this category
-    const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
-    
-    if (categoryItems.length > 0) {
-      reportHTML += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
-    }
-  });
-  
-  // Add additional notes
-  if (notes) {
+  // Add all pages with page numbers
+  pageContents.forEach((content, index) => {
     reportHTML += `
-      <div class="notes-section">
-        <h3 class="notes-title">Additional Notes</h3>
-        <p class="notes-content">${notes}</p>
+      <div class="page-container">
+        ${content}
+        <div class="page-number">Page ${index + 1} of ${pageContents.length}</div>
       </div>
     `;
-  }
+  });
   
-  // Close the main div and HTML tags
+  // Close HTML tags
   reportHTML += `
-      </div>
     </body>
     </html>
   `;

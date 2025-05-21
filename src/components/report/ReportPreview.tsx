@@ -58,37 +58,50 @@ export const ReportPreview = ({
       </CardHeader>
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
-          <div className="space-y-6">
-            {/* Report Header */}
-            <ReportHeader settings={settings} loading={settingsLoading} />
-            
-            {/* Patient Information */}
-            <PatientInfoDisplay patient={patient} />
-            
-            <div className="space-y-8">
-              {/* Render categories in the same order as MAIN_CATEGORIES */}
-              {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
-                <ReportCategory
-                  key={category}
-                  categoryId={category}
-                  categoryName={categoryNames[category]}
-                  items={getSelectedItems(category)}
-                  subcategories={subcategories}
-                  getSubcategoryName={getSubcategoryName}
-                />
-              ))}
+          <div className="space-y-6 max-w-[210mm] mx-auto">
+            {/* Page Container - simulating the PDF page layout */}
+            <div className="bg-white p-6 border border-gray-200 shadow-sm mx-auto" 
+                 style={{ padding: '15mm', boxSizing: 'border-box' }}>
+              {/* Report Header */}
+              <ReportHeader settings={settings} loading={settingsLoading} />
               
-              {/* Additional Notes Section */}
-              {additionalNotes && (
-                <div className="border-b pb-4">
-                  <h3 className="text-medical-700 font-medium text-lg mb-3">
-                    Additional Notes
-                  </h3>
-                  <div className="pl-4">
-                    <p className="whitespace-pre-wrap">{additionalNotes}</p>
+              {/* Patient Information */}
+              <PatientInfoDisplay patient={patient} />
+              
+              <div className="space-y-8">
+                {/* Render categories in the same order as MAIN_CATEGORIES */}
+                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
+                  <ReportCategory
+                    key={category}
+                    categoryId={category}
+                    categoryName={categoryNames[category]}
+                    items={getSelectedItems(category)}
+                    subcategories={subcategories}
+                    getSubcategoryName={getSubcategoryName}
+                  />
+                ))}
+                
+                {/* Additional Notes Section */}
+                {additionalNotes && (
+                  <div className="border-b pb-4">
+                    <h3 className="text-medical-700 font-medium text-lg mb-3">
+                      Additional Notes
+                    </h3>
+                    <div className="pl-4">
+                      <p className="whitespace-pre-wrap">{additionalNotes}</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+              
+              {/* Page number indicator (for preview only) */}
+              <div className="text-center text-xs text-gray-500 mt-8">
+                Page 1
+              </div>
+            </div>
+            
+            <div className="text-center text-xs text-gray-500">
+              <p>Note: The PDF will automatically create multiple pages as needed for longer reports.</p>
             </div>
           </div>
         ) : (

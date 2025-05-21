@@ -16,18 +16,10 @@ export const renderPdfFromHtml = async (
   // Create a temporary div to render the report
   const reportContainer = document.createElement('div');
   reportContainer.id = 'report-container';
-  reportContainer.style.width = '800px';
-  reportContainer.style.padding = '20px';
   reportContainer.style.position = 'absolute';
   reportContainer.style.left = '-9999px';
   reportContainer.style.backgroundColor = 'white';
   document.body.appendChild(reportContainer);
-  
-  // Define PDF margins in mm
-  const marginLeft = 15; // 15mm left margin
-  const marginRight = 15; // 15mm right margin
-  const marginTop = 15; // 15mm top margin
-  const marginBottom = 20; // 20mm bottom margin (larger to accommodate page numbers)
   
   try {
     // Update progress
@@ -36,8 +28,15 @@ export const renderPdfFromHtml = async (
     // Set the HTML content
     reportContainer.innerHTML = htmlContent;
     
+    // Get all page containers
+    const pageContainers = reportContainer.querySelectorAll('.page-container');
+    
+    if (pageContainers.length === 0) {
+      throw new Error('No page containers found in the report');
+    }
+    
     // Wait for images to load and report progress
-    onProgress?.({ status: 'rendering', percentage: 30 });
+    onProgress?.({ status: 'rendering', percentage: 20 });
     
     // Load all images in the container
     const imgElements = reportContainer.querySelectorAll('img');
@@ -64,77 +63,50 @@ export const renderPdfFromHtml = async (
     
     // Final preparation before canvas rendering
     await new Promise((resolve) => setTimeout(resolve, 500));
-    onProgress?.({ status: 'rendering', percentage: 50 });
+    onProgress?.({ status: 'rendering', percentage: 30 });
     
-    // Convert HTML to canvas with better error handling
-    const canvas = await html2canvas(reportContainer, {
-      scale: 2, // Higher resolution
-      useCORS: true,
-      logging: false,
-      backgroundColor: '#ffffff', // Ensure white background
-      onclone: (doc) => {
-        // Additional handling for cloned document if needed
-        return Promise.resolve();
-      }
-    }).catch(error => {
-      console.error('HTML to canvas conversion failed:', error);
-      throw new Error('Failed to render the report. Please try again.');
-    });
-    
-    onProgress?.({ status: 'generating', percentage: 70 });
-    
-    // Create PDF with hyperlink support
+    // Create PDF document
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
     
-    const imgData = canvas.toDataURL('image/png');
+    // Process each page container
+    let pageIndex = 0;
     
-    // Calculate content dimensions with margins
-    const pdfWidth = 210; // A4 width in mm
-    const pdfHeight = 297; // A4 height in mm
-    const contentWidth = pdfWidth - marginLeft - marginRight;
-    const contentHeight = pdfHeight - marginTop - marginBottom;
-    
-    // Calculate image scaling to fit within the margins
-    const imgWidth = contentWidth;
-    const imgHeight = canvas.height * imgWidth / canvas.width;
-    
-    // Handle multi-page content
-    let heightLeft = imgHeight;
-    let position = 0;
-    let pageCount = 0;
-    
-    // First page
-    pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
-    heightLeft -= contentHeight;
-    pageCount++;
-    
-    // Add more pages if needed
-    while (heightLeft > 0) {
-      position = -(contentHeight * pageCount);
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
-      heightLeft -= contentHeight;
-      pageCount++;
-    }
-    
-    // Process links in the document and add them to the PDF with margin adjustments
-    processLinksForPdf(reportContainer, pdf, contentWidth, imgHeight, marginLeft, marginTop);
-    
-    // Add page numbers with margin consideration
-    for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(10);
-      pdf.setTextColor(100);
-      pdf.text(
-        `Page ${i} of ${pdf.getNumberOfPages()}`, 
-        pdfWidth / 2, 
-        pdfHeight - (marginBottom / 2), 
-        { align: 'center' }
-      );
+    for (const pageContainer of Array.from(pageContainers)) {
+      // Update progress based on page processing
+      const progressPercentage = 30 + Math.floor((pageIndex / pageContainers.length) * 50);
+      onProgress?.({ 
+        status: 'generating', 
+        percentage: Math.min(progressPercentage, 80) 
+      });
+      
+      // Add a new page for all but the first page
+      if (pageIndex > 0) {
+        pdf.addPage();
+      }
+      
+      // Convert page to canvas
+      const canvas = await html2canvas(pageContainer as HTMLElement, {
+        scale: 2, // Higher resolution
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      }).catch(error => {
+        console.error(`HTML to canvas conversion failed for page ${pageIndex + 1}:`, error);
+        throw new Error(`Failed to render page ${pageIndex + 1}. Please try again.`);
+      });
+      
+      // Add image of the page to PDF
+      const imgData = canvas.toDataURL('image/png');
+      pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // A4 dimensions in mm
+      
+      // Process links in this page
+      processLinksForPage(pageContainer as HTMLElement, pdf, pageIndex);
+      
+      pageIndex++;
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
@@ -161,39 +133,38 @@ export const renderPdfFromHtml = async (
   }
 };
 
-// Function to process links and add them to the PDF
-const processLinksForPdf = (
-  container: HTMLElement, 
-  pdf: jsPDF, 
-  contentWidth: number, 
-  imgHeight: number,
-  marginLeft: number,
-  marginTop: number
+// Function to process links for a specific page
+const processLinksForPage = (
+  pageContainer: HTMLElement, 
+  pdf: jsPDF,
+  pageIndex: number
 ) => {
-  // Get all links in the container
-  const links = container.querySelectorAll('a');
+  // Get all links in the page
+  const links = pageContainer.querySelectorAll('a');
   
   // Calculate the scale factor between HTML and PDF dimensions
-  const rect = container.getBoundingClientRect();
-  const scaleX = contentWidth / rect.width;
-  const scaleY = imgHeight / rect.height;
+  const rect = pageContainer.getBoundingClientRect();
+  
+  // A4 size in mm
+  const pdfWidth = 210; 
+  const pdfHeight = 297;
   
   // Process each link
   links.forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
     
-    // Get link position relative to the container
+    // Get link position relative to the page container
     const linkRect = link.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
+    const containerRect = pageContainer.getBoundingClientRect();
     
-    // Calculate position in PDF coordinates and add margins
-    const x = marginLeft + (linkRect.left - containerRect.left) * scaleX;
-    const y = marginTop + (linkRect.top - containerRect.top) * scaleY;
-    const width = linkRect.width * scaleX;
-    const height = linkRect.height * scaleY;
+    // Calculate position in PDF coordinates (mm)
+    const x = (linkRect.left - containerRect.left) * (pdfWidth / rect.width);
+    const y = (linkRect.top - containerRect.top) * (pdfHeight / rect.height);
+    const width = linkRect.width * (pdfWidth / rect.width);
+    const height = linkRect.height * (pdfHeight / rect.height);
     
-    // Add link annotation to the PDF (jsPDF)
+    // Add link annotation to the PDF
     pdf.link(x, y, width, height, { url: href });
   });
 };
