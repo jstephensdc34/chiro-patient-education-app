@@ -23,6 +23,12 @@ export const renderPdfFromHtml = async (
   reportContainer.style.backgroundColor = 'white';
   document.body.appendChild(reportContainer);
   
+  // Define PDF margins in mm
+  const marginLeft = 15; // 15mm left margin
+  const marginRight = 15; // 15mm right margin
+  const marginTop = 15; // 15mm top margin
+  const marginBottom = 20; // 20mm bottom margin (larger to accommodate page numbers)
+  
   try {
     // Update progress
     onProgress?.({ status: 'preparing', percentage: 10 });
@@ -85,8 +91,15 @@ export const renderPdfFromHtml = async (
     });
     
     const imgData = canvas.toDataURL('image/png');
-    const imgWidth = 210; // A4 width in mm
-    const pageHeight = 297; // A4 height in mm
+    
+    // Calculate content dimensions with margins
+    const pdfWidth = 210; // A4 width in mm
+    const pdfHeight = 297; // A4 height in mm
+    const contentWidth = pdfWidth - marginLeft - marginRight;
+    const contentHeight = pdfHeight - marginTop - marginBottom;
+    
+    // Calculate image scaling to fit within the margins
+    const imgWidth = contentWidth;
     const imgHeight = canvas.height * imgWidth / canvas.width;
     
     // Handle multi-page content
@@ -95,28 +108,33 @@ export const renderPdfFromHtml = async (
     let pageCount = 0;
     
     // First page
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
+    heightLeft -= contentHeight;
     pageCount++;
     
     // Add more pages if needed
     while (heightLeft > 0) {
-      position = -pageHeight * pageCount;
+      position = -(contentHeight * pageCount);
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
+      heightLeft -= contentHeight;
       pageCount++;
     }
     
-    // Process links in the document and add them to the PDF
-    processLinksForPdf(reportContainer, pdf, imgWidth, imgHeight);
+    // Process links in the document and add them to the PDF with margin adjustments
+    processLinksForPdf(reportContainer, pdf, contentWidth, imgHeight, marginLeft, marginTop);
     
-    // Add page numbers
+    // Add page numbers with margin consideration
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFontSize(10);
       pdf.setTextColor(100);
-      pdf.text(`Page ${i} of ${pdf.getNumberOfPages()}`, pdf.internal.pageSize.getWidth() / 2, pdf.internal.pageSize.getHeight() - 10, { align: 'center' });
+      pdf.text(
+        `Page ${i} of ${pdf.getNumberOfPages()}`, 
+        pdfWidth / 2, 
+        pdfHeight - (marginBottom / 2), 
+        { align: 'center' }
+      );
     }
     
     onProgress?.({ status: 'finalizing', percentage: 90 });
@@ -147,16 +165,18 @@ export const renderPdfFromHtml = async (
 const processLinksForPdf = (
   container: HTMLElement, 
   pdf: jsPDF, 
-  pdfWidth: number, 
-  pdfHeight: number
+  contentWidth: number, 
+  imgHeight: number,
+  marginLeft: number,
+  marginTop: number
 ) => {
   // Get all links in the container
   const links = container.querySelectorAll('a');
   
   // Calculate the scale factor between HTML and PDF dimensions
   const rect = container.getBoundingClientRect();
-  const scaleX = pdfWidth / rect.width;
-  const scaleY = pdfHeight / rect.height;
+  const scaleX = contentWidth / rect.width;
+  const scaleY = imgHeight / rect.height;
   
   // Process each link
   links.forEach(link => {
@@ -167,9 +187,9 @@ const processLinksForPdf = (
     const linkRect = link.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
     
-    // Calculate position in PDF coordinates
-    const x = (linkRect.left - containerRect.left) * scaleX;
-    const y = (linkRect.top - containerRect.top) * scaleY;
+    // Calculate position in PDF coordinates and add margins
+    const x = marginLeft + (linkRect.left - containerRect.left) * scaleX;
+    const y = marginTop + (linkRect.top - containerRect.top) * scaleY;
     const width = linkRect.width * scaleX;
     const height = linkRect.height * scaleY;
     
