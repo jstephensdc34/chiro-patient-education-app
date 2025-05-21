@@ -108,13 +108,14 @@ export const renderPdfFromHtml = async (
     let pageCount = 0;
     
     // First page
-    pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
+    pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
     heightLeft -= contentHeight;
     pageCount++;
     
     // Add more pages if needed
     while (heightLeft > 0) {
-      // Calculate position for next page - fixing the top margin issue on subsequent pages
+      // For subsequent pages, we need to calculate the vertical position properly
+      // We want to show the next part of the image starting at the top margin of the new page
       position = marginTop - (contentHeight * pageCount);
       pdf.addPage();
       pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
