@@ -114,10 +114,9 @@ export const renderPdfFromHtml = async (
     
     // Add more pages if needed
     while (heightLeft > 0) {
-      // Calculate position for next page - fixing the top margin issue on subsequent pages
-      position = marginTop - (contentHeight * pageCount);
+      position = -(contentHeight * pageCount);
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'PNG', marginLeft, marginTop + position, imgWidth, imgHeight);
       heightLeft -= contentHeight;
       pageCount++;
     }
