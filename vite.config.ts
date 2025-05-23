@@ -37,5 +37,7 @@ export default defineConfig(({ mode }) => ({
       '@tiptap/pm/transform',
       '@tiptap/starter-kit'
     ]
-  }
+  },
+  // Ensure the app works with any base path by setting this to '/'
+  base: '/',
 }));

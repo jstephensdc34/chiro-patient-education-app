@@ -13,6 +13,16 @@ if (!rootElement) {
 } else {
   const root = createRoot(rootElement);
   
+  // Handle potential runtime errors during initialization
+  window.addEventListener('error', (event) => {
+    console.error('Global error caught:', event.error);
+  });
+
+  // Log app start and environment info
+  console.log("Starting application");
+  console.log("Base URL:", import.meta.env.BASE_URL);
+  console.log("Environment:", import.meta.env.MODE);
+  
   try {
     root.render(
       <StrictMode>

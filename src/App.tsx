@@ -36,31 +36,42 @@ const queryClient = new QueryClient({
   }
 });
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <ErrorBoundary>
-          <AuthProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/report" element={<Report />} />
-                <Route path="/library" element={<Library />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/admin" element={<Admin />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </TooltipProvider>
-          </AuthProvider>
-        </ErrorBoundary>
-      </BrowserRouter>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+// Get the base URL from the environment or use root path
+const getBasename = () => {
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  return baseUrl === '/' ? '/' : baseUrl;
+};
+
+const App = () => {
+  // Log the app initialization for debugging
+  console.log("App initializing with base path:", getBasename());
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter basename={getBasename()}>
+          <ErrorBoundary>
+            <AuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/report" element={<Report />} />
+                  <Route path="/library" element={<Library />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/admin" element={<Admin />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </TooltipProvider>
+            </AuthProvider>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 // Add console logs for debugging purposes
 console.log("App component defined");

@@ -18,11 +18,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Log error details to help with debugging blank screens
+    console.error("ErrorBoundary caught an error:", error);
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error("Error caught by ErrorBoundary:", error, errorInfo);
+    console.error("Error caught by ErrorBoundary:", error);
+    console.error("Component stack:", errorInfo.componentStack);
   }
 
   render() {
@@ -30,10 +33,16 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return this.props.fallback || (
         <div className="p-6 bg-red-50 border border-red-200 rounded-md">
           <h2 className="text-xl font-semibold text-red-700 mb-2">Something went wrong</h2>
-          <p className="text-red-600">{this.state.error?.message}</p>
+          <p className="text-red-600">{this.state.error?.message || "Unknown error"}</p>
+          <pre className="mt-2 p-2 bg-gray-50 text-xs overflow-auto max-h-40 rounded">
+            {this.state.error?.stack || "No stack trace available"}
+          </pre>
           <button
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-            onClick={() => this.setState({ hasError: false, error: null })}
+            onClick={() => {
+              console.log("Attempting to recover from error");
+              this.setState({ hasError: false, error: null });
+            }}
           >
             Try again
           </button>
