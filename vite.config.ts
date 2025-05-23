@@ -22,7 +22,15 @@ export default defineConfig(({ mode }) => ({
       '@tiptap/pm/state': 'prosemirror-state',
       '@tiptap/pm/view': 'prosemirror-view',
       '@tiptap/pm/model': 'prosemirror-model',
-      '@tiptap/pm/transform': 'prosemirror-transform'
+      '@tiptap/pm/transform': 'prosemirror-transform',
+      '@tiptap/pm/dropcursor': 'prosemirror-dropcursor',
+      '@tiptap/pm/gapcursor': 'prosemirror-gapcursor',
+      '@tiptap/pm/commands': 'prosemirror-commands',
+      '@tiptap/pm/history': 'prosemirror-history',
+      '@tiptap/pm/inputrules': 'prosemirror-inputrules',
+      '@tiptap/pm/keymap': 'prosemirror-keymap',
+      '@tiptap/pm/schema-list': 'prosemirror-schema-list',
+      '@tiptap/pm/schema-basic': 'prosemirror-schema-basic'
     },
   },
   build: {
@@ -37,7 +45,15 @@ export default defineConfig(({ mode }) => ({
       'prosemirror-state',
       'prosemirror-view',
       'prosemirror-model',
-      'prosemirror-transform'
+      'prosemirror-transform',
+      'prosemirror-dropcursor',
+      'prosemirror-gapcursor',
+      'prosemirror-commands',
+      'prosemirror-history',
+      'prosemirror-inputrules',
+      'prosemirror-keymap',
+      'prosemirror-schema-list',
+      'prosemirror-schema-basic'
     ]
   },
   // Ensure the app works with any base path by setting this to '/'
