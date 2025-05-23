@@ -25,8 +25,9 @@ if (!rootElement) {
     console.log("App rendering started");
   } catch (error) {
     console.error("Error rendering the application:", error);
+    // Fix the style attribute to use proper React style object instead of string
     root.render(
-      <div style="color: red; padding: 20px;">
+      <div style={{color: "red", padding: "20px"}}>
         <h1>Error rendering the application</h1>
         <p>{error instanceof Error ? error.message : String(error)}</p>
       </div>
