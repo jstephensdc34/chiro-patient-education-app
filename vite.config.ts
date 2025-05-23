@@ -18,24 +18,26 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Add proper aliases for TipTap ProseMirror dependencies
+      '@tiptap/pm/state': 'prosemirror-state',
+      '@tiptap/pm/view': 'prosemirror-view',
+      '@tiptap/pm/model': 'prosemirror-model',
+      '@tiptap/pm/transform': 'prosemirror-transform'
     },
   },
   build: {
     rollupOptions: {
-      // External packages that should not be bundled
-      external: [
-        /^@tiptap\/pm\/.*/
-      ]
+      // We don't need to externalize these anymore since we're using aliases
     }
   },
   optimizeDeps: {
     include: [
       '@tiptap/core',
-      '@tiptap/pm/state',
-      '@tiptap/pm/view',
-      '@tiptap/pm/model',
-      '@tiptap/pm/transform',
-      '@tiptap/starter-kit'
+      '@tiptap/starter-kit',
+      'prosemirror-state',
+      'prosemirror-view',
+      'prosemirror-model',
+      'prosemirror-transform'
     ]
   },
   // Ensure the app works with any base path by setting this to '/'

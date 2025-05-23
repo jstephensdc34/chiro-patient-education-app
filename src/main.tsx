@@ -16,6 +16,17 @@ if (!rootElement) {
   // Handle potential runtime errors during initialization
   window.addEventListener('error', (event) => {
     console.error('Global error caught:', event.error);
+    // Display error in the DOM for visibility even if console isn't open
+    const errorDiv = document.createElement('div');
+    errorDiv.style.padding = '20px';
+    errorDiv.style.color = 'red';
+    errorDiv.style.backgroundColor = '#ffeeee';
+    errorDiv.style.border = '1px solid red';
+    errorDiv.style.margin = '20px';
+    errorDiv.innerHTML = `<h3>Error Loading Application</h3>
+                          <p>${event.error?.message || 'Unknown error'}</p>
+                          <pre style="overflow: auto; max-height: 300px;">${event.error?.stack || ''}</pre>`;
+    document.body.insertBefore(errorDiv, document.body.firstChild);
   });
 
   // Log app start and environment info
@@ -35,7 +46,6 @@ if (!rootElement) {
     console.log("App rendering started");
   } catch (error) {
     console.error("Error rendering the application:", error);
-    // Fix the style attribute to use proper React style object instead of string
     root.render(
       <div style={{color: "red", padding: "20px"}}>
         <h1>Error rendering the application</h1>
