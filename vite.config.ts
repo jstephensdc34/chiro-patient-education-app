@@ -35,13 +35,17 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      // We don't need to externalize these anymore since we're using aliases
+      // We explicitly externalize the prosemirror packages to avoid bundling issues
+      external: [
+        // No externals needed since we're using aliases
+      ]
     }
   },
   optimizeDeps: {
     include: [
       '@tiptap/core',
       '@tiptap/starter-kit',
+      '@tiptap/extension-dropcursor',
       'prosemirror-state',
       'prosemirror-view',
       'prosemirror-model',
