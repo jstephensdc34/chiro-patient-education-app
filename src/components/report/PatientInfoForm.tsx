@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { PatientInfo } from "@/types";
 
 interface PatientInfoFormProps {
-  patient: PatientInfo;
-  onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
+  patient: PatientInfo & { email?: string };
+  onPatientInfoChange: (key: keyof (PatientInfo & { email?: string }), value: string | number) => void;
 }
 
 export const PatientInfoForm = ({ patient, onPatientInfoChange }: PatientInfoFormProps) => {
@@ -25,6 +25,16 @@ export const PatientInfoForm = ({ patient, onPatientInfoChange }: PatientInfoFor
               value={patient.name}
               onChange={(e) => onPatientInfoChange("name", e.target.value)}
               required
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="patientEmail">Email Address</Label>
+            <Input
+              id="patientEmail"
+              type="email"
+              value={patient.email || ""}
+              onChange={(e) => onPatientInfoChange("email", e.target.value)}
+              placeholder="patient@example.com"
             />
           </div>
           <div className="grid gap-2">

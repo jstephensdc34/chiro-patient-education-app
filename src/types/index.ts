@@ -1,4 +1,3 @@
-
 export interface ReportItem {
   id: string;
   name: string;
@@ -91,4 +90,27 @@ export interface ReportSetting {
   name: string;
   value: string;
   created_at: string;
+}
+
+export interface EmailDeliveryStatus {
+  status: 'idle' | 'preparing' | 'sending' | 'sent' | 'error';
+  progress: number;
+  message?: string;
+  error?: string;
+}
+
+export interface EmailReportData {
+  patient: PatientInfo;
+  selectedItems: ReportItem[];
+  notes: string;
+  settings: ReportSetting[];
+  subcategories: Subcategory[];
+  recipientEmail: string;
+  subject?: string;
+  message?: string;
+}
+
+// Extended PatientInfo to include email
+export interface PatientInfoWithEmail extends PatientInfo {
+  email?: string;
 }
