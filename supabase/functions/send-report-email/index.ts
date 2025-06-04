@@ -234,8 +234,14 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const emailData: EmailReportRequest = await req.json();
     
+    console.log("Attempting to send email to:", emailData.recipientEmail);
+    
     // Validate required fields
     if (!emailData.recipientEmail || !emailData.patient.name) {
+      console.error("Missing required fields:", { 
+        hasEmail: !!emailData.recipientEmail, 
+        hasPatientName: !!emailData.patient.name 
+      });
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { 
@@ -245,24 +251,72 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Get clinic info for from address
+    const clinicName = emailData.settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
+    const clinicEmail = emailData.settings.find(s => s.name === "clinic_email")?.value;
+    
+    // Use clinic email if available and verified, otherwise use Resend default
+    // Note: For production, you should verify your domain with Resend
+    const fromAddress = clinicEmail && clinicEmail.includes('@') 
+      ? `${clinicName} <${clinicEmail}>`
+      : `${clinicName} <reports@resend.dev>`;
+    
+    console.log("Sending from:", fromAddress);
+
     // Generate HTML content
     const htmlContent = generateEmailHtml(emailData);
     
-    // Send email using Resend
-    const emailResponse = await resend.emails.send({
-      from: "Medical Reports <reports@resend.dev>",
+    // Enhanced email configuration for better deliverability
+    const emailConfig = {
+      from: fromAddress,
       to: [emailData.recipientEmail],
-      subject: emailData.subject || `Medical Report for ${emailData.patient.name}`,
+      subject: emailData.subject || `Chiropractic Report for ${emailData.patient.name}`,
       html: htmlContent,
+      // Add text version for better deliverability
+      text: `Chiropractic Report for ${emailData.patient.name}\n\nThis is an HTML email. Please view in an email client that supports HTML to see the full report.\n\nIf you have any questions, please contact our office.`,
+      // Add headers to improve deliverability
+      headers: {
+        'X-Priority': '3',
+        'X-Mailer': 'Chiropractic Report System',
+        'List-Unsubscribe': '<mailto:unsubscribe@resend.dev>',
+      },
+      // Add tags for better tracking
+      tags: [
+        { name: 'type', value: 'medical-report' },
+        { name: 'patient', value: emailData.patient.name.replace(/\s+/g, '-').toLowerCase() }
+      ]
+    };
+    
+    console.log("Email configuration:", {
+      to: emailConfig.to,
+      from: emailConfig.from,
+      subject: emailConfig.subject,
+      hasHtml: !!emailConfig.html,
+      hasText: !!emailConfig.text
     });
+    
+    // Send email using Resend
+    const emailResponse = await resend.emails.send(emailConfig);
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Resend response:", emailResponse);
+
+    if (emailResponse.error) {
+      console.error("Resend error:", emailResponse.error);
+      throw new Error(`Email service error: ${emailResponse.error.message || 'Unknown error'}`);
+    }
+
+    console.log("Email sent successfully to:", emailData.recipientEmail, "with ID:", emailResponse.data?.id);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         messageId: emailResponse.data?.id,
-        message: "Email sent successfully" 
+        message: "Email sent successfully",
+        deliveryInfo: {
+          recipient: emailData.recipientEmail,
+          messageId: emailResponse.data?.id,
+          fromAddress: fromAddress
+        }
       }),
       {
         status: 200,
@@ -272,11 +326,17 @@ const handler = async (req: Request): Promise<Response> => {
     
   } catch (error: any) {
     console.error("Error in send-report-email function:", error);
+    console.error("Error stack:", error.stack);
+    
+    // Log more details about the error
+    if (error.name) console.error("Error name:", error.name);
+    if (error.code) console.error("Error code:", error.code);
     
     return new Response(
       JSON.stringify({ 
         error: error.message || "Failed to send email",
-        details: error.toString()
+        details: error.toString(),
+        type: error.name || 'UnknownError'
       }),
       {
         status: 500,
