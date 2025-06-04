@@ -5,23 +5,17 @@ import { useToast } from "@/components/ui/use-toast";
 import { generatePDF, RenderPdfProgress } from "@/utils/pdf";
 import { ReportSetting } from "@/services/reportSettingsService";
 
-// Extended PatientInfo to include email
-interface ExtendedPatientInfo extends PatientInfo {
-  email?: string;
-}
-
 export const useReportGeneration = (
   items: ReportItem[],
   settings: ReportSetting[],
   subcategories: any[]
 ) => {
   const { toast } = useToast();
-  const [patient, setPatient] = useState<ExtendedPatientInfo>({
+  const [patient, setPatient] = useState<PatientInfo>({
     name: "",
     age: undefined,
     gender: "",
-    date: new Date().toISOString().split("T")[0],
-    email: ""
+    date: new Date().toISOString().split("T")[0]
   });
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
@@ -29,7 +23,7 @@ export const useReportGeneration = (
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
 
-  const handlePatientInfoChange = (key: keyof ExtendedPatientInfo, value: string | number) => {
+  const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
   };
   

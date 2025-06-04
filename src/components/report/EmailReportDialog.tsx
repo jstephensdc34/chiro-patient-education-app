@@ -29,7 +29,7 @@ export const EmailReportDialog = ({
   emailStatus,
   onSendEmail
 }: EmailReportDialogProps) => {
-  const [recipientEmail, setRecipientEmail] = useState(defaultEmail);
+  const [recipientEmail, setRecipientEmail] = useState("");
   const [subject, setSubject] = useState(`Medical Report for ${patientName}`);
   const [message, setMessage] = useState(`Dear Patient,
 

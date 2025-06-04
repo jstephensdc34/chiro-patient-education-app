@@ -1,3 +1,4 @@
+
 export interface ReportItem {
   id: string;
   name: string;
@@ -108,9 +109,4 @@ export interface EmailReportData {
   recipientEmail: string;
   subject?: string;
   message?: string;
-}
-
-// Extended PatientInfo to include email
-export interface PatientInfoWithEmail extends PatientInfo {
-  email?: string;
 }

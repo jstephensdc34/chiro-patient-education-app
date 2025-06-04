@@ -14,7 +14,7 @@ import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
 
 interface ReportBuilderProps {
-  patient: PatientInfo & { email?: string };
+  patient: PatientInfo;
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
@@ -25,7 +25,7 @@ interface ReportBuilderProps {
   pdfProgress: RenderPdfProgress;
   subcategories: any[];
   activeCategory: CategoryType;
-  onPatientInfoChange: (key: keyof (PatientInfo & { email?: string }), value: string | number) => void;
+  onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
   onToggleItem: (itemId: string) => void;
   onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
@@ -142,7 +142,7 @@ export const ReportBuilder = ({
         open={showEmailDialog}
         onOpenChange={handleEmailDialogClose}
         patientName={patient.name}
-        defaultEmail={patient.email}
+        defaultEmail=""
         emailStatus={emailStatus}
         onSendEmail={handleSendEmail}
       />
