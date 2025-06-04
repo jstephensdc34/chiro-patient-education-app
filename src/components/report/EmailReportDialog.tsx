@@ -30,10 +30,10 @@ export const EmailReportDialog = ({
   onSendEmail
 }: EmailReportDialogProps) => {
   const [recipientEmail, setRecipientEmail] = useState("");
-  const [subject, setSubject] = useState(`Medical Report for ${patientName}`);
+  const [subject, setSubject] = useState(`Chiropractic report for ${patientName}`);
   const [message, setMessage] = useState(`Dear Patient,
 
-Please find your medical report below. This report contains important information about your consultation and treatment plan.
+Please find your chiropractic report below. This report contains important information about your consultation and treatment plan.
 
 If you have any questions about this report, please don't hesitate to contact our office.
 
