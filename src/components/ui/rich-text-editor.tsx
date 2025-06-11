@@ -36,7 +36,7 @@ export function RichTextEditor({
     },
     editorProps: {
       attributes: {
-        class: 'min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 prose prose-sm max-w-none',
+        class: 'min-h-[120px] max-h-[200px] w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm focus-visible:outline-none prose prose-sm max-w-none overflow-y-auto',
         placeholder,
       },
     },
@@ -51,13 +51,13 @@ export function RichTextEditor({
 
   // Wait until client-side to render to avoid hydration issues
   if (!isMounted) {
-    return <div className={`min-h-[120px] ${className} border border-input rounded-md bg-background px-3 py-2`} />;
+    return <div className={`min-h-[120px] max-h-[200px] ${className} border border-input rounded-md bg-background px-3 py-2`} />;
   }
 
   return (
     <div className={`rich-text-editor ${className}`}>
-      <div className="border border-input rounded-md bg-background overflow-hidden">
-        <div className="flex flex-wrap gap-1 p-1 border-b border-input bg-muted/50">
+      <div className="border border-input rounded-md bg-background overflow-hidden max-h-[250px] flex flex-col">
+        <div className="flex flex-wrap gap-1 p-1 border-b border-input bg-muted/50 flex-shrink-0">
           <button
             type="button"
             onClick={() => editor?.chain().focus().toggleBold().run()}
@@ -91,7 +91,9 @@ export function RichTextEditor({
             Numbered List
           </button>
         </div>
-        <EditorContent editor={editor} className="p-0" />
+        <div className="flex-1 overflow-y-auto">
+          <EditorContent editor={editor} className="p-0" />
+        </div>
       </div>
     </div>
   );
