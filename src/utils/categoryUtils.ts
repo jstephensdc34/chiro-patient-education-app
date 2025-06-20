@@ -68,6 +68,25 @@ export const getOrderedSubcategories = (categoryId: string, subcategories: any[]
     });
   }
   
+  // Special ordering for homecare subcategories
+  if (categoryId === "homecare") {
+    // Define the desired order
+    const homecareOrder = [
+      "home_therapy",
+      "adls",
+      "activity_modification",
+      "condition_specific",
+      "wellness"
+    ];
+    
+    // Sort according to the defined order
+    return categorySubs.sort((a, b) => {
+      const indexA = homecareOrder.indexOf(a.id);
+      const indexB = homecareOrder.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }
+  
   // Special ordering for exercises subcategories
   if (categoryId === "exercises") {
     // Define the desired order

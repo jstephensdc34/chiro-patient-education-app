@@ -74,6 +74,7 @@ export const HOMECARE_SUBCATEGORIES = [
   'home_therapy',
   'adls',
   'activity_modification',
+  'condition_specific',
   'wellness'
 ];
 

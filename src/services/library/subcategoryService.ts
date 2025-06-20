@@ -44,6 +44,7 @@ export const mockSubcategories: Subcategory[] = [
   { id: "home_therapy", name: "Home Therapy", parentCategoryId: "homecare", description: "Self-administered therapeutic techniques" },
   { id: "adls", name: "ADLs", parentCategoryId: "homecare", description: "Activities of Daily Living modifications" },
   { id: "activity_modification", name: "Activity Modification", parentCategoryId: "homecare", description: "Recommendations for modifying daily activities" },
+  { id: "condition_specific", name: "Condition Specific", parentCategoryId: "homecare", description: "Recommendations specific to certain conditions" },
   { id: "wellness", name: "Wellness", parentCategoryId: "homecare", description: "General health and wellness recommendations" },
   // Exercises subcategories
   { id: "cervical_exercises", name: "Cervical", parentCategoryId: "exercises", description: "Neck exercises" },
