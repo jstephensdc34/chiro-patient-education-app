@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { PatientSelector } from "@/components/posture/PatientSelector";
@@ -13,12 +12,17 @@ import { usePostureData, Patient, type PostureAssessment } from "@/hooks/usePost
 import { useAuth } from "@/components/auth/AuthContext";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Camera, Users, BarChart3, ArrowLeft } from "lucide-react";
+import { PhotoAnnotation } from "@/components/posture/PhotoAnnotation";
+import { PhotoComparison } from "@/components/posture/PhotoComparison";
+import { GuidedMeasurement, ProtocolSelector } from "@/components/posture/GuidedMeasurement";
 
 const PostureAssessment = () => {
   const { isAuthenticated } = useAuth();
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [activeAssessment, setActiveAssessment] = useState<PostureAssessment | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [analysisMode, setAnalysisMode] = useState<'photos' | 'measurements' | 'analysis' | 'annotation' | 'comparison' | 'guided'>('photos');
+  const [selectedProtocol, setSelectedProtocol] = useState<any>(null);
 
   const {
     patients,
@@ -70,6 +74,29 @@ const PostureAssessment = () => {
     }
   };
 
+  const handleAnnotationSave = (measurement: any) => {
+    addMeasurement({
+      assessment_id: activeAssessment!.id,
+      measurement_type: measurement.label,
+      value: measurement.value || 0,
+      unit: measurement.unit || 'px',
+      notes: `Annotated measurement: ${measurement.type}`
+    });
+  };
+
+  const handleProtocolComplete = (measurements: any[]) => {
+    measurements.forEach(measurement => {
+      if (measurement) {
+        addMeasurement({
+          assessment_id: activeAssessment!.id,
+          ...measurement
+        });
+      }
+    });
+    setSelectedProtocol(null);
+    setAnalysisMode('measurements');
+  };
+
   const patientAssessments = selectedPatient 
     ? assessments.filter(a => a.patient_id === selectedPatient.id)
     : [];
@@ -89,7 +116,7 @@ const PostureAssessment = () => {
                   size="sm"
                   onClick={() => {
                     setActiveAssessment(null);
-                    setActiveTab("overview");
+                    setAnalysisMode('photos');
                   }}
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
@@ -124,10 +151,13 @@ const PostureAssessment = () => {
                 </CardHeader>
               </Card>
 
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-3">
+              <Tabs value={analysisMode} onValueChange={(value: any) => setAnalysisMode(value)}>
+                <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="photos">Photos</TabsTrigger>
                   <TabsTrigger value="measurements">Measurements</TabsTrigger>
+                  <TabsTrigger value="annotation">Annotation</TabsTrigger>
+                  <TabsTrigger value="comparison">Comparison</TabsTrigger>
+                  <TabsTrigger value="guided">Guided</TabsTrigger>
                   <TabsTrigger value="analysis">Analysis</TabsTrigger>
                 </TabsList>
 
@@ -147,6 +177,55 @@ const PostureAssessment = () => {
                   />
                 </TabsContent>
 
+                <TabsContent value="annotation" className="space-y-6">
+                  <div className="grid gap-6">
+                    {activeAssessment.photos?.map((photo) => (
+                      <PhotoAnnotation
+                        key={photo.id}
+                        photoUrl={`/api/photo/${photo.file_path}`}
+                        photoType={photo.photo_type}
+                        onSaveMeasurement={handleAnnotationSave}
+                      />
+                    ))}
+                    {(!activeAssessment.photos || activeAssessment.photos.length === 0) && (
+                      <Card>
+                        <CardContent className="py-8">
+                          <div className="text-center">
+                            <Camera className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                            <p className="text-muted-foreground">
+                              No photos available for annotation
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Upload photos in the Photos tab first
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="comparison" className="space-y-6">
+                  <PhotoComparison
+                    assessments={patientAssessments}
+                    onExport={() => {
+                      // Export functionality would be implemented here
+                      console.log('Export comparison');
+                    }}
+                  />
+                </TabsContent>
+
+                <TabsContent value="guided" className="space-y-6">
+                  {selectedProtocol ? (
+                    <GuidedMeasurement
+                      protocol={selectedProtocol}
+                      onMeasurementComplete={handleProtocolComplete}
+                    />
+                  ) : (
+                    <ProtocolSelector onSelectProtocol={setSelectedProtocol} />
+                  )}
+                </TabsContent>
+
                 <TabsContent value="analysis" className="space-y-6">
                   <Card>
                     <CardHeader>
@@ -156,7 +235,7 @@ const PostureAssessment = () => {
                       <div className="text-center py-8">
                         <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                         <p className="text-muted-foreground">
-                          AI-powered analysis coming soon. For now, use the measurements tab to manually record posture metrics.
+                          AI-powered analysis coming soon. Use the annotation and guided measurement tools for manual analysis.
                         </p>
                       </div>
                     </CardContent>
