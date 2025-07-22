@@ -110,7 +110,7 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
           {photoTypes.map(({ key, label, description }) => {
             const existingPhoto = getPhotoForType(key);
             const isUploading = uploading === key;
-            const isLoadingUrl = existingPhoto ? isLoadingUrl(existingPhoto.file_path) : false;
+            const isLoadingThisUrl = existingPhoto ? isLoadingUrl(existingPhoto.file_path) : false;
             const photoUrl = existingPhoto ? photoUrls[existingPhoto.id] : null;
 
             return (
@@ -123,7 +123,7 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
                 {existingPhoto ? (
                   <div className="relative">
                     <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden">
-                      {isLoadingUrl ? (
+                      {isLoadingThisUrl ? (
                         <div className="w-full h-full flex items-center justify-center">
                           <div className="text-sm text-muted-foreground">Loading...</div>
                         </div>
@@ -150,7 +150,7 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
                         variant="secondary"
                         className="flex-1"
                         onClick={() => handleViewPhoto(existingPhoto)}
-                        disabled={isLoadingUrl || !photoUrl}
+                        disabled={isLoadingThisUrl || !photoUrl}
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         View
