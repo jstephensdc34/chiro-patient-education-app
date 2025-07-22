@@ -15,7 +15,7 @@ const Index = () => {
         <div className="flex flex-col items-center justify-center space-y-8 text-center">
           <div className="space-y-3">
             <h1 className="text-4xl font-bold tracking-tight text-medical-800 sm:text-5xl">
-              ChiroReportCraft
+              Chiro Patient
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Comprehensive chiropractic suite with patient reports, posture assessment, and clinical tools.
@@ -65,10 +65,10 @@ const Index = () => {
           </div>
           
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 w-full max-w-6xl">
-            <h2 className="text-2xl font-semibold text-medical-700 mb-4">About ChiroReportCraft</h2>
+            <h2 className="text-2xl font-semibold text-medical-700 mb-4">About Chiro Patient</h2>
             <div className="text-left space-y-4">
               <p>
-                ChiroReportCraft is a comprehensive chiropractic suite that helps physicians create professional patient reports, 
+                Chiro Patient is a comprehensive chiropractic suite that helps physicians create professional patient reports, 
                 conduct posture assessments, and manage treatment plans with ease. Customize your library with specific diagnoses, 
                 treatment options, home care recommendations, and therapeutic exercises.
               </p>
@@ -160,7 +160,7 @@ const Index = () => {
       
       <footer className="bg-white py-6 border-t border-gray-200 mt-12">
         <div className="container mx-auto px-4">
-          <p className="text-center text-gray-500 text-sm">© 2025 ChiroReportCraft. All rights reserved.</p>
+          <p className="text-center text-gray-500 text-sm">© 2025 Chiro Patient. All rights reserved.</p>
         </div>
       </footer>
     </div>
