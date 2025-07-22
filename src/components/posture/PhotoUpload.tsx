@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
+
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Upload, X, Eye } from "lucide-react";
 import { PosturePhoto } from "@/hooks/usePostureData";
+import { useSignedUrls } from "@/hooks/useSignedUrls";
 
 interface PhotoUploadProps {
   assessmentId: string;
@@ -15,13 +17,38 @@ interface PhotoUploadProps {
 export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: PhotoUploadProps) => {
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [photoUrls, setPhotoUrls] = useState<{ [key: string]: string }>({});
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const { generateSignedUrl, isLoadingUrl, getUrlFromCache } = useSignedUrls('posture-photos');
 
   const photoTypes = [
     { key: 'side', label: 'Side View', description: 'Profile view from the side' },
     { key: 'front', label: 'Front View', description: 'Frontal view facing forward' },
     { key: 'back', label: 'Back View', description: 'Posterior view from behind' }
   ] as const;
+
+  const loadPhotoUrl = async (photo: PosturePhoto) => {
+    const cachedUrl = getUrlFromCache(photo.file_path);
+    if (cachedUrl) {
+      setPhotoUrls(prev => ({ ...prev, [photo.id]: cachedUrl }));
+      return cachedUrl;
+    }
+
+    const url = await generateSignedUrl(photo.file_path);
+    if (url) {
+      setPhotoUrls(prev => ({ ...prev, [photo.id]: url }));
+    }
+    return url;
+  };
+
+  useEffect(() => {
+    // Load signed URLs for all existing photos
+    existingPhotos.forEach(photo => {
+      if (!photoUrls[photo.id]) {
+        loadPhotoUrl(photo);
+      }
+    });
+  }, [existingPhotos]);
 
   const handleFileSelect = async (file: File, photoType: 'side' | 'front' | 'back') => {
     if (!file) return;
@@ -63,9 +90,11 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
     return existingPhotos.find(photo => photo.photo_type === type);
   };
 
-  const getPhotoUrl = (photo: PosturePhoto) => {
-    // This would be the actual photo URL from Supabase storage
-    return `https://owpyvsxftbwqqstsxwmp.supabase.co/storage/v1/object/public/posture-photos/${photo.file_path}`;
+  const handleViewPhoto = async (photo: PosturePhoto) => {
+    const url = await loadPhotoUrl(photo);
+    if (url) {
+      window.open(url, '_blank');
+    }
   };
 
   return (
@@ -81,6 +110,8 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
           {photoTypes.map(({ key, label, description }) => {
             const existingPhoto = getPhotoForType(key);
             const isUploading = uploading === key;
+            const isLoadingUrl = existingPhoto ? isLoadingUrl(existingPhoto.file_path) : false;
+            const photoUrl = existingPhoto ? photoUrls[existingPhoto.id] : null;
 
             return (
               <div key={key} className="space-y-3">
@@ -92,11 +123,21 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
                 {existingPhoto ? (
                   <div className="relative">
                     <div className="aspect-[3/4] bg-muted rounded-lg overflow-hidden">
-                      <img
-                        src={getPhotoUrl(existingPhoto)}
-                        alt={`${label} posture photo`}
-                        className="w-full h-full object-cover"
-                      />
+                      {isLoadingUrl ? (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-sm text-muted-foreground">Loading...</div>
+                        </div>
+                      ) : photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt={`${label} posture photo`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-sm text-muted-foreground">Failed to load</div>
+                        </div>
+                      )}
                     </div>
                     <div className="absolute top-2 right-2 flex gap-1">
                       <Badge variant="secondary" className="text-xs">
@@ -108,7 +149,8 @@ export const PhotoUpload = ({ assessmentId, existingPhotos, onUploadPhoto }: Pho
                         size="sm"
                         variant="secondary"
                         className="flex-1"
-                        onClick={() => window.open(getPhotoUrl(existingPhoto), '_blank')}
+                        onClick={() => handleViewPhoto(existingPhoto)}
+                        disabled={isLoadingUrl || !photoUrl}
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         View
