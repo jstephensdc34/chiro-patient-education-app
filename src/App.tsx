@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import Library from "./pages/Library";
+import PostureAssessment from "./pages/PostureAssessment";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -59,6 +59,7 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/report" element={<Report />} />
                   <Route path="/library" element={<Library />} />
+                  <Route path="/posture-assessment" element={<PostureAssessment />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/admin" element={<Admin />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
