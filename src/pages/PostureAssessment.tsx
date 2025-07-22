@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { PatientSelector } from "@/components/posture/PatientSelector";
 import { AssessmentCreator } from "@/components/posture/AssessmentCreator";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { usePostureData, Patient, type PostureAssessment } from "@/hooks/usePostureData";
 import { useAuth } from "@/components/auth/AuthContext";
+import { useSignedUrls } from "@/hooks/useSignedUrls";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Camera, Users, BarChart3, ArrowLeft } from "lucide-react";
 import { PhotoAnnotation } from "@/components/posture/PhotoAnnotation";
@@ -23,6 +24,7 @@ const PostureAssessment = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [analysisMode, setAnalysisMode] = useState<'photos' | 'measurements' | 'analysis' | 'annotation' | 'comparison' | 'guided'>('photos');
   const [selectedProtocol, setSelectedProtocol] = useState<any>(null);
+  const [photoUrls, setPhotoUrls] = useState<{ [key: string]: string }>({});
 
   const {
     patients,
@@ -34,6 +36,35 @@ const PostureAssessment = () => {
     addMeasurement,
     refetch
   } = usePostureData();
+
+  const { generateSignedUrl, isLoadingUrl } = useSignedUrls('posture-photos');
+
+  // Generate signed URLs for photos when assessment changes
+  useEffect(() => {
+    if (activeAssessment?.photos) {
+      const loadPhotoUrls = async () => {
+        const urlPromises = activeAssessment.photos.map(async (photo) => {
+          const url = await generateSignedUrl(photo.file_path);
+          return { id: photo.id, url };
+        });
+        
+        const results = await Promise.all(urlPromises);
+        const urlMap: { [key: string]: string } = {};
+        
+        results.forEach(result => {
+          if (result.url) {
+            urlMap[result.id] = result.url;
+          }
+        });
+        
+        setPhotoUrls(urlMap);
+      };
+
+      loadPhotoUrls();
+    } else {
+      setPhotoUrls({});
+    }
+  }, [activeAssessment?.photos, generateSignedUrl]);
 
   if (!isAuthenticated) {
     return (
@@ -179,14 +210,34 @@ const PostureAssessment = () => {
 
                 <TabsContent value="annotation" className="space-y-6">
                   <div className="grid gap-6">
-                    {activeAssessment.photos?.map((photo) => (
-                      <PhotoAnnotation
-                        key={photo.id}
-                        photoUrl={`/api/photo/${photo.file_path}`}
-                        photoType={photo.photo_type}
-                        onSaveMeasurement={handleAnnotationSave}
-                      />
-                    ))}
+                    {activeAssessment.photos?.map((photo) => {
+                      const photoUrl = photoUrls[photo.id];
+                      const isLoading = isLoadingUrl(photo.file_path);
+                      
+                      if (isLoading || !photoUrl) {
+                        return (
+                          <Card key={photo.id}>
+                            <CardContent className="py-8">
+                              <div className="text-center">
+                                <LoadingSpinner />
+                                <p className="text-muted-foreground mt-2">
+                                  Loading {photo.photo_type} view...
+                                </p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      }
+                      
+                      return (
+                        <PhotoAnnotation
+                          key={photo.id}
+                          photoUrl={photoUrl}
+                          photoType={photo.photo_type}
+                          onSaveMeasurement={handleAnnotationSave}
+                        />
+                      );
+                    })}
                     {(!activeAssessment.photos || activeAssessment.photos.length === 0) && (
                       <Card>
                         <CardContent className="py-8">
