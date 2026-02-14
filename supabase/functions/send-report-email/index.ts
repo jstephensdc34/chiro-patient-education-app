@@ -255,37 +255,36 @@ const handler = async (req: Request): Promise<Response> => {
     const clinicName = emailData.settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
     const clinicEmail = emailData.settings.find(s => s.name === "clinic_email")?.value;
     
-    // Use clinic email if available and verified, otherwise use Resend default
-    // Note: For production, you should verify your domain with Resend
-    const fromAddress = clinicEmail && clinicEmail.includes('@') 
-      ? `${clinicName} <${clinicEmail}>`
-      : `${clinicName} <reports@resend.dev>`;
+    // Always use Resend's default domain for sending to avoid unverified domain errors.
+    // Use the clinic email as reply-to so patients can reply directly.
+    const fromAddress = `${clinicName} <onboarding@resend.dev>`;
+    const replyTo = clinicEmail && clinicEmail.includes('@') ? clinicEmail : undefined;
     
-    console.log("Sending from:", fromAddress);
+    console.log("Sending from:", fromAddress, "Reply-To:", replyTo);
 
     // Generate HTML content
     const htmlContent = generateEmailHtml(emailData);
     
     // Enhanced email configuration for better deliverability
-    const emailConfig = {
+    const emailConfig: any = {
       from: fromAddress,
       to: [emailData.recipientEmail],
       subject: emailData.subject || `Chiropractic Report for ${emailData.patient.name}`,
       html: htmlContent,
-      // Add text version for better deliverability
       text: `Chiropractic Report for ${emailData.patient.name}\n\nThis is an HTML email. Please view in an email client that supports HTML to see the full report.\n\nIf you have any questions, please contact our office.`,
-      // Add headers to improve deliverability
       headers: {
         'X-Priority': '3',
         'X-Mailer': 'Chiropractic Report System',
-        'List-Unsubscribe': '<mailto:unsubscribe@resend.dev>',
       },
-      // Add tags for better tracking
       tags: [
         { name: 'type', value: 'medical-report' },
         { name: 'patient', value: emailData.patient.name.replace(/\s+/g, '-').toLowerCase() }
       ]
     };
+    
+    if (replyTo) {
+      emailConfig.reply_to = replyTo;
+    }
     
     console.log("Email configuration:", {
       to: emailConfig.to,
