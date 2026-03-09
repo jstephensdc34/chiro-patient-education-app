@@ -83,17 +83,6 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-green-100 p-2 rounded-full">
-                    <svg className="h-5 w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-md font-medium text-gray-800">Posture Analysis</h3>
-                    <p className="text-sm text-gray-600">Advanced digital posture assessment tools</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
                   <div className="flex-shrink-0 bg-medical-100 p-2 rounded-full">
                     <svg className="h-5 w-5 text-medical-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
