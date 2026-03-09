@@ -49,19 +49,6 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-green-400 transition-all duration-200">
-              <CardHeader>
-                <CardTitle className="text-green-700">Posture Assessment</CardTitle>
-                <CardDescription>Comprehensive posture analysis and corrective exercise recommendations</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col items-center">
-                <Link to="/posture-assessment" className="w-full">
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
-                    Start Assessment
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
           </div>
           
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 w-full max-w-6xl">
