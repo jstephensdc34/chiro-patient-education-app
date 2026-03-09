@@ -104,17 +104,6 @@ const Index = () => {
                     <p className="text-sm text-gray-600">Include links to educational resources for patients</p>
                   </div>
                 </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-green-100 p-2 rounded-full">
-                    <svg className="h-5 w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-md font-medium text-gray-800">Exercise Programs</h3>
-                    <p className="text-sm text-gray-600">Customized corrective exercise recommendations</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
