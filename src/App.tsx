@@ -8,7 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Report from "./pages/Report";
 import Library from "./pages/Library";
-import PostureAssessment from "./pages/PostureAssessment";
+
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
