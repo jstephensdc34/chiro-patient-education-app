@@ -2,6 +2,7 @@
 export interface ReportItem {
   id: string;
   name: string;
+  definition?: string;
   description: string;
   infoLink?: string;
   categoryId: string;

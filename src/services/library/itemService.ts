@@ -26,6 +26,7 @@ export const fetchItemsByCategory = async (
   return data.map(item => ({
     id: item.id,
     name: item.name,
+    definition: item.definition,
     description: item.description,
     infoLink: item.info_link,
     categoryId: item.category_id,
@@ -42,6 +43,7 @@ export const createItem = async (
     .from("library_items")
     .insert({
       name: item.name,
+      definition: item.definition,
       description: item.description,
       info_link: item.infoLink,
       category_id: item.categoryId,
@@ -59,6 +61,7 @@ export const createItem = async (
   return {
     id: data.id,
     name: data.name,
+    definition: data.definition,
     description: data.description,
     infoLink: data.info_link,
     categoryId: data.category_id,
@@ -75,6 +78,7 @@ export const updateItem = async (
     .from("library_items")
     .update({
       name: item.name,
+      definition: item.definition,
       description: item.description,
       info_link: item.infoLink,
       category_id: item.categoryId,
@@ -93,6 +97,7 @@ export const updateItem = async (
   return {
     id: data.id,
     name: data.name,
+    definition: data.definition,
     description: data.description,
     infoLink: data.info_link,
     categoryId: data.category_id,
