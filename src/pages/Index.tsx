@@ -56,7 +56,7 @@ const Index = () => {
             <div className="text-left space-y-4">
               <p>
                 Chiro Patient Ed Suite is a comprehensive chiropractic suite that helps physicians create professional patient reports, 
-                conduct posture assessments, and manage treatment plans with ease. Customize your library with specific diagnoses, 
+                and manage treatment plans with ease. Customize your library with specific diagnoses, 
                 treatment options, home care recommendations, and therapeutic exercises.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
