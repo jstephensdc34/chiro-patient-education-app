@@ -18,7 +18,7 @@ const Index = () => {
               Chiro Patient Ed Suite
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Comprehensive chiropractic suite with patient reports, posture assessment, and clinical tools.
+              Comprehensive chiropractic suite with patient reports and clinical tools.
             </p>
           </div>
           
