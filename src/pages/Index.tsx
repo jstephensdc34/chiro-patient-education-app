@@ -18,7 +18,7 @@ const Index = () => {
               Chiro Patient Ed Suite
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Comprehensive chiropractic suite with patient reports, posture assessment, and clinical tools.
+              Comprehensive chiropractic suite with patient reports and clinical tools.
             </p>
           </div>
           
@@ -49,19 +49,6 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-green-400 transition-all duration-200">
-              <CardHeader>
-                <CardTitle className="text-green-700">Posture Assessment</CardTitle>
-                <CardDescription>Comprehensive posture analysis and corrective exercise recommendations</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col items-center">
-                <Link to="/posture-assessment" className="w-full">
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
-                    Start Assessment
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
           </div>
           
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 w-full max-w-6xl">
@@ -69,7 +56,7 @@ const Index = () => {
             <div className="text-left space-y-4">
               <p>
                 Chiro Patient Ed Suite is a comprehensive chiropractic suite that helps physicians create professional patient reports, 
-                conduct posture assessments, and manage treatment plans with ease. Customize your library with specific diagnoses, 
+                and manage treatment plans with ease. Customize your library with specific diagnoses, 
                 treatment options, home care recommendations, and therapeutic exercises.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
@@ -96,17 +83,6 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-green-100 p-2 rounded-full">
-                    <svg className="h-5 w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-md font-medium text-gray-800">Posture Analysis</h3>
-                    <p className="text-sm text-gray-600">Advanced digital posture assessment tools</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
                   <div className="flex-shrink-0 bg-medical-100 p-2 rounded-full">
                     <svg className="h-5 w-5 text-medical-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -126,17 +102,6 @@ const Index = () => {
                   <div className="ml-3">
                     <h3 className="text-md font-medium text-gray-800">Resource Library</h3>
                     <p className="text-sm text-gray-600">Include links to educational resources for patients</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-green-100 p-2 rounded-full">
-                    <svg className="h-5 w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-md font-medium text-gray-800">Exercise Programs</h3>
-                    <p className="text-sm text-gray-600">Customized corrective exercise recommendations</p>
                   </div>
                 </div>
               </div>
