@@ -26,6 +26,7 @@ export const fetchItemsByCategory = async (
   return data.map(item => ({
     id: item.id,
     name: item.name,
+    definition: item.definition,
     description: item.description,
     infoLink: item.info_link,
     categoryId: item.category_id,
