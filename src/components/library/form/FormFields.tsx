@@ -41,6 +41,17 @@ export const FormFields = ({
         />
       </div>
       
+      <div className="grid gap-2">
+        <Label htmlFor="definition">Definition</Label>
+        <Input
+          id="definition"
+          placeholder="Brief 1-2 sentence definition..."
+          value={item.definition || ""}
+          onChange={(e) => handleChange("definition", e.target.value)}
+          disabled={isSubmitting}
+        />
+      </div>
+      
       {availableSubcategories.length > 0 && (
         <div className="grid gap-2">
           <Label htmlFor="subcategory">Subcategory</Label>
