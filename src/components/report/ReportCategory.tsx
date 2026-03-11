@@ -70,6 +70,4 @@ export const ReportCategory = ({
         )}
       </div>
     );
-    </div>
-  );
 };
