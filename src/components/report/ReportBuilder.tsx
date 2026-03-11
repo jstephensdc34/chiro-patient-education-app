@@ -52,6 +52,7 @@ export const ReportBuilder = ({
   onToggleItem,
   onCategoryChange,
   onNotesChange,
+  onTreatmentGoalsChange,
   onGeneratePDF,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
