@@ -291,7 +291,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_and_update_library_item: {
+        Args: {
+          _category_id: string
+          _definition: string
+          _description: string
+          _info_link: string
+          _item_id: string
+          _name: string
+          _subcategory_id: string
+          _user_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
