@@ -80,6 +80,21 @@ export const generateEmailHtml = ({
     }
   });
   
+  // Add custom treatment goals section
+  let treatmentGoalsContent = '';
+  if (customTreatmentGoals) {
+    treatmentGoalsContent = `
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 30px;">
+        <tr>
+          <td style="background-color: #f0f9ff; padding: 20px; border-left: 4px solid #2563eb;">
+            <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 18px;">Additional Treatment Goals</h3>
+            <p style="margin: 0; color: #374151; line-height: 1.6; font-size: 14px; white-space: pre-wrap;">${customTreatmentGoals}</p>
+          </td>
+        </tr>
+      </table>
+    `;
+  }
+
   // Add additional notes section
   let notesContent = '';
   if (notes) {
