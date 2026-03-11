@@ -69,6 +69,7 @@ export const ReportBuilder = ({
       patient,
       selectedItems: selectedItemsData,
       notes: additionalNotes,
+      customTreatmentGoals,
       settings,
       subcategories,
       recipientEmail: emailData.recipientEmail,
