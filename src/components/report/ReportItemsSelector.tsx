@@ -1,6 +1,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
