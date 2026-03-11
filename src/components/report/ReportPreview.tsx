@@ -31,6 +31,7 @@ export const ReportPreview = ({
   items,
   selectedItems,
   additionalNotes,
+  customTreatmentGoals = "",
   subcategories = [],
   settings = [],
   settingsLoading = false
