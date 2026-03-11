@@ -20,6 +20,7 @@ interface ReportPreviewProps {
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
+  customTreatmentGoals?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
