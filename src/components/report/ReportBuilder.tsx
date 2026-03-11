@@ -131,6 +131,8 @@ export const ReportBuilder = ({
           onToggleItem={onToggleItem}
           isLoading={isLoading}
           subcategories={subcategories}
+          customTreatmentGoals={customTreatmentGoals}
+          onTreatmentGoalsChange={onTreatmentGoalsChange}
         />
         
         <ReportPreview
