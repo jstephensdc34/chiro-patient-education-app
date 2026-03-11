@@ -31,6 +31,7 @@ interface ReportBuilderProps {
   onToggleItem: (itemId: string) => void;
   onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
+  onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
 }
 
