@@ -74,68 +74,27 @@ export const updateItem = async (
   item: ReportItem,
   userId: string
 ): Promise<ReportItem> => {
-  // First try updating (works if user owns the item)
-  const { data, error } = await supabase
-    .from("library_items")
-    .update({
-      name: item.name,
-      definition: item.definition,
-      description: item.description,
-      info_link: item.infoLink,
-      category_id: item.categoryId,
-      subcategory_id: item.subcategoryId,
-      user_id: userId
-    })
-    .eq("id", item.id)
-    .select();
+  const { data, error } = await supabase.rpc('claim_and_update_library_item', {
+    _item_id: item.id,
+    _user_id: userId,
+    _name: item.name,
+    _definition: item.definition || null,
+    _description: item.description,
+    _info_link: item.infoLink || null,
+    _category_id: item.categoryId,
+    _subcategory_id: item.subcategoryId || null,
+  });
 
   if (error) {
     console.error("Error updating item:", error);
     throw error;
   }
 
-  // If RLS blocked the update (0 rows returned), delete old and re-create with current user
-  if (!data || data.length === 0) {
-    console.log("Update returned 0 rows (RLS). Creating new item with current user ownership.");
-    const { data: newData, error: insertError } = await supabase
-      .from("library_items")
-      .insert({
-        name: item.name,
-        definition: item.definition,
-        description: item.description,
-        info_link: item.infoLink,
-        category_id: item.categoryId,
-        subcategory_id: item.subcategoryId,
-        user_id: userId
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error("Error creating replacement item:", insertError);
-      throw insertError;
-    }
-
-    return {
-      id: newData.id,
-      name: newData.name,
-      definition: newData.definition,
-      description: newData.description,
-      infoLink: newData.info_link,
-      categoryId: newData.category_id,
-      subcategoryId: newData.subcategory_id
-    };
-  }
-
-  const updated = data[0];
+  // The function returns the new/updated item id
+  const newId = data as string;
   return {
-    id: updated.id,
-    name: updated.name,
-    definition: updated.definition,
-    description: updated.description,
-    infoLink: updated.info_link,
-    categoryId: updated.category_id,
-    subcategoryId: updated.subcategory_id
+    ...item,
+    id: newId,
   };
 };
 

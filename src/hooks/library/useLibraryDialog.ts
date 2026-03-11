@@ -44,8 +44,8 @@ export const useLibraryDialog = (
       if ('id' in item && item.id) {
         // Update existing item
         const updatedItem = await updateItem(item as ReportItem, user.id);
-        setItems(items.map(existingItem => 
-          existingItem.id === updatedItem.id ? updatedItem : existingItem
+        setItems(prevItems => prevItems.map(existingItem => 
+          existingItem.id === (item as ReportItem).id ? updatedItem : existingItem
         ));
         
         toast({
