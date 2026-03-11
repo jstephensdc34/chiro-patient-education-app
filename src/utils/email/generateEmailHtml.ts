@@ -17,6 +17,7 @@ export const generateEmailHtml = ({
   patient,
   selectedItems,
   notes,
+  customTreatmentGoals,
   settings,
   subcategories
 }: GenerateEmailHtmlParams): string => {
