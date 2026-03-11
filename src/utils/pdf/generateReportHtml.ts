@@ -98,12 +98,7 @@ export const generateReportHtml = ({
     `;
   }
 
-  // Build the page content with pagination
-  // First page always contains the header
   let pageContents = [`${headerContent}`];
-  
-  // Simple content distribution algorithm - could be enhanced with more sophisticated content calculations
-  // Split categories by estimated content size
   const categoryContentParts = categorySections.split('<div class="category-section">');
   
   // First part is empty due to split
