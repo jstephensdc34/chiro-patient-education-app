@@ -27,7 +27,9 @@ export const ReportItemsSelector = ({
   onCategoryChange,
   onToggleItem,
   isLoading = false,
-  subcategories = []
+  subcategories = [],
+  customTreatmentGoals = "",
+  onTreatmentGoalsChange
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
