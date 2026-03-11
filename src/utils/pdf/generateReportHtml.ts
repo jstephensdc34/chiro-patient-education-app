@@ -8,6 +8,7 @@ interface GenerateReportHtmlParams {
   patient: PatientInfo;
   selectedItems: ReportItem[];
   notes: string;
+  customTreatmentGoals?: string;
   settings: ReportSetting[];
   subcategories: any[];
 }
