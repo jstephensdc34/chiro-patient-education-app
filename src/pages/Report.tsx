@@ -26,6 +26,7 @@ const Report = () => {
     handleToggleItem,
     handleGenerateReport,
     setAdditionalNotes,
+    setCustomTreatmentGoals,
     setActiveCategory
   } = useReportGeneration(items, settings, subcategories);
   
