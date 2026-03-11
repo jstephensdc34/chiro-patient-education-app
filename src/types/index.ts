@@ -40,6 +40,7 @@ export interface PDFReportData {
   patient: PatientInfo;
   selectedItems: ReportItem[];
   notes: string;
+  customTreatmentGoals?: string;
   settings: ReportSetting[];
   subcategories: Subcategory[];
 }
