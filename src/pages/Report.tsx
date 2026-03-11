@@ -55,6 +55,7 @@ const Report = () => {
               items={items}
               selectedItems={selectedItems}
               additionalNotes={additionalNotes}
+              customTreatmentGoals={customTreatmentGoals}
               settings={settings}
               settingsLoading={settingsLoading}
               isLoading={isLoading}
