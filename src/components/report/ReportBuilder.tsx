@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
@@ -6,12 +7,14 @@ import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
+import { OverviewReport } from "@/components/report/OverviewReport";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -135,16 +138,35 @@ export const ReportBuilder = ({
           onTreatmentGoalsChange={onTreatmentGoalsChange}
         />
         
-        <ReportPreview
-          patient={patient}
-          items={items}
-          selectedItems={selectedItems}
-          additionalNotes={additionalNotes}
-          customTreatmentGoals={customTreatmentGoals}
-          subcategories={subcategories}
-          settings={settings}
-          settingsLoading={settingsLoading}
-        />
+        <Tabs defaultValue="full" className="mt-6">
+          <TabsList>
+            <TabsTrigger value="full">Full Report</TabsTrigger>
+            <TabsTrigger value="overview">Overview Report</TabsTrigger>
+          </TabsList>
+          <TabsContent value="full">
+            <ReportPreview
+              patient={patient}
+              items={items}
+              selectedItems={selectedItems}
+              additionalNotes={additionalNotes}
+              customTreatmentGoals={customTreatmentGoals}
+              subcategories={subcategories}
+              settings={settings}
+              settingsLoading={settingsLoading}
+            />
+          </TabsContent>
+          <TabsContent value="overview">
+            <OverviewReport
+              patient={patient}
+              items={items}
+              selectedItems={selectedItems}
+              customTreatmentGoals={customTreatmentGoals}
+              subcategories={subcategories}
+              settings={settings}
+              settingsLoading={settingsLoading}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
 
       <EmailReportDialog
