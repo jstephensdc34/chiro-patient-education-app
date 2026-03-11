@@ -83,6 +83,18 @@ export const ReportPreview = ({
                   />
                 ))}
                 
+                {/* Custom Treatment Goals Section */}
+                {customTreatmentGoals && (
+                  <div className="border-b pb-4">
+                    <h3 className="text-medical-700 font-medium text-lg mb-3">
+                      Additional Treatment Goals
+                    </h3>
+                    <div className="pl-4">
+                      <p className="whitespace-pre-wrap">{customTreatmentGoals}</p>
+                    </div>
+                  </div>
+                )}
+                
                 {/* Additional Notes Section */}
                 {additionalNotes && (
                   <div className="border-b pb-4">

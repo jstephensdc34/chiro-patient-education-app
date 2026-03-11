@@ -15,7 +15,7 @@ interface GeneratePDFParams {
 }
 
 export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
-  const { patient, selectedItems, notes, settings, subcategories, onProgress } = params;
+  const { patient, selectedItems, notes, customTreatmentGoals, settings, subcategories, onProgress } = params;
   
   try {
     // Generate the HTML content
@@ -23,6 +23,7 @@ export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
       patient,
       selectedItems,
       notes,
+      customTreatmentGoals,
       settings,
       subcategories
     });

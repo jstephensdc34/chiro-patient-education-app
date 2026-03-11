@@ -143,6 +143,7 @@ export const ReportBuilder = ({
           items={items}
           selectedItems={selectedItems}
           additionalNotes={additionalNotes}
+          customTreatmentGoals={customTreatmentGoals}
           subcategories={subcategories}
           settings={settings}
           settingsLoading={settingsLoading}

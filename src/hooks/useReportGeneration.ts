@@ -95,6 +95,7 @@ export const useReportGeneration = (
     patient,
     selectedItems,
     additionalNotes,
+    customTreatmentGoals,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
@@ -102,6 +103,7 @@ export const useReportGeneration = (
     handleToggleItem,
     handleGenerateReport,
     setAdditionalNotes,
+    setCustomTreatmentGoals,
     setActiveCategory
   };
 };

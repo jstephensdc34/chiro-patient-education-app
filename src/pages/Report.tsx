@@ -67,6 +67,7 @@ const Report = () => {
               onToggleItem={handleToggleItem}
               onCategoryChange={setActiveCategory as (category: CategoryType) => void}
               onNotesChange={setAdditionalNotes}
+              onTreatmentGoalsChange={setCustomTreatmentGoals}
               onGeneratePDF={handleGenerateReport}
             />
           </TabsContent>

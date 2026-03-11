@@ -130,7 +130,10 @@ export const generateReportHtml = ({
     currentPageContent += categoryContent;
   });
   
-  // Add notes to the last page
+  // Add treatment goals and notes to the last page
+  if (treatmentGoalsContent) {
+    pageContents[pageContents.length - 1] += treatmentGoalsContent;
+  }
   if (notesContent) {
     pageContents[pageContents.length - 1] += notesContent;
   }
