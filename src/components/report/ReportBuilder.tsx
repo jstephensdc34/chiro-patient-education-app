@@ -40,6 +40,7 @@ export const ReportBuilder = ({
   items,
   selectedItems,
   additionalNotes,
+  customTreatmentGoals,
   settings,
   settingsLoading,
   isLoading,
