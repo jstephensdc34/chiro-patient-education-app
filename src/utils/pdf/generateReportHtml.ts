@@ -79,6 +79,17 @@ export const generateReportHtml = ({
     }
   });
   
+  // Add custom treatment goals section
+  let treatmentGoalsContent = '';
+  if (customTreatmentGoals) {
+    treatmentGoalsContent = `
+      <div class="notes-section">
+        <h3 class="notes-title">Additional Treatment Goals</h3>
+        <p class="notes-content">${customTreatmentGoals}</p>
+      </div>
+    `;
+  }
+
   // Add additional notes section
   let notesContent = '';
   if (notes) {
