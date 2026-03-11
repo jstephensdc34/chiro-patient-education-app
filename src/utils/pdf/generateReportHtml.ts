@@ -17,6 +17,7 @@ export const generateReportHtml = ({
   patient,
   selectedItems,
   notes,
+  customTreatmentGoals,
   settings,
   subcategories
 }: GenerateReportHtmlParams): string => {
