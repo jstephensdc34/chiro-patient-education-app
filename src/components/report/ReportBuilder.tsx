@@ -19,6 +19,7 @@ interface ReportBuilderProps {
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
+  customTreatmentGoals: string;
   settings: ReportSetting[];
   settingsLoading: boolean;
   isLoading: boolean;
