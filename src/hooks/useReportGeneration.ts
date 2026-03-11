@@ -19,6 +19,7 @@ export const useReportGeneration = (
   });
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
+  const [customTreatmentGoals, setCustomTreatmentGoals] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
@@ -66,6 +67,7 @@ export const useReportGeneration = (
         patient,
         selectedItems: selectedItemsData,
         notes: additionalNotes,
+        customTreatmentGoals,
         settings,
         subcategories,
         onProgress: (progress) => {
@@ -93,6 +95,7 @@ export const useReportGeneration = (
     patient,
     selectedItems,
     additionalNotes,
+    customTreatmentGoals,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
@@ -100,6 +103,7 @@ export const useReportGeneration = (
     handleToggleItem,
     handleGenerateReport,
     setAdditionalNotes,
+    setCustomTreatmentGoals,
     setActiveCategory
   };
 };

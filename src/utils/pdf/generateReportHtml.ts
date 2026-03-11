@@ -8,6 +8,7 @@ interface GenerateReportHtmlParams {
   patient: PatientInfo;
   selectedItems: ReportItem[];
   notes: string;
+  customTreatmentGoals?: string;
   settings: ReportSetting[];
   subcategories: any[];
 }
@@ -16,6 +17,7 @@ export const generateReportHtml = ({
   patient,
   selectedItems,
   notes,
+  customTreatmentGoals,
   settings,
   subcategories
 }: GenerateReportHtmlParams): string => {
@@ -77,6 +79,17 @@ export const generateReportHtml = ({
     }
   });
   
+  // Add custom treatment goals section
+  let treatmentGoalsContent = '';
+  if (customTreatmentGoals) {
+    treatmentGoalsContent = `
+      <div class="notes-section">
+        <h3 class="notes-title">Additional Treatment Goals</h3>
+        <p class="notes-content">${customTreatmentGoals}</p>
+      </div>
+    `;
+  }
+
   // Add additional notes section
   let notesContent = '';
   if (notes) {
@@ -117,7 +130,10 @@ export const generateReportHtml = ({
     currentPageContent += categoryContent;
   });
   
-  // Add notes to the last page
+  // Add treatment goals and notes to the last page
+  if (treatmentGoalsContent) {
+    pageContents[pageContents.length - 1] += treatmentGoalsContent;
+  }
   if (notesContent) {
     pageContents[pageContents.length - 1] += notesContent;
   }

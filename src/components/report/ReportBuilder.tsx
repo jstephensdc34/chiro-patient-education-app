@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
+import { CustomTreatmentGoals } from "@/components/report/CustomTreatmentGoals";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
 import { ReportSetting } from "@/services/reportSettingsService";
@@ -18,6 +19,7 @@ interface ReportBuilderProps {
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
+  customTreatmentGoals: string;
   settings: ReportSetting[];
   settingsLoading: boolean;
   isLoading: boolean;
@@ -29,6 +31,7 @@ interface ReportBuilderProps {
   onToggleItem: (itemId: string) => void;
   onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
+  onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
 }
 
@@ -37,6 +40,7 @@ export const ReportBuilder = ({
   items,
   selectedItems,
   additionalNotes,
+  customTreatmentGoals,
   settings,
   settingsLoading,
   isLoading,
@@ -48,6 +52,7 @@ export const ReportBuilder = ({
   onToggleItem,
   onCategoryChange,
   onNotesChange,
+  onTreatmentGoalsChange,
   onGeneratePDF,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
@@ -64,6 +69,7 @@ export const ReportBuilder = ({
       patient,
       selectedItems: selectedItemsData,
       notes: additionalNotes,
+      customTreatmentGoals,
       settings,
       subcategories,
       recipientEmail: emailData.recipientEmail,
@@ -89,6 +95,11 @@ export const ReportBuilder = ({
         <NotesField
           notes={additionalNotes}
           onChange={onNotesChange}
+        />
+        
+        <CustomTreatmentGoals
+          goals={customTreatmentGoals}
+          onChange={onTreatmentGoalsChange}
         />
         
         <div className="space-y-3 mt-6">
@@ -132,6 +143,7 @@ export const ReportBuilder = ({
           items={items}
           selectedItems={selectedItems}
           additionalNotes={additionalNotes}
+          customTreatmentGoals={customTreatmentGoals}
           subcategories={subcategories}
           settings={settings}
           settingsLoading={settingsLoading}

@@ -20,6 +20,7 @@ interface ReportPreviewProps {
   items: ReportItem[];
   selectedItems: string[];
   additionalNotes: string;
+  customTreatmentGoals?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -30,6 +31,7 @@ export const ReportPreview = ({
   items,
   selectedItems,
   additionalNotes,
+  customTreatmentGoals = "",
   subcategories = [],
   settings = [],
   settingsLoading = false
@@ -80,6 +82,18 @@ export const ReportPreview = ({
                     getSubcategoryName={getSubcategoryName}
                   />
                 ))}
+                
+                {/* Custom Treatment Goals Section */}
+                {customTreatmentGoals && (
+                  <div className="border-b pb-4">
+                    <h3 className="text-medical-700 font-medium text-lg mb-3">
+                      Additional Treatment Goals
+                    </h3>
+                    <div className="pl-4">
+                      <p className="whitespace-pre-wrap">{customTreatmentGoals}</p>
+                    </div>
+                  </div>
+                )}
                 
                 {/* Additional Notes Section */}
                 {additionalNotes && (

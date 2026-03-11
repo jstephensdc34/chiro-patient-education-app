@@ -18,6 +18,7 @@ const Report = () => {
     patient,
     selectedItems,
     additionalNotes,
+    customTreatmentGoals,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
@@ -25,6 +26,7 @@ const Report = () => {
     handleToggleItem,
     handleGenerateReport,
     setAdditionalNotes,
+    setCustomTreatmentGoals,
     setActiveCategory
   } = useReportGeneration(items, settings, subcategories);
   
@@ -53,6 +55,7 @@ const Report = () => {
               items={items}
               selectedItems={selectedItems}
               additionalNotes={additionalNotes}
+              customTreatmentGoals={customTreatmentGoals}
               settings={settings}
               settingsLoading={settingsLoading}
               isLoading={isLoading}
@@ -64,6 +67,7 @@ const Report = () => {
               onToggleItem={handleToggleItem}
               onCategoryChange={setActiveCategory as (category: CategoryType) => void}
               onNotesChange={setAdditionalNotes}
+              onTreatmentGoalsChange={setCustomTreatmentGoals}
               onGeneratePDF={handleGenerateReport}
             />
           </TabsContent>
