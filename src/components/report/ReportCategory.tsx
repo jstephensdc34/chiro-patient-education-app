@@ -18,7 +18,8 @@ export const ReportCategory = ({
   categoryName, 
   items, 
   subcategories,
-  getSubcategoryName 
+  getSubcategoryName,
+  customTreatmentGoals
 }: ReportCategoryProps) => {
   // Render subcategories and their items in the correct order
   const renderSubcategoryItems = () => {
