@@ -67,6 +67,7 @@ export const useReportGeneration = (
         patient,
         selectedItems: selectedItemsData,
         notes: additionalNotes,
+        customTreatmentGoals,
         settings,
         subcategories,
         onProgress: (progress) => {
