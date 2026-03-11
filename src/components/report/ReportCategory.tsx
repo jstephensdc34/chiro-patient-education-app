@@ -10,6 +10,7 @@ interface ReportCategoryProps {
   items: ReportItemType[];
   subcategories: any[];
   getSubcategoryName: (id: string) => string;
+  customTreatmentGoals?: string;
 }
 
 export const ReportCategory = ({ 
