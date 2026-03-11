@@ -21,13 +21,11 @@ export const ReportCategory = ({
   getSubcategoryName,
   customTreatmentGoals
 }: ReportCategoryProps) => {
-  // Render subcategories and their items in the correct order
   const renderSubcategoryItems = () => {
     const orderedSubcategories = getOrderedSubcategories(categoryId, subcategories);
     
     return (
       <div className="space-y-4 pl-4">
-        {/* Render items by subcategory */}
         {orderedSubcategories.map(subcategory => {
           const subcategoryItems = items.filter(
             item => item.subcategoryId === subcategory.id
@@ -42,7 +40,6 @@ export const ReportCategory = ({
           );
         })}
         
-        {/* Render uncategorized items */}
         {(() => {
           const uncategorizedItems = items.filter(
             item => !item.subcategoryId
@@ -56,7 +53,6 @@ export const ReportCategory = ({
           ) : null;
         })()}
 
-        {/* Custom treatment goals inline */}
         {customTreatmentGoals && (
           <div className="ml-2">
             <ul className="space-y-3 ml-4">
@@ -70,4 +66,29 @@ export const ReportCategory = ({
         )}
       </div>
     );
+  };
+
+  const renderSimpleList = () => (
+    <ul className="space-y-3 ml-8">
+      {items.map(item => (
+        <ReportItem key={item.id} item={item} />
+      ))}
+    </ul>
+  );
+
+  return (
+    <div className="border-b pb-4">
+      <h3 className="text-medical-700 font-medium text-lg mb-3">
+        {categoryName}
+      </h3>
+      
+      {(categoryId === "diagnosis" || categoryId === "extremity" || 
+        categoryId === "treatment" || categoryId === "homecare" || 
+        categoryId === "exercises") ? (
+        renderSubcategoryItems()
+      ) : (
+        renderSimpleList()
+      )}
+    </div>
+  );
 };
