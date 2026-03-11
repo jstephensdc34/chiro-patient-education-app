@@ -96,10 +96,6 @@ export const ReportBuilder = ({
           onChange={onNotesChange}
         />
         
-        <CustomTreatmentGoals
-          goals={customTreatmentGoals}
-          onChange={onTreatmentGoalsChange}
-        />
         
         <div className="space-y-3 mt-6">
           {isGeneratingPDF ? (
