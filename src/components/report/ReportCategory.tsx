@@ -55,40 +55,21 @@ export const ReportCategory = ({
             />
           ) : null;
         })()}
+
+        {/* Custom treatment goals inline */}
+        {customTreatmentGoals && (
+          <div className="ml-2">
+            <ul className="space-y-3 ml-4">
+              <li className="ml-4">
+                <div className="font-medium">
+                  • {customTreatmentGoals}
+                </div>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     );
-  };
-
-  // Render a simple list for categories without subcategories
-  const renderSimpleList = () => (
-    <ul className="space-y-3 ml-8">
-      {items.map(item => (
-        <ReportItem key={item.id} item={item} />
-      ))}
-    </ul>
-  );
-
-  return (
-    <div className="border-b pb-4">
-      <h3 className="text-medical-700 font-medium text-lg mb-3">
-        {categoryName}
-      </h3>
-      
-      {(categoryId === "diagnosis" || categoryId === "extremity" || 
-        categoryId === "treatment" || categoryId === "homecare" || 
-        categoryId === "exercises") ? (
-        renderSubcategoryItems()
-      ) : (
-        renderSimpleList()
-      )}
-      
-      {customTreatmentGoals && (
-        <li className="ml-4 list-none">
-          <span className="font-semibold text-foreground">
-            • {customTreatmentGoals}
-          </span>
-        </li>
-      )}
     </div>
   );
 };
