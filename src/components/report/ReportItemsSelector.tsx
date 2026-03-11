@@ -16,6 +16,8 @@ interface ReportItemsSelectorProps {
   onToggleItem: (itemId: string) => void;
   isLoading?: boolean;
   subcategories: any[];
+  customTreatmentGoals?: string;
+  onTreatmentGoalsChange?: (goals: string) => void;
 }
 
 export const ReportItemsSelector = ({
