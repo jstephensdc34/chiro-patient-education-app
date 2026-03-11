@@ -83,9 +83,11 @@ export const ReportCategory = ({
       )}
       
       {customTreatmentGoals && (
-        <div className="pl-4 mt-3">
-          <p className="whitespace-pre-wrap text-foreground">{customTreatmentGoals}</p>
-        </div>
+        <li className="ml-4 list-none">
+          <span className="font-semibold text-foreground">
+            • {customTreatmentGoals}
+          </span>
+        </li>
       )}
     </div>
   );
