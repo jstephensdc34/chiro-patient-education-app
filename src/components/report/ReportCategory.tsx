@@ -10,6 +10,7 @@ interface ReportCategoryProps {
   items: ReportItemType[];
   subcategories: any[];
   getSubcategoryName: (id: string) => string;
+  customTreatmentGoals?: string;
 }
 
 export const ReportCategory = ({ 
@@ -17,7 +18,8 @@ export const ReportCategory = ({
   categoryName, 
   items, 
   subcategories,
-  getSubcategoryName 
+  getSubcategoryName,
+  customTreatmentGoals
 }: ReportCategoryProps) => {
   // Render subcategories and their items in the correct order
   const renderSubcategoryItems = () => {
@@ -78,6 +80,12 @@ export const ReportCategory = ({
         renderSubcategoryItems()
       ) : (
         renderSimpleList()
+      )}
+      
+      {customTreatmentGoals && (
+        <div className="pl-4 mt-3">
+          <p className="whitespace-pre-wrap text-foreground">{customTreatmentGoals}</p>
+        </div>
       )}
     </div>
   );

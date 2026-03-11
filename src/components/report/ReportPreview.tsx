@@ -72,7 +72,7 @@ export const ReportPreview = ({
               
               <div className="space-y-8">
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
-                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category)).map((category) => (
+                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && customTreatmentGoals)).map((category) => (
                   <ReportCategory
                     key={category}
                     categoryId={category}
@@ -80,20 +80,9 @@ export const ReportPreview = ({
                     items={getSelectedItems(category)}
                     subcategories={subcategories}
                     getSubcategoryName={getSubcategoryName}
+                    customTreatmentGoals={category === "treatment" ? customTreatmentGoals : undefined}
                   />
                 ))}
-                
-                {/* Custom Treatment Goals Section */}
-                {customTreatmentGoals && (
-                  <div className="border-b pb-4">
-                    <h3 className="text-medical-700 font-medium text-lg mb-3">
-                      Additional Treatment Goals
-                    </h3>
-                    <div className="pl-4">
-                      <p className="whitespace-pre-wrap">{customTreatmentGoals}</p>
-                    </div>
-                  </div>
-                )}
                 
                 {/* Additional Notes Section */}
                 {additionalNotes && (

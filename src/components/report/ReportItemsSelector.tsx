@@ -1,6 +1,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
@@ -16,6 +17,8 @@ interface ReportItemsSelectorProps {
   onToggleItem: (itemId: string) => void;
   isLoading?: boolean;
   subcategories: any[];
+  customTreatmentGoals?: string;
+  onTreatmentGoalsChange?: (goals: string) => void;
 }
 
 export const ReportItemsSelector = ({
@@ -25,7 +28,9 @@ export const ReportItemsSelector = ({
   onCategoryChange,
   onToggleItem,
   isLoading = false,
-  subcategories = []
+  subcategories = [],
+  customTreatmentGoals = "",
+  onTreatmentGoalsChange
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
@@ -99,6 +104,20 @@ export const ReportItemsSelector = ({
                   selectedItems={selectedItems}
                   onToggleItem={onToggleItem}
                 />
+                
+                {category === "treatment" && onTreatmentGoalsChange && (
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-foreground mb-2 block">
+                      Additional Treatment Goals
+                    </label>
+                    <Textarea
+                      className="min-h-[100px]"
+                      placeholder="Enter any custom treatment goals for this patient..."
+                      value={customTreatmentGoals}
+                      onChange={(e) => onTreatmentGoalsChange(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
             </TabsContent>
           ))}

@@ -71,24 +71,21 @@ export const generateReportHtml = ({
   let categorySections = '';
   
   MAIN_CATEGORIES.forEach(categoryId => {
-    // Get items for this category
     const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
     
-    if (categoryItems.length > 0) {
+    if (categoryItems.length > 0 || (categoryId === "treatment" && customTreatmentGoals)) {
       categorySections += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
+      
+      // Append custom treatment goals inline within the treatment section
+      if (categoryId === "treatment" && customTreatmentGoals) {
+        // Insert before the closing </div> of the category section
+        categorySections = categorySections.replace(
+          /(<\/div>\s*)$/,
+          `<div class="custom-goals"><p class="notes-content">${customTreatmentGoals}</p></div>$1`
+        );
+      }
     }
   });
-  
-  // Add custom treatment goals section
-  let treatmentGoalsContent = '';
-  if (customTreatmentGoals) {
-    treatmentGoalsContent = `
-      <div class="notes-section">
-        <h3 class="notes-title">Additional Treatment Goals</h3>
-        <p class="notes-content">${customTreatmentGoals}</p>
-      </div>
-    `;
-  }
 
   // Add additional notes section
   let notesContent = '';
@@ -101,12 +98,7 @@ export const generateReportHtml = ({
     `;
   }
 
-  // Build the page content with pagination
-  // First page always contains the header
   let pageContents = [`${headerContent}`];
-  
-  // Simple content distribution algorithm - could be enhanced with more sophisticated content calculations
-  // Split categories by estimated content size
   const categoryContentParts = categorySections.split('<div class="category-section">');
   
   // First part is empty due to split
@@ -130,10 +122,6 @@ export const generateReportHtml = ({
     currentPageContent += categoryContent;
   });
   
-  // Add treatment goals and notes to the last page
-  if (treatmentGoalsContent) {
-    pageContents[pageContents.length - 1] += treatmentGoalsContent;
-  }
   if (notesContent) {
     pageContents[pageContents.length - 1] += notesContent;
   }

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
 import { NotesField } from "@/components/report/NotesField";
-import { CustomTreatmentGoals } from "@/components/report/CustomTreatmentGoals";
 import { ReportItemsSelector } from "@/components/report/ReportItemsSelector";
 import { ReportPreview } from "@/components/report/ReportPreview";
 import { ReportSetting } from "@/services/reportSettingsService";
@@ -97,10 +96,6 @@ export const ReportBuilder = ({
           onChange={onNotesChange}
         />
         
-        <CustomTreatmentGoals
-          goals={customTreatmentGoals}
-          onChange={onTreatmentGoalsChange}
-        />
         
         <div className="space-y-3 mt-6">
           {isGeneratingPDF ? (
@@ -136,6 +131,8 @@ export const ReportBuilder = ({
           onToggleItem={onToggleItem}
           isLoading={isLoading}
           subcategories={subcategories}
+          customTreatmentGoals={customTreatmentGoals}
+          onTreatmentGoalsChange={onTreatmentGoalsChange}
         />
         
         <ReportPreview
