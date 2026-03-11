@@ -18,6 +18,7 @@ const Report = () => {
     patient,
     selectedItems,
     additionalNotes,
+    customTreatmentGoals,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
