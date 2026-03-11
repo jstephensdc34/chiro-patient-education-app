@@ -104,6 +104,20 @@ export const ReportItemsSelector = ({
                   selectedItems={selectedItems}
                   onToggleItem={onToggleItem}
                 />
+                
+                {category === "treatment" && onTreatmentGoalsChange && (
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-foreground mb-2 block">
+                      Additional Treatment Goals
+                    </label>
+                    <Textarea
+                      className="min-h-[100px]"
+                      placeholder="Enter any custom treatment goals for this patient..."
+                      value={customTreatmentGoals}
+                      onChange={(e) => onTreatmentGoalsChange(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
             </TabsContent>
           ))}
