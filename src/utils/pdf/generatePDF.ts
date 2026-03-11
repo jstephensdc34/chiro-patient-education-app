@@ -8,6 +8,7 @@ interface GeneratePDFParams {
   patient: PatientInfo;
   selectedItems: ReportItem[];
   notes: string;
+  customTreatmentGoals?: string;
   settings: ReportSetting[];
   subcategories: any[];
   onProgress?: (progress: RenderPdfProgress) => void;
