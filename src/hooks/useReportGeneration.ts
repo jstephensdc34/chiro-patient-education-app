@@ -94,7 +94,7 @@ export const useReportGeneration = (
     }
   };
 
-  const handleShareReport = async () => {
+  const handleShareReport = async (format: ShareReportFormat = "full") => {
     if (!patient.name) {
       toast({ title: "Missing Information", description: "Please enter the patient's name.", variant: "destructive" });
       return;
