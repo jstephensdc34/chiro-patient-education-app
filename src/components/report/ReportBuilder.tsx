@@ -29,6 +29,8 @@ interface ReportBuilderProps {
   isLoading: boolean;
   isGeneratingPDF: boolean;
   pdfProgress: RenderPdfProgress;
+  isSharing: boolean;
+  shareUrl: string | null;
   subcategories: any[];
   activeCategory: CategoryType;
   onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
@@ -37,6 +39,8 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
+  onShareReport: () => void;
+  onShareUrlChange: (url: string | null) => void;
 }
 
 export const ReportBuilder = ({
