@@ -55,14 +55,14 @@ export const ReportPreview = ({
 
   return (
     <Card className="mt-6">
-      <CardHeader className="bg-gray-100 border-b border-gray-200">
-        <CardTitle className="text-gray-800 text-lg">Report Preview</CardTitle>
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
           <div className="space-y-6 max-w-[210mm] mx-auto">
             {/* Page Container - simulating the PDF page layout */}
-            <div className="bg-white p-6 border border-gray-200 shadow-sm mx-auto" 
+            <div className="bg-white p-6 border border-border shadow-sm mx-auto" 
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               {/* Report Header */}
               <ReportHeader settings={settings} loading={settingsLoading} />
@@ -86,29 +86,29 @@ export const ReportPreview = ({
                 
                 {/* Additional Notes Section */}
                 {additionalNotes && (
-                  <div className="border-b pb-4">
-                    <h3 className="text-medical-700 font-medium text-lg mb-3">
-                      Additional Notes
-                    </h3>
-                    <div className="pl-4">
-                      <p className="whitespace-pre-wrap">{additionalNotes}</p>
+                  <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
+                    <div className="px-4 py-2 bg-gray-600">
+                      <h4 className="font-semibold text-sm text-white">Additional Notes</h4>
+                    </div>
+                    <div className="px-4 py-3">
+                      <p className="whitespace-pre-wrap text-sm text-foreground/80">{additionalNotes}</p>
                     </div>
                   </div>
                 )}
               </div>
               
               {/* Page number indicator (for preview only) */}
-              <div className="text-center text-xs text-gray-500 mt-8">
+              <div className="text-center text-xs text-muted-foreground mt-8">
                 Page 1
               </div>
             </div>
             
-            <div className="text-center text-xs text-gray-500">
+            <div className="text-center text-xs text-muted-foreground">
               <p>Note: The PDF will automatically create multiple pages as needed for longer reports.</p>
             </div>
           </div>
         ) : (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-muted-foreground">
             <p>Select items from the categories above to build your report.</p>
           </div>
         )}
