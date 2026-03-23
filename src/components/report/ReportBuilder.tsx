@@ -201,6 +201,14 @@ export const ReportBuilder = ({
         emailStatus={emailStatus}
         onSendEmail={handleSendEmail}
       />
+
+      <ShareReportDialog
+        open={showShareDialog}
+        onOpenChange={setShowShareDialog}
+        shareUrl={shareUrl}
+        isLoading={isSharing}
+        onShare={onShareReport}
+      />
     </div>
   );
 };
