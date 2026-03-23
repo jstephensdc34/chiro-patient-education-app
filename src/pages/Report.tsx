@@ -75,7 +75,7 @@ const Report = () => {
               onNotesChange={setAdditionalNotes}
               onTreatmentGoalsChange={setCustomTreatmentGoals}
               onGeneratePDF={handleGenerateReport}
-              onShareReport={handleShareReport}
+              onShareReport={(format) => handleShareReport(format)}
               onShareUrlChange={setShareUrl}
             />
           </TabsContent>
