@@ -2,6 +2,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { PatientInfo, ReportItem } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { generateReportHtml } from "./pdf/generateReportHtml";
+import { generateOverviewReportHtml } from "./generateOverviewReportHtml";
+
+export type ShareReportFormat = "full" | "overview";
 
 interface ShareReportParams {
   patient: PatientInfo;
@@ -10,10 +13,13 @@ interface ShareReportParams {
   customTreatmentGoals?: string;
   settings: ReportSetting[];
   subcategories: any[];
+  format?: ShareReportFormat;
 }
 
 export const shareReport = async (params: ShareReportParams): Promise<string> => {
-  const html = generateReportHtml(params);
+  const html = params.format === "overview"
+    ? generateOverviewReportHtml(params)
+    : generateReportHtml(params);
 
   // Create a unique filename
   const timestamp = Date.now();
