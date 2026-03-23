@@ -24,6 +24,8 @@ export const useReportGeneration = (
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
+  const [isSharing, setIsSharing] = useState<boolean>(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
 
   const handlePatientInfoChange = (key: keyof PatientInfo, value: string | number) => {
     setPatient(prev => ({ ...prev, [key]: value }));
