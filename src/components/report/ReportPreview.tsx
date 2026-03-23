@@ -62,7 +62,7 @@ export const ReportPreview = ({
         {selectedItems.length > 0 ? (
           <div className="space-y-6 max-w-[210mm] mx-auto">
             {/* Page Container - simulating the PDF page layout */}
-            <div className="bg-white p-6 border border-gray-200 shadow-sm mx-auto" 
+            <div className="bg-white p-6 border border-border shadow-sm mx-auto" 
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               {/* Report Header */}
               <ReportHeader settings={settings} loading={settingsLoading} />
