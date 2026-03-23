@@ -86,12 +86,12 @@ export const ReportPreview = ({
                 
                 {/* Additional Notes Section */}
                 {additionalNotes && (
-                  <div className="border-b pb-4">
-                    <h3 className="text-medical-700 font-medium text-lg mb-3">
-                      Additional Notes
-                    </h3>
-                    <div className="pl-4">
-                      <p className="whitespace-pre-wrap">{additionalNotes}</p>
+                  <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
+                    <div className="px-4 py-2 bg-gray-600">
+                      <h4 className="font-semibold text-sm text-white">Additional Notes</h4>
+                    </div>
+                    <div className="px-4 py-3">
+                      <p className="whitespace-pre-wrap text-sm text-foreground/80">{additionalNotes}</p>
                     </div>
                   </div>
                 )}
