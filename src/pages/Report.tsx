@@ -65,6 +65,8 @@ const Report = () => {
               isLoading={isLoading}
               isGeneratingPDF={isGeneratingPDF}
               pdfProgress={pdfProgress}
+              isSharing={isSharing}
+              shareUrl={shareUrl}
               subcategories={subcategories}
               activeCategory={activeCategory}
               onPatientInfoChange={handlePatientInfoChange}
@@ -73,6 +75,8 @@ const Report = () => {
               onNotesChange={setAdditionalNotes}
               onTreatmentGoalsChange={setCustomTreatmentGoals}
               onGeneratePDF={handleGenerateReport}
+              onShareReport={handleShareReport}
+              onShareUrlChange={setShareUrl}
             />
           </TabsContent>
           
