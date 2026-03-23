@@ -32,9 +32,9 @@ export const shareReport = async (params: ShareReportParams): Promise<string> =>
     throw new Error(`Failed to upload report: ${error.message}`);
   }
 
-  // Build the edge function URL to serve the HTML with correct Content-Type
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const serveUrl = `${supabaseUrl}/functions/v1/serve-report?file=${encodeURIComponent(fileName)}`;
+  const basePath = import.meta.env.BASE_URL || "/";
+  const shareUrl = new URL(`${basePath.replace(/\/$/, "")}/shared-report`, window.location.origin);
+  shareUrl.searchParams.set("file", fileName);
 
-  return serveUrl;
+  return shareUrl.toString();
 };
