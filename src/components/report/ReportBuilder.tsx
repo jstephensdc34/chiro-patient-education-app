@@ -54,6 +54,8 @@ export const ReportBuilder = ({
   isLoading,
   isGeneratingPDF,
   pdfProgress,
+  isSharing,
+  shareUrl,
   subcategories,
   activeCategory,
   onPatientInfoChange,
@@ -62,8 +64,11 @@ export const ReportBuilder = ({
   onNotesChange,
   onTreatmentGoalsChange,
   onGeneratePDF,
+  onShareReport,
+  onShareUrlChange,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const { emailStatus, sendEmailReport, resetEmailStatus } = useEmailDelivery();
 
   const handleSendEmail = async (emailData: {
