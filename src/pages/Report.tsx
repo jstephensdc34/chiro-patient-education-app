@@ -22,12 +22,16 @@ const Report = () => {
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
+    isSharing,
+    shareUrl,
     handlePatientInfoChange,
     handleToggleItem,
     handleGenerateReport,
+    handleShareReport,
     setAdditionalNotes,
     setCustomTreatmentGoals,
-    setActiveCategory
+    setActiveCategory,
+    setShareUrl
   } = useReportGeneration(items, settings, subcategories);
   
   const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
