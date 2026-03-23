@@ -94,6 +94,37 @@ export const useReportGeneration = (
     }
   };
 
+  const handleShareReport = async () => {
+    if (!patient.name) {
+      toast({ title: "Missing Information", description: "Please enter the patient's name.", variant: "destructive" });
+      return;
+    }
+    if (selectedItems.length === 0) {
+      toast({ title: "No Items Selected", description: "Please select at least one item for the report.", variant: "destructive" });
+      return;
+    }
+
+    setIsSharing(true);
+    try {
+      const selectedItemsData = items.filter(item => selectedItems.includes(item.id));
+      const url = await shareReport({
+        patient,
+        selectedItems: selectedItemsData,
+        notes: additionalNotes,
+        customTreatmentGoals,
+        settings,
+        subcategories,
+      });
+      setShareUrl(url);
+      toast({ title: "Report Shared", description: "Shareable link has been generated!" });
+    } catch (error) {
+      console.error("Error sharing report:", error);
+      toast({ title: "Error", description: error instanceof Error ? error.message : "Failed to share report.", variant: "destructive" });
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return {
     patient,
     selectedItems,
@@ -102,11 +133,15 @@ export const useReportGeneration = (
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
+    isSharing,
+    shareUrl,
     handlePatientInfoChange,
     handleToggleItem,
     handleGenerateReport,
+    handleShareReport,
     setAdditionalNotes,
     setCustomTreatmentGoals,
-    setActiveCategory
+    setActiveCategory,
+    setShareUrl
   };
 };
