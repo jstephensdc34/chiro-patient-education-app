@@ -11,10 +11,12 @@ import { OverviewReport } from "@/components/report/OverviewReport";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
+import { ShareReportDialog } from "@/components/report/ShareReportDialog";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "lucide-react";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
