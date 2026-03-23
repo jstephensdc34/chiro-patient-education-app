@@ -11,10 +11,12 @@ import { OverviewReport } from "@/components/report/OverviewReport";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
+import { ShareReportDialog } from "@/components/report/ShareReportDialog";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "lucide-react";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -27,6 +29,8 @@ interface ReportBuilderProps {
   isLoading: boolean;
   isGeneratingPDF: boolean;
   pdfProgress: RenderPdfProgress;
+  isSharing: boolean;
+  shareUrl: string | null;
   subcategories: any[];
   activeCategory: CategoryType;
   onPatientInfoChange: (key: keyof PatientInfo, value: string | number) => void;
@@ -35,6 +39,8 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
+  onShareReport: () => void;
+  onShareUrlChange: (url: string | null) => void;
 }
 
 export const ReportBuilder = ({
@@ -48,6 +54,8 @@ export const ReportBuilder = ({
   isLoading,
   isGeneratingPDF,
   pdfProgress,
+  isSharing,
+  shareUrl,
   subcategories,
   activeCategory,
   onPatientInfoChange,
@@ -56,8 +64,11 @@ export const ReportBuilder = ({
   onNotesChange,
   onTreatmentGoalsChange,
   onGeneratePDF,
+  onShareReport,
+  onShareUrlChange,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const { emailStatus, sendEmailReport, resetEmailStatus } = useEmailDelivery();
 
   const handleSendEmail = async (emailData: {
@@ -121,6 +132,19 @@ export const ReportBuilder = ({
           >
             Send Email Report
           </Button>
+          
+          <Button 
+            variant="outline"
+            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50 text-lg py-6"
+            onClick={() => {
+              onShareUrlChange(null);
+              setShowShareDialog(true);
+            }}
+            disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
+          >
+            <Link className="mr-2 h-4 w-4" />
+            Share Report Link
+          </Button>
         </div>
       </div>
       
@@ -176,6 +200,14 @@ export const ReportBuilder = ({
         defaultEmail=""
         emailStatus={emailStatus}
         onSendEmail={handleSendEmail}
+      />
+
+      <ShareReportDialog
+        open={showShareDialog}
+        onOpenChange={setShowShareDialog}
+        shareUrl={shareUrl}
+        isLoading={isSharing}
+        onShare={onShareReport}
       />
     </div>
   );

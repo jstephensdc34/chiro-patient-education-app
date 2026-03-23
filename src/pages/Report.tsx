@@ -22,12 +22,16 @@ const Report = () => {
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
+    isSharing,
+    shareUrl,
     handlePatientInfoChange,
     handleToggleItem,
     handleGenerateReport,
+    handleShareReport,
     setAdditionalNotes,
     setCustomTreatmentGoals,
-    setActiveCategory
+    setActiveCategory,
+    setShareUrl
   } = useReportGeneration(items, settings, subcategories);
   
   const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
@@ -61,6 +65,8 @@ const Report = () => {
               isLoading={isLoading}
               isGeneratingPDF={isGeneratingPDF}
               pdfProgress={pdfProgress}
+              isSharing={isSharing}
+              shareUrl={shareUrl}
               subcategories={subcategories}
               activeCategory={activeCategory}
               onPatientInfoChange={handlePatientInfoChange}
@@ -69,6 +75,8 @@ const Report = () => {
               onNotesChange={setAdditionalNotes}
               onTreatmentGoalsChange={setCustomTreatmentGoals}
               onGeneratePDF={handleGenerateReport}
+              onShareReport={handleShareReport}
+              onShareUrlChange={setShareUrl}
             />
           </TabsContent>
           
