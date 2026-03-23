@@ -208,7 +208,7 @@ export const ReportBuilder = ({
         onOpenChange={setShowShareDialog}
         shareUrl={shareUrl}
         isLoading={isSharing}
-        onShare={onShareReport}
+        onShare={(format) => onShareReport(format)}
       />
     </div>
   );
