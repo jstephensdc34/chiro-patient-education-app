@@ -4,6 +4,14 @@ import { ReportSubcategory } from "./ReportSubcategory";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
 import { ReportItem } from "./ReportItem";
 
+const sectionStyles: Record<string, { bg: string; border: string; headerBg: string; headerText: string }> = {
+  diagnosis: { bg: "bg-blue-50", border: "border-blue-200", headerBg: "bg-blue-600", headerText: "text-white" },
+  extremity: { bg: "bg-indigo-50", border: "border-indigo-200", headerBg: "bg-indigo-600", headerText: "text-white" },
+  treatment: { bg: "bg-emerald-50", border: "border-emerald-200", headerBg: "bg-emerald-600", headerText: "text-white" },
+  homecare: { bg: "bg-rose-50", border: "border-rose-200", headerBg: "bg-rose-600", headerText: "text-white" },
+  exercises: { bg: "bg-purple-50", border: "border-purple-200", headerBg: "bg-purple-600", headerText: "text-white" },
+};
+
 interface ReportCategoryProps {
   categoryId: string;
   categoryName: string;
@@ -21,11 +29,13 @@ export const ReportCategory = ({
   getSubcategoryName,
   customTreatmentGoals
 }: ReportCategoryProps) => {
+  const style = sectionStyles[categoryId] || sectionStyles.diagnosis;
+
   const renderSubcategoryItems = () => {
     const orderedSubcategories = getOrderedSubcategories(categoryId, subcategories);
     
     return (
-      <div className="space-y-4 pl-4">
+      <div className="space-y-3">
         {orderedSubcategories.map(subcategory => {
           const subcategoryItems = items.filter(
             item => item.subcategoryId === subcategory.id
@@ -36,6 +46,7 @@ export const ReportCategory = ({
               key={subcategory.id} 
               title={getSubcategoryName(subcategory.id)}
               items={subcategoryItems}
+              style={style}
             />
           );
         })}
@@ -49,46 +60,31 @@ export const ReportCategory = ({
             <ReportSubcategory
               title="Other"
               items={uncategorizedItems}
+              style={style}
             />
           ) : null;
         })()}
 
         {customTreatmentGoals && (
-          <div className="ml-2">
-            <ul className="space-y-3 ml-4">
-              <li className="ml-4">
-                <div className="font-medium">
-                  • {customTreatmentGoals}
-                </div>
-              </li>
-            </ul>
+          <div className={`rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
+            <div className={`px-4 py-2 ${style.headerBg}`}>
+              <h4 className={`font-semibold text-sm ${style.headerText}`}>Custom Treatment Goal</h4>
+            </div>
+            <div className="px-4 py-3">
+              <p className="text-sm font-bold text-foreground/80">• {customTreatmentGoals}</p>
+            </div>
           </div>
         )}
       </div>
     );
   };
 
-  const renderSimpleList = () => (
-    <ul className="space-y-3 ml-8">
-      {items.map(item => (
-        <ReportItem key={item.id} item={item} />
-      ))}
-    </ul>
-  );
-
   return (
-    <div className="border-b pb-4">
-      <h3 className="text-medical-700 font-medium text-lg mb-3">
-        {categoryName}
-      </h3>
-      
-      {(categoryId === "diagnosis" || categoryId === "extremity" || 
-        categoryId === "treatment" || categoryId === "homecare" || 
-        categoryId === "exercises") ? (
-        renderSubcategoryItems()
-      ) : (
-        renderSimpleList()
-      )}
+    <div className="mb-6">
+      <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3`}>
+        <h3 className={`font-bold text-base ${style.headerText}`}>{categoryName}</h3>
+      </div>
+      {renderSubcategoryItems()}
     </div>
   );
 };
