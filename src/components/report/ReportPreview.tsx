@@ -98,7 +98,7 @@ export const ReportPreview = ({
               </div>
               
               {/* Page number indicator (for preview only) */}
-              <div className="text-center text-xs text-gray-500 mt-8">
+              <div className="text-center text-xs text-muted-foreground mt-8">
                 Page 1
               </div>
             </div>
