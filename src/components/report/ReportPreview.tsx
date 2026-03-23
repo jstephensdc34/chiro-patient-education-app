@@ -108,7 +108,7 @@ export const ReportPreview = ({
             </div>
           </div>
         ) : (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-muted-foreground">
             <p>Select items from the categories above to build your report.</p>
           </div>
         )}
