@@ -114,6 +114,7 @@ export const useReportGeneration = (
         customTreatmentGoals,
         settings,
         subcategories,
+        format,
       });
       setShareUrl(url);
       toast({ title: "Report Shared", description: "Shareable link has been generated!" });
