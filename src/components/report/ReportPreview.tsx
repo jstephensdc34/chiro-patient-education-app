@@ -103,7 +103,7 @@ export const ReportPreview = ({
               </div>
             </div>
             
-            <div className="text-center text-xs text-gray-500">
+            <div className="text-center text-xs text-muted-foreground">
               <p>Note: The PDF will automatically create multiple pages as needed for longer reports.</p>
             </div>
           </div>
