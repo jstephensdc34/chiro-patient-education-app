@@ -55,8 +55,8 @@ export const ReportPreview = ({
 
   return (
     <Card className="mt-6">
-      <CardHeader className="bg-gray-100 border-b border-gray-200">
-        <CardTitle className="text-gray-800 text-lg">Report Preview</CardTitle>
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
