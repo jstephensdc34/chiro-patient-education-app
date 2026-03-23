@@ -11,6 +11,7 @@ import Library from "./pages/Library";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import SharedReport from "./pages/SharedReport";
 
 // Create a new QueryClient instance with error handling
 const queryClient = new QueryClient({
@@ -57,6 +58,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/report" element={<Report />} />
+                  <Route path="/shared-report" element={<SharedReport />} />
                   <Route path="/library" element={<Library />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/admin" element={<Admin />} />
