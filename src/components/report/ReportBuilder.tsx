@@ -132,6 +132,19 @@ export const ReportBuilder = ({
           >
             Send Email Report
           </Button>
+          
+          <Button 
+            variant="outline"
+            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50 text-lg py-6"
+            onClick={() => {
+              onShareUrlChange(null);
+              setShowShareDialog(true);
+            }}
+            disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
+          >
+            <Link className="mr-2 h-4 w-4" />
+            Share Report Link
+          </Button>
         </div>
       </div>
       
