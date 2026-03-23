@@ -10,13 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Copy, Check, Loader2, Link } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { ShareReportFormat } from "@/utils/shareReport";
 
 interface ShareReportDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   shareUrl: string | null;
   isLoading: boolean;
-  onShare: () => void;
+  onShare: (format: ShareReportFormat) => void;
 }
 
 export const ShareReportDialog = ({
@@ -43,15 +44,21 @@ export const ShareReportDialog = ({
         <DialogHeader>
           <DialogTitle>Share Report</DialogTitle>
           <DialogDescription>
-            Generate a shareable link to send to your patient.
+            Choose a report format and generate a shareable link.
           </DialogDescription>
         </DialogHeader>
 
         {!shareUrl && !isLoading && (
-          <Button onClick={onShare} className="w-full bg-medical-700 hover:bg-medical-800">
-            <Link className="mr-2 h-4 w-4" />
-            Generate Shareable Link
-          </Button>
+          <div className="flex flex-col gap-3">
+            <Button onClick={() => onShare("full")} className="w-full bg-medical-700 hover:bg-medical-800">
+              <Link className="mr-2 h-4 w-4" />
+              Share Full Report
+            </Button>
+            <Button onClick={() => onShare("overview")} variant="outline" className="w-full border-medical-600 text-medical-700 hover:bg-medical-50">
+              <Link className="mr-2 h-4 w-4" />
+              Share Overview Report
+            </Button>
+          </div>
         )}
 
         {isLoading && (

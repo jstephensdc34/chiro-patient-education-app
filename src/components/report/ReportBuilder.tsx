@@ -12,6 +12,7 @@ import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
 import { ShareReportDialog } from "@/components/report/ShareReportDialog";
+import { ShareReportFormat } from "@/utils/shareReport";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
@@ -39,7 +40,7 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
-  onShareReport: () => void;
+  onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
 }
 
@@ -207,7 +208,7 @@ export const ReportBuilder = ({
         onOpenChange={setShowShareDialog}
         shareUrl={shareUrl}
         isLoading={isSharing}
-        onShare={onShareReport}
+        onShare={(format) => onShareReport(format)}
       />
     </div>
   );

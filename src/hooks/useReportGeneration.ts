@@ -4,7 +4,7 @@ import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePDF, RenderPdfProgress } from "@/utils/pdf";
 import { ReportSetting } from "@/services/reportSettingsService";
-import { shareReport } from "@/utils/shareReport";
+import { shareReport, ShareReportFormat } from "@/utils/shareReport";
 
 export const useReportGeneration = (
   items: ReportItem[],
@@ -94,7 +94,7 @@ export const useReportGeneration = (
     }
   };
 
-  const handleShareReport = async () => {
+  const handleShareReport = async (format: ShareReportFormat = "full") => {
     if (!patient.name) {
       toast({ title: "Missing Information", description: "Please enter the patient's name.", variant: "destructive" });
       return;
@@ -114,6 +114,7 @@ export const useReportGeneration = (
         customTreatmentGoals,
         settings,
         subcategories,
+        format,
       });
       setShareUrl(url);
       toast({ title: "Report Shared", description: "Shareable link has been generated!" });
