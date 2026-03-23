@@ -40,7 +40,7 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onGeneratePDF: () => void;
-  onShareReport: () => void;
+  onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
 }
 
