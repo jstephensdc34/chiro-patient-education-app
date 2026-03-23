@@ -4,6 +4,7 @@ import { CategoryType, PatientInfo, ReportItem } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import { generatePDF, RenderPdfProgress } from "@/utils/pdf";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { shareReport } from "@/utils/shareReport";
 
 export const useReportGeneration = (
   items: ReportItem[],
