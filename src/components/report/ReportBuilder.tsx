@@ -12,6 +12,7 @@ import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
 import { ShareReportDialog } from "@/components/report/ShareReportDialog";
+import { ShareReportFormat } from "@/utils/shareReport";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
