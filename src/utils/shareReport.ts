@@ -32,10 +32,9 @@ export const shareReport = async (params: ShareReportParams): Promise<string> =>
     throw new Error(`Failed to upload report: ${error.message}`);
   }
 
-  // Get public URL
-  const { data: urlData } = supabase.storage
-    .from("shared-reports")
-    .getPublicUrl(fileName);
+  // Build the edge function URL to serve the HTML with correct Content-Type
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const serveUrl = `${supabaseUrl}/functions/v1/serve-report?file=${encodeURIComponent(fileName)}`;
 
-  return urlData.publicUrl;
+  return serveUrl;
 };
