@@ -143,6 +143,8 @@ export const useReportGeneration = (
     setAdditionalNotes,
     setCustomTreatmentGoals,
     setActiveCategory,
-    setShareUrl
+    setShareUrl,
+    setPatient,
+    setSelectedItems,
   };
 };
