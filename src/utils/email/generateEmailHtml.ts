@@ -61,10 +61,8 @@ export const generateEmailHtml = ({
       </tr>
     </table>
     
-    <h2 style="color: #1f2937; font-size: 24px; margin: 0 0 10px 0; text-align: center;">${patient.name}</h2>
+    <h2 style="color: #1f2937; font-size: 24px; margin: 0 0 10px 0; text-align: center;">Patient ID: ${patient.name}</h2>
     <p style="color: #6b7280; text-align: center; margin: 0 0 30px 0; font-size: 16px;">
-      ${patient.age ? `Age: ${patient.age} | ` : ''}
-      ${patient.gender ? `Gender: ${patient.gender} | ` : ''}
       Date: ${new Date(patient.date).toLocaleDateString()}
     </p>
   `;

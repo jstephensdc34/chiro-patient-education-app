@@ -19,36 +19,13 @@ export const PatientInfoForm = ({ patient, onPatientInfoChange }: PatientInfoFor
       <CardContent className="pt-6">
         <div className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="patientName">Patient Name*</Label>
+            <Label htmlFor="patientName">Patient ID*</Label>
             <Input
               id="patientName"
               value={patient.name}
               onChange={(e) => onPatientInfoChange("name", e.target.value)}
               required
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="patientAge">Age</Label>
-            <Input
-              id="patientAge"
-              type="number"
-              value={patient.age || ""}
-              onChange={(e) => onPatientInfoChange("age", parseInt(e.target.value) || 0)}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="patientGender">Gender</Label>
-            <select
-              id="patientGender"
-              className="w-full p-2 border border-gray-300 rounded-md"
-              value={patient.gender}
-              onChange={(e) => onPatientInfoChange("gender", e.target.value)}
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="reportDate">Report Date</Label>

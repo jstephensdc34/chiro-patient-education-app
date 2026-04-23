@@ -149,9 +149,9 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
       <p class="clinic-info">${[clinicAddress, clinicPhone, clinicEmail, clinicWebsite].filter(Boolean).join(" | ")}</p>
     </div>
   </div>
-  <h2 class="patient-name">${patient.name}</h2>
+  <h2 class="patient-name">Patient ID: ${patient.name}</h2>
   <p class="patient-info">
-    ${patient.age ? `Age: ${patient.age} | ` : ""}${patient.gender ? `Gender: ${patient.gender} | ` : ""}Date: ${new Date(patient.date).toLocaleDateString()}
+    Date: ${new Date(patient.date).toLocaleDateString()}
   </p>
   ${sections}
 </div></body></html>`;

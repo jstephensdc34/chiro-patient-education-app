@@ -10,10 +10,8 @@ export const PatientInfoDisplay = ({ patient }: PatientInfoDisplayProps) => {
   
   return (
     <div className="pb-2 border-b border-gray-200">
-      <h2 className="text-lg font-bold">{patient.name}</h2>
+      <h2 className="text-lg font-bold">Patient ID: {patient.name}</h2>
       <div className="text-sm text-gray-600 flex gap-x-4">
-        {patient.age && <span>Age: {patient.age}</span>}
-        {patient.gender && <span>Gender: {patient.gender}</span>}
         <span>Date: {new Date(patient.date).toLocaleDateString()}</span>
       </div>
     </div>
