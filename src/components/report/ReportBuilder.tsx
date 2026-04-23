@@ -114,7 +114,22 @@ export const ReportBuilder = ({
           notes={additionalNotes}
           onChange={onNotesChange}
         />
-        
+
+        <CarePlansPanel
+          savedPlans={carePlans.savedPlans}
+          loadingPlans={carePlans.loadingPlans}
+          currentPlanId={carePlans.currentPlanId}
+          currentPlanTitle={carePlans.currentPlanTitle}
+          lastAutoSavedAt={carePlans.lastAutoSavedAt}
+          draftRestored={carePlans.draftRestored}
+          onSaveAs={carePlans.saveAs}
+          onUpdateCurrent={carePlans.updateCurrent}
+          onLoad={carePlans.loadPlan}
+          onDelete={carePlans.removePlan}
+          onRename={carePlans.rename}
+          onNew={carePlans.newPlan}
+          hasContent={!!patient.name || selectedItems.length > 0}
+        />
         
         <div className="space-y-3 mt-6">
           {isGeneratingPDF ? (
