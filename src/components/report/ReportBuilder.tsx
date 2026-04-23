@@ -18,6 +18,8 @@ import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "lucide-react";
+import { CarePlansPanel } from "@/components/report/CarePlansPanel";
+import { useCarePlans } from "@/hooks/useCarePlans";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -42,6 +44,7 @@ interface ReportBuilderProps {
   onGeneratePDF: () => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
+  carePlans: ReturnType<typeof useCarePlans>;
 }
 
 export const ReportBuilder = ({
@@ -67,6 +70,7 @@ export const ReportBuilder = ({
   onGeneratePDF,
   onShareReport,
   onShareUrlChange,
+  carePlans,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
@@ -110,7 +114,22 @@ export const ReportBuilder = ({
           notes={additionalNotes}
           onChange={onNotesChange}
         />
-        
+
+        <CarePlansPanel
+          savedPlans={carePlans.savedPlans}
+          loadingPlans={carePlans.loadingPlans}
+          currentPlanId={carePlans.currentPlanId}
+          currentPlanTitle={carePlans.currentPlanTitle}
+          lastAutoSavedAt={carePlans.lastAutoSavedAt}
+          draftRestored={carePlans.draftRestored}
+          onSaveAs={carePlans.saveAs}
+          onUpdateCurrent={carePlans.updateCurrent}
+          onLoad={carePlans.loadPlan}
+          onDelete={carePlans.removePlan}
+          onRename={carePlans.rename}
+          onNew={carePlans.newPlan}
+          hasContent={!!patient.name || selectedItems.length > 0}
+        />
         
         <div className="space-y-3 mt-6">
           {isGeneratingPDF ? (

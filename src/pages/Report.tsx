@@ -7,6 +7,7 @@ import { useReportSettings } from "@/hooks/useReportSettings";
 import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 import { useReportData } from "@/hooks/useReportData";
 import { useReportGeneration } from "@/hooks/useReportGeneration";
+import { useCarePlans } from "@/hooks/useCarePlans";
 import { ReportBuilder } from "@/components/report/ReportBuilder";
 import { CategoryType } from "@/types";
 
@@ -31,8 +32,23 @@ const Report = () => {
     setAdditionalNotes,
     setCustomTreatmentGoals,
     setActiveCategory,
-    setShareUrl
+    setShareUrl,
+    setPatient,
+    setSelectedItems,
   } = useReportGeneration(items, settings, subcategories);
+
+  const carePlans = useCarePlans({
+    patient,
+    selectedItems,
+    additionalNotes,
+    customTreatmentGoals,
+    activeCategory,
+    setPatient,
+    setSelectedItems,
+    setAdditionalNotes,
+    setCustomTreatmentGoals,
+    setActiveCategory,
+  });
   
   const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
   
@@ -77,6 +93,7 @@ const Report = () => {
               onGeneratePDF={handleGenerateReport}
               onShareReport={(format) => handleShareReport(format)}
               onShareUrlChange={setShareUrl}
+              carePlans={carePlans}
             />
           </TabsContent>
           

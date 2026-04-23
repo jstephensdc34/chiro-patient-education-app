@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      care_plans: {
+        Row: {
+          active_category: string | null
+          additional_notes: string | null
+          created_at: string
+          custom_treatment_goals: string | null
+          id: string
+          is_draft: boolean
+          patient_name: string | null
+          report_date: string | null
+          selected_item_ids: Json
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_category?: string | null
+          additional_notes?: string | null
+          created_at?: string
+          custom_treatment_goals?: string | null
+          id?: string
+          is_draft?: boolean
+          patient_name?: string | null
+          report_date?: string | null
+          selected_item_ids?: Json
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_category?: string | null
+          additional_notes?: string | null
+          created_at?: string
+          custom_treatment_goals?: string | null
+          id?: string
+          is_draft?: boolean
+          patient_name?: string | null
+          report_date?: string | null
+          selected_item_ids?: Json
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       library_categories: {
         Row: {
           created_at: string
