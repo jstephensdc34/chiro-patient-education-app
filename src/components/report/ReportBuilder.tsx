@@ -18,6 +18,8 @@ import { useEmailDelivery } from "@/hooks/useEmailDelivery";
 import { generateEmailHtml } from "@/utils/email";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "lucide-react";
+import { CarePlansPanel } from "@/components/report/CarePlansPanel";
+import { useCarePlans } from "@/hooks/useCarePlans";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -42,6 +44,7 @@ interface ReportBuilderProps {
   onGeneratePDF: () => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
+  carePlans: ReturnType<typeof useCarePlans>;
 }
 
 export const ReportBuilder = ({
