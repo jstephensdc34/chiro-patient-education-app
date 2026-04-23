@@ -70,6 +70,7 @@ export const ReportBuilder = ({
   onGeneratePDF,
   onShareReport,
   onShareUrlChange,
+  carePlans,
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
