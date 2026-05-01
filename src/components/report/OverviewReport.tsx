@@ -217,7 +217,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.diagnosis.label} style={sectionStyles.diagnosis} />
                     <div className="grid grid-cols-2 gap-3">
                       {diagnosisItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.diagnosis} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.diagnosis} />
                       ))}
                     </div>
                   </div>
@@ -229,7 +229,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.extremity.label} style={sectionStyles.extremity} />
                     <div className="grid grid-cols-2 gap-3">
                       {extremityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.extremity} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.extremity} />
                       ))}
                     </div>
                   </div>
@@ -241,7 +241,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.treatment.label} style={sectionStyles.treatment} />
                     <div className="grid grid-cols-2 gap-3">
                       {treatmentModalityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.treatment} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.treatment} />
                       ))}
                     </div>
                   </div>
@@ -254,7 +254,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <div className="grid grid-cols-2 gap-3">
                       {/* Care Plan Type cards */}
                       {carePlanItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.carePlan} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
                       ))}
 
                       {/* Treatment Goals as bullet list card */}
@@ -283,7 +283,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.homecare.label} style={sectionStyles.homecare} />
                     <div className="grid grid-cols-2 gap-3">
                       {homecareItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.homecare} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.homecare} />
                       ))}
                     </div>
                   </div>
@@ -295,7 +295,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.exercises.label} style={sectionStyles.exercises} />
                     <div className="grid grid-cols-2 gap-3">
                       {exerciseItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.exercises} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.exercises} />
                       ))}
                     </div>
                   </div>
