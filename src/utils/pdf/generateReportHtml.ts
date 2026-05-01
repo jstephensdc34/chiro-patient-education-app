@@ -9,6 +9,7 @@ interface GenerateReportHtmlParams {
   selectedItems: ReportItem[];
   notes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   settings: ReportSetting[];
   subcategories: any[];
 }
@@ -18,6 +19,7 @@ export const generateReportHtml = ({
   selectedItems,
   notes,
   customTreatmentGoals,
+  estimatedCost,
   settings,
   subcategories
 }: GenerateReportHtmlParams): string => {
@@ -71,15 +73,29 @@ export const generateReportHtml = ({
   MAIN_CATEGORIES.forEach(categoryId => {
     const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
     
-    if (categoryItems.length > 0 || (categoryId === "treatment" && customTreatmentGoals)) {
+    if (categoryItems.length > 0 || (categoryId === "treatment" && (customTreatmentGoals || estimatedCost))) {
       categorySections += renderCategorySection(categoryId, categoryItems, categoryNames, subcategories, getSubcategoryName);
       
-      // Append custom treatment goals inline within the treatment section
+      let inserts = "";
       if (categoryId === "treatment" && customTreatmentGoals) {
-        // Insert before the closing </div> of the category section
+        inserts += `<div class="custom-goals"><p class="notes-content">${customTreatmentGoals}</p></div>`;
+      }
+      if (categoryId === "treatment" && estimatedCost) {
+        inserts += `
+          <div style="margin-top:12px;border:1px solid #a7f3d0;background:#ecfdf5;border-radius:8px;overflow:hidden;">
+            <div style="padding:8px 16px;background:#059669;color:#fff;font-weight:600;font-size:14px;">Estimated Cost</div>
+            <div style="padding:16px;text-align:center;">
+              <p style="margin:0;font-size:24px;font-weight:700;color:#047857;">${estimatedCost}</p>
+              <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:#6b7280;">
+                Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+              </p>
+            </div>
+          </div>`;
+      }
+      if (inserts) {
         categorySections = categorySections.replace(
           /(<\/div>\s*)$/,
-          `<div class="custom-goals"><p class="notes-content">${customTreatmentGoals}</p></div>$1`
+          `${inserts}$1`
         );
       }
     }
