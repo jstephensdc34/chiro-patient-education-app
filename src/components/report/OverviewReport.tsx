@@ -58,6 +58,7 @@ interface OverviewReportProps {
   items: ReportItem[];
   selectedItems: string[];
   customTreatmentGoals?: string;
+  additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -93,6 +94,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   items,
   selectedItems,
   customTreatmentGoals = "",
+  additionalNotes = "",
   subcategories = [],
   settings = [],
   settingsLoading = false,
