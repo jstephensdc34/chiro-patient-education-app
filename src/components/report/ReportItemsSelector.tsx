@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
@@ -19,6 +20,8 @@ interface ReportItemsSelectorProps {
   subcategories: any[];
   customTreatmentGoals?: string;
   onTreatmentGoalsChange?: (goals: string) => void;
+  estimatedCost?: string;
+  onEstimatedCostChange?: (cost: string) => void;
 }
 
 export const ReportItemsSelector = ({
@@ -30,7 +33,9 @@ export const ReportItemsSelector = ({
   isLoading = false,
   subcategories = [],
   customTreatmentGoals = "",
-  onTreatmentGoalsChange
+  onTreatmentGoalsChange,
+  estimatedCost = "",
+  onEstimatedCostChange,
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
