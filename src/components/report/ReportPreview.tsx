@@ -116,4 +116,6 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
       </CardContent>
     </Card>
   );
-};
+});
+
+ReportPreview.displayName = "ReportPreview";
