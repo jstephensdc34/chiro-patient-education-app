@@ -1,6 +1,6 @@
 
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
@@ -41,7 +41,7 @@ interface ReportBuilderProps {
   onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
-  onGeneratePDF: () => void;
+  onGeneratePDF: (element: HTMLElement | null) => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
   carePlans: ReturnType<typeof useCarePlans>;
@@ -74,6 +74,7 @@ export const ReportBuilder = ({
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const reportPreviewRef = useRef<HTMLDivElement>(null);
   const { emailStatus, sendEmailReport, resetEmailStatus } = useEmailDelivery();
 
   const handleSendEmail = async (emailData: {
@@ -137,7 +138,7 @@ export const ReportBuilder = ({
           ) : (
             <Button 
               className="w-full bg-medical-700 hover:bg-medical-800 text-lg py-6"
-              onClick={onGeneratePDF}
+              onClick={() => onGeneratePDF(reportPreviewRef.current)}
               disabled={isGeneratingPDF}
             >
               Generate PDF Report
@@ -189,6 +190,7 @@ export const ReportBuilder = ({
           </TabsList>
           <TabsContent value="full">
             <ReportPreview
+              ref={reportPreviewRef}
               patient={patient}
               items={items}
               selectedItems={selectedItems}
