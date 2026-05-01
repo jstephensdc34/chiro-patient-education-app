@@ -60,7 +60,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
 
   const renderGrid = (items: ReportItem[], colors: typeof sectionColors.diagnosis) =>
     `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      ${items.map(item => renderCard(item.name, item.definition, colors)).join("")}
+      ${items.map(item => renderCard(item.name, item.definition, item.infoLink, colors)).join("")}
     </div>`;
 
   let sections = "";
@@ -87,7 +87,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
   }
 
   if (carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals) {
-    const carePlanCards = carePlanItems.map(item => renderCard(item.name, item.definition, sectionColors.carePlan)).join("");
+    const carePlanCards = carePlanItems.map(item => renderCard(item.name, item.definition, item.infoLink, sectionColors.carePlan)).join("");
 
     let goalsCard = "";
     if (treatmentGoalItems.length > 0 || customTreatmentGoals) {
