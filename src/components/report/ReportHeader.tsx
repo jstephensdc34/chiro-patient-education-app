@@ -37,7 +37,7 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
     return (
       <Card className="mb-6 bg-gray-50 border border-gray-200">
         <CardContent className="pt-4 flex items-center gap-6">
-          <Skeleton className="w-16 h-16" />
+          <Skeleton className="w-28 h-28" />
           <div className="flex-grow space-y-2">
             <Skeleton className="h-6 w-3/4" />
             <Skeleton className="h-4 w-full" />
@@ -51,15 +51,15 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
   return (
     <Card className="mb-6 bg-gray-50 border border-gray-200">
       <CardContent className="pt-4 flex items-center gap-6">
-        <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center">
+        <div className="flex-shrink-0 h-28 w-auto max-w-[14rem] flex items-center justify-center">
           {clinicInfo.logoUrl ? (
             <img
               src={clinicInfo.logoUrl}
               alt="Clinic Logo"
-              className="max-w-full max-h-full object-contain"
+              className="h-28 max-h-28 w-auto max-w-[14rem] object-contain"
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded">
+            <div className="h-28 w-28 bg-gray-200 flex items-center justify-center rounded">
               <span className="text-xs text-gray-500">Logo</span>
             </div>
           )}
