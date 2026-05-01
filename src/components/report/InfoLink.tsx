@@ -1,4 +1,3 @@
-
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface InfoLinkProps {
@@ -9,10 +8,17 @@ export const InfoLink = ({ link }: InfoLinkProps) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="text-xs text-medical-600 cursor-pointer ml-1">[info]</span>
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-white/90 hover:text-white underline ml-1 cursor-pointer"
+        >
+          [info]
+        </a>
       </TooltipTrigger>
       <TooltipContent>
-        <p>View more information</p>
+        <p>Open more information ({link})</p>
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>
