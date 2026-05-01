@@ -128,6 +128,18 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     </div>`;
   }
 
+  if (notes && notes.trim()) {
+    const escapedNotes = notes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    sections += `<div style="margin-bottom:24px;">
+      ${renderSectionHeader("Additional Notes", "#4b5563")}
+      <div style="border-radius:8px;border:1px solid #e5e7eb;background:#f9fafb;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="padding:12px 16px;">
+          <p style="margin:0;font-size:13px;color:#374151;white-space:pre-wrap;">${escapedNotes}</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Patient Report - ${patient.name}</title>
