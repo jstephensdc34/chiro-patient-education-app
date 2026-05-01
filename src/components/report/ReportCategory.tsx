@@ -19,6 +19,7 @@ interface ReportCategoryProps {
   subcategories: any[];
   getSubcategoryName: (id: string) => string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
 }
 
 export const ReportCategory = ({ 
@@ -27,7 +28,8 @@ export const ReportCategory = ({
   items, 
   subcategories,
   getSubcategoryName,
-  customTreatmentGoals
+  customTreatmentGoals,
+  estimatedCost,
 }: ReportCategoryProps) => {
   const style = sectionStyles[categoryId] || sectionStyles.diagnosis;
 
