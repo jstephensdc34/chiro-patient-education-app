@@ -59,6 +59,7 @@ interface OverviewReportProps {
   items: ReportItem[];
   selectedItems: string[];
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
@@ -103,6 +104,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   items,
   selectedItems,
   customTreatmentGoals = "",
+  estimatedCost = "",
   additionalNotes = "",
   subcategories = [],
   settings = [],
