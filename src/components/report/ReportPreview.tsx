@@ -99,10 +99,6 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               </div>
               
             </div>
-            
-            <div className="text-center text-xs text-muted-foreground">
-              <p>Note: The PDF will automatically create multiple pages as needed for longer reports.</p>
-            </div>
           </div>
         ) : (
           <div className="p-8 text-center text-muted-foreground">
