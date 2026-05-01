@@ -197,7 +197,7 @@ export const ReportBuilder = ({
             <TabsTrigger value="full">Full Report</TabsTrigger>
             <TabsTrigger value="overview">Overview Report</TabsTrigger>
           </TabsList>
-          <TabsContent value="full">
+          <TabsContent value="full" forceMount className="data-[state=inactive]:hidden">
             <ReportPreview
               ref={reportPreviewRef}
               patient={patient}
@@ -210,7 +210,7 @@ export const ReportBuilder = ({
               settingsLoading={settingsLoading}
             />
           </TabsContent>
-          <TabsContent value="overview">
+          <TabsContent value="overview" forceMount className="data-[state=inactive]:hidden">
             <OverviewReport
               ref={overviewReportRef}
               patient={patient}
