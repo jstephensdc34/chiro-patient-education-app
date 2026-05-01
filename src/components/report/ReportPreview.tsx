@@ -1,4 +1,5 @@
 
+import { forwardRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CategoryType, MAIN_CATEGORIES, PatientInfo, ReportItem } from "@/types";
 import { ReportHeader } from "./ReportHeader";
@@ -26,7 +27,7 @@ interface ReportPreviewProps {
   settingsLoading?: boolean;
 }
 
-export const ReportPreview = ({
+export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   patient,
   items,
   selectedItems,
@@ -35,7 +36,7 @@ export const ReportPreview = ({
   subcategories = [],
   settings = [],
   settingsLoading = false
-}: ReportPreviewProps) => {
+}, ref) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
       item.categoryId === categoryId && selectedItems.includes(item.id)
@@ -60,9 +61,9 @@ export const ReportPreview = ({
       </CardHeader>
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
-          <div className="space-y-6 max-w-[210mm] mx-auto">
+          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
             {/* Page Container - simulating the PDF page layout */}
-            <div className="bg-white p-6 border border-border shadow-sm mx-auto" 
+            <div className="bg-white p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               {/* Report Header */}
               <ReportHeader settings={settings} loading={settingsLoading} />
@@ -115,4 +116,6 @@ export const ReportPreview = ({
       </CardContent>
     </Card>
   );
-};
+});
+
+ReportPreview.displayName = "ReportPreview";

@@ -39,7 +39,7 @@ export const useReportGeneration = (
     );
   };
   
-  const handleGenerateReport = async () => {
+  const handleGenerateReport = async (element: HTMLElement | null) => {
     // Validation
     if (!patient.name) {
       toast({
@@ -58,21 +58,23 @@ export const useReportGeneration = (
       });
       return;
     }
+
+    if (!element) {
+      toast({
+        title: "Preview Not Ready",
+        description: "The report preview is not available yet. Please try again.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     setIsGeneratingPDF(true);
     setPdfProgress({ status: 'preparing', percentage: 0 });
     
     try {
-      const selectedItemsData = items.filter(item => selectedItems.includes(item.id));
-      
-      // Generate PDF with progress updates
       await generatePDF({
-        patient,
-        selectedItems: selectedItemsData,
-        notes: additionalNotes,
-        customTreatmentGoals,
-        settings,
-        subcategories,
+        element,
+        patientName: patient.name,
         onProgress: (progress) => {
           setPdfProgress(progress);
         }

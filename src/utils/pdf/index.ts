@@ -1,4 +1,3 @@
-
 import { generatePDF } from './generatePDF';
 import { RenderPdfProgress } from './renderPdf';
 import { generateReportHtml } from './generateReportHtml';
