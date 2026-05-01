@@ -22,6 +22,7 @@ interface ReportPreviewProps {
   selectedItems: string[];
   additionalNotes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -33,6 +34,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   selectedItems,
   additionalNotes,
   customTreatmentGoals = "",
+  estimatedCost = "",
   subcategories = [],
   settings = [],
   settingsLoading = false
