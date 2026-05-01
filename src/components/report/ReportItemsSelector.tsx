@@ -123,6 +123,22 @@ export const ReportItemsSelector = ({
                     />
                   </div>
                 )}
+
+                {category === "treatment" && activeSubcategory === "estimated_cost" && onEstimatedCostChange && (
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-foreground mb-2 block">
+                      Estimated Cost (free text)
+                    </label>
+                    <Input
+                      placeholder="e.g. $1,500 or $50 per visit"
+                      value={estimatedCost}
+                      onChange={(e) => onEstimatedCostChange(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Shown prominently in the Treatment Plan section of the report.
+                    </p>
+                  </div>
+                )}
               </div>
             </TabsContent>
           ))}
