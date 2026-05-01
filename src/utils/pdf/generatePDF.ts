@@ -1,37 +1,15 @@
-
-import { PatientInfo, ReportItem } from '@/types';
-import { ReportSetting } from '@/services/reportSettingsService';
-import { generateReportHtml } from './generateReportHtml';
-import { renderPdfFromHtml, RenderPdfProgress } from './renderPdf';
+import { renderPdfFromElement, RenderPdfProgress } from './renderPdf';
 
 interface GeneratePDFParams {
-  patient: PatientInfo;
-  selectedItems: ReportItem[];
-  notes: string;
-  customTreatmentGoals?: string;
-  settings: ReportSetting[];
-  subcategories: any[];
+  element: HTMLElement;
+  patientName: string;
   onProgress?: (progress: RenderPdfProgress) => void;
 }
 
 export const generatePDF = async (params: GeneratePDFParams): Promise<void> => {
-  const { patient, selectedItems, notes, customTreatmentGoals, settings, subcategories, onProgress } = params;
-  
-  try {
-    // Generate the HTML content
-    const htmlContent = generateReportHtml({
-      patient,
-      selectedItems,
-      notes,
-      customTreatmentGoals,
-      settings,
-      subcategories
-    });
-    
-    // Render the PDF from the HTML content
-    await renderPdfFromHtml(htmlContent, patient.name, onProgress);
-  } catch (error) {
-    console.error("Error in PDF generation:", error);
-    throw new Error(error instanceof Error ? error.message : "Failed to generate report");
+  const { element, patientName, onProgress } = params;
+  if (!element) {
+    throw new Error('Report preview element is not available yet.');
   }
+  await renderPdfFromElement(element, patientName, onProgress);
 };
