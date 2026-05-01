@@ -115,6 +115,7 @@ export const useReportGeneration = (
         selectedItems: selectedItemsData,
         notes: additionalNotes,
         customTreatmentGoals,
+        estimatedCost,
         settings,
         subcategories,
         format,
