@@ -58,6 +58,7 @@ interface OverviewReportProps {
   items: ReportItem[];
   selectedItems: string[];
   customTreatmentGoals?: string;
+  additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -93,6 +94,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   items,
   selectedItems,
   customTreatmentGoals = "",
+  additionalNotes = "",
   subcategories = [],
   settings = [],
   settingsLoading = false,
@@ -184,7 +186,8 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
     homecareItems.length > 0 ||
-    exerciseItems.length > 0;
+    exerciseItems.length > 0 ||
+    !!additionalNotes;
 
   return (
     <Card className="mt-6">
@@ -285,6 +288,20 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                       {exerciseItems.map((item) => (
                         <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.exercises} />
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Notes */}
+                {additionalNotes && (
+                  <div>
+                    <div className="rounded-lg px-4 py-2.5 bg-gray-600 mb-3">
+                      <h3 className="font-bold text-base text-white">Additional Notes</h3>
+                    </div>
+                    <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
+                      <div className="px-4 py-3">
+                        <p className="whitespace-pre-wrap text-sm text-foreground/80">{additionalNotes}</p>
+                      </div>
                     </div>
                   </div>
                 )}

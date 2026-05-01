@@ -37,7 +37,7 @@ const renderSectionHeader = (label: string, headerBg: string) => `
 `;
 
 export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): string => {
-  const { patient, selectedItems, customTreatmentGoals, settings, subcategories } = params;
+  const { patient, selectedItems, notes, customTreatmentGoals, settings, subcategories } = params;
 
   const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
   const clinicAddress = settings.find(s => s.name === "clinic_address")?.value || "";
@@ -125,6 +125,18 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     sections += `<div style="margin-bottom:24px;">
       ${renderSectionHeader("Therapeutic Exercises", sectionColors.exercises.headerBg)}
       ${renderGrid(exerciseItems, sectionColors.exercises)}
+    </div>`;
+  }
+
+  if (notes && notes.trim()) {
+    const escapedNotes = notes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    sections += `<div style="margin-bottom:24px;">
+      ${renderSectionHeader("Additional Notes", "#4b5563")}
+      <div style="border-radius:8px;border:1px solid #e5e7eb;background:#f9fafb;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="padding:12px 16px;">
+          <p style="margin:0;font-size:13px;color:#374151;white-space:pre-wrap;">${escapedNotes}</p>
+        </div>
+      </div>
     </div>`;
   }
 
