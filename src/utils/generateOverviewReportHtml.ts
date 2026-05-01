@@ -6,6 +6,7 @@ interface GenerateOverviewHtmlParams {
   selectedItems: ReportItem[];
   notes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   settings: ReportSetting[];
   subcategories: any[];
 }
@@ -38,7 +39,7 @@ const renderSectionHeader = (label: string, headerBg: string) => `
 `;
 
 export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): string => {
-  const { patient, selectedItems, notes, customTreatmentGoals, settings, subcategories } = params;
+  const { patient, selectedItems, notes, customTreatmentGoals, estimatedCost, settings, subcategories } = params;
 
   const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
   const clinicAddress = settings.find(s => s.name === "clinic_address")?.value || "";
