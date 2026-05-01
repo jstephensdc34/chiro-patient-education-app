@@ -109,6 +109,7 @@ export interface EmailReportData {
   selectedItems: ReportItem[];
   notes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   settings: ReportSetting[];
   subcategories: Subcategory[];
   recipientEmail: string;
