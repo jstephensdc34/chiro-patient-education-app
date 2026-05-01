@@ -105,7 +105,7 @@ export const ReportItemsSelector = ({
                   onToggleItem={onToggleItem}
                 />
                 
-                {category === "treatment" && onTreatmentGoalsChange && (
+                {category === "treatment" && activeSubcategory === "treatment_goals" && onTreatmentGoalsChange && (
                   <div className="mt-4">
                     <label className="text-sm font-medium text-foreground mb-2 block">
                       Additional Treatment Goals
