@@ -41,6 +41,7 @@ export interface PDFReportData {
   selectedItems: ReportItem[];
   notes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   settings: ReportSetting[];
   subcategories: Subcategory[];
 }
