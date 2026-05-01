@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReportItem, TREATMENT_SUBCATEGORIES } from "@/types";
 import { ReportHeader } from "./ReportHeader";
 import { PatientInfoDisplay } from "./PatientInfoDisplay";
+import { InfoLink } from "./InfoLink";
 import { PatientInfo } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 
@@ -67,18 +68,26 @@ interface OverviewReportProps {
 const OverviewCard = ({
   name,
   definition,
+  infoLink,
   style,
 }: {
   name: string;
   definition?: string;
+  infoLink?: string;
   style: typeof sectionStyles.diagnosis;
 }) => (
   <div className={`rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
-    <div className={`px-4 py-2 ${style.headerBg}`}>
+    <div className={`px-4 py-2 ${style.headerBg} flex items-center gap-2`}>
       <h4 className={`font-semibold text-sm ${style.headerText}`}>{name}</h4>
+      {infoLink && <InfoLink link={infoLink} />}
     </div>
-    <div className="px-4 py-3">
+    <div className="px-4 py-3 space-y-2">
       <p className="text-sm text-foreground/80">{definition || "No definition provided."}</p>
+      {infoLink && (
+        <p className="text-xs text-muted-foreground italic">
+          For more information: {infoLink}
+        </p>
+      )}
     </div>
   </div>
 );
