@@ -1,4 +1,5 @@
 
+import { forwardRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReportItem, TREATMENT_SUBCATEGORIES } from "@/types";
 import { ReportHeader } from "./ReportHeader";
@@ -87,7 +88,7 @@ const SectionHeader = ({ label, style }: { label: string; style: typeof sectionS
   </div>
 );
 
-export const OverviewReport = ({
+export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   patient,
   items,
   selectedItems,
@@ -95,7 +96,7 @@ export const OverviewReport = ({
   subcategories = [],
   settings = [],
   settingsLoading = false,
-}: OverviewReportProps) => {
+}, ref) => {
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
       if (!selectedItems.includes(item.id)) return false;
@@ -192,7 +193,7 @@ export const OverviewReport = ({
       </CardHeader>
       <CardContent className="pt-6">
         {hasContent ? (
-          <div className="space-y-6 max-w-[210mm] mx-auto">
+          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
             <div className="bg-white p-6 border border-border shadow-sm mx-auto" style={{ padding: "15mm", boxSizing: "border-box" }}>
               <ReportHeader settings={settings} loading={settingsLoading} />
               <PatientInfoDisplay patient={patient} />
@@ -300,4 +301,6 @@ export const OverviewReport = ({
       </CardContent>
     </Card>
   );
-};
+});
+
+OverviewReport.displayName = "OverviewReport";

@@ -12,6 +12,7 @@ import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
 import { EmailReportDialog } from "@/components/report/EmailReportDialog";
 import { ShareReportDialog } from "@/components/report/ShareReportDialog";
+import { PdfFormatDialog, PdfFormat } from "@/components/report/PdfFormatDialog";
 import { ShareReportFormat } from "@/utils/shareReport";
 import { RenderPdfProgress } from "@/utils/pdf";
 import { useEmailDelivery } from "@/hooks/useEmailDelivery";
@@ -74,8 +75,16 @@ export const ReportBuilder = ({
 }: ReportBuilderProps) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showPdfDialog, setShowPdfDialog] = useState(false);
   const reportPreviewRef = useRef<HTMLDivElement>(null);
+  const overviewReportRef = useRef<HTMLDivElement>(null);
   const { emailStatus, sendEmailReport, resetEmailStatus } = useEmailDelivery();
+
+  const handlePdfFormatSelect = (format: PdfFormat) => {
+    setShowPdfDialog(false);
+    const target = format === "overview" ? overviewReportRef.current : reportPreviewRef.current;
+    onGeneratePDF(target);
+  };
 
   const handleSendEmail = async (emailData: {
     recipientEmail: string;
@@ -138,8 +147,8 @@ export const ReportBuilder = ({
           ) : (
             <Button 
               className="w-full bg-medical-700 hover:bg-medical-800 text-lg py-6"
-              onClick={() => onGeneratePDF(reportPreviewRef.current)}
-              disabled={isGeneratingPDF}
+              onClick={() => setShowPdfDialog(true)}
+              disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
             >
               Generate PDF Report
             </Button>
@@ -188,7 +197,7 @@ export const ReportBuilder = ({
             <TabsTrigger value="full">Full Report</TabsTrigger>
             <TabsTrigger value="overview">Overview Report</TabsTrigger>
           </TabsList>
-          <TabsContent value="full">
+          <TabsContent value="full" forceMount className="data-[state=inactive]:hidden">
             <ReportPreview
               ref={reportPreviewRef}
               patient={patient}
@@ -201,8 +210,9 @@ export const ReportBuilder = ({
               settingsLoading={settingsLoading}
             />
           </TabsContent>
-          <TabsContent value="overview">
+          <TabsContent value="overview" forceMount className="data-[state=inactive]:hidden">
             <OverviewReport
+              ref={overviewReportRef}
               patient={patient}
               items={items}
               selectedItems={selectedItems}
@@ -230,6 +240,12 @@ export const ReportBuilder = ({
         shareUrl={shareUrl}
         isLoading={isSharing}
         onShare={(format) => onShareReport(format)}
+      />
+
+      <PdfFormatDialog
+        open={showPdfDialog}
+        onOpenChange={setShowPdfDialog}
+        onSelect={handlePdfFormatSelect}
       />
     </div>
   );
