@@ -196,6 +196,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     carePlanItems.length > 0 ||
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
+    estimatedCost ||
     homecareItems.length > 0 ||
     exerciseItems.length > 0 ||
     !!additionalNotes;
