@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReportItem, TREATMENT_SUBCATEGORIES } from "@/types";
 import { ReportHeader } from "./ReportHeader";
 import { PatientInfoDisplay } from "./PatientInfoDisplay";
+import { InfoLink } from "./InfoLink";
 import { PatientInfo } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 
@@ -67,18 +68,26 @@ interface OverviewReportProps {
 const OverviewCard = ({
   name,
   definition,
+  infoLink,
   style,
 }: {
   name: string;
   definition?: string;
+  infoLink?: string;
   style: typeof sectionStyles.diagnosis;
 }) => (
   <div className={`rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
-    <div className={`px-4 py-2 ${style.headerBg}`}>
+    <div className={`px-4 py-2 ${style.headerBg} flex items-center gap-2`}>
       <h4 className={`font-semibold text-sm ${style.headerText}`}>{name}</h4>
+      {infoLink && <InfoLink link={infoLink} />}
     </div>
-    <div className="px-4 py-3">
+    <div className="px-4 py-3 space-y-2">
       <p className="text-sm text-foreground/80">{definition || "No definition provided."}</p>
+      {infoLink && (
+        <p className="text-xs text-muted-foreground italic">
+          For more information: {infoLink}
+        </p>
+      )}
     </div>
   </div>
 );
@@ -208,7 +217,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.diagnosis.label} style={sectionStyles.diagnosis} />
                     <div className="grid grid-cols-2 gap-3">
                       {diagnosisItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.diagnosis} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.diagnosis} />
                       ))}
                     </div>
                   </div>
@@ -220,7 +229,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.extremity.label} style={sectionStyles.extremity} />
                     <div className="grid grid-cols-2 gap-3">
                       {extremityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.extremity} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.extremity} />
                       ))}
                     </div>
                   </div>
@@ -232,7 +241,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.treatment.label} style={sectionStyles.treatment} />
                     <div className="grid grid-cols-2 gap-3">
                       {treatmentModalityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.treatment} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.treatment} />
                       ))}
                     </div>
                   </div>
@@ -245,7 +254,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <div className="grid grid-cols-2 gap-3">
                       {/* Care Plan Type cards */}
                       {carePlanItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.carePlan} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
                       ))}
 
                       {/* Treatment Goals as bullet list card */}
@@ -274,7 +283,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.homecare.label} style={sectionStyles.homecare} />
                     <div className="grid grid-cols-2 gap-3">
                       {homecareItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.homecare} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.homecare} />
                       ))}
                     </div>
                   </div>
@@ -286,7 +295,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <SectionHeader label={sectionStyles.exercises.label} style={sectionStyles.exercises} />
                     <div className="grid grid-cols-2 gap-3">
                       {exerciseItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} style={sectionStyles.exercises} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.exercises} />
                       ))}
                     </div>
                   </div>
