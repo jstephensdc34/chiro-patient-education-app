@@ -102,6 +102,7 @@ export const ReportBuilder = ({
       selectedItems: selectedItemsData,
       notes: additionalNotes,
       customTreatmentGoals,
+      estimatedCost,
       settings,
       subcategories,
       recipientEmail: emailData.recipientEmail,
@@ -194,6 +195,8 @@ export const ReportBuilder = ({
           subcategories={subcategories}
           customTreatmentGoals={customTreatmentGoals}
           onTreatmentGoalsChange={onTreatmentGoalsChange}
+          estimatedCost={estimatedCost}
+          onEstimatedCostChange={onEstimatedCostChange}
         />
         
         <Tabs defaultValue="full" className="mt-6">
@@ -209,6 +212,7 @@ export const ReportBuilder = ({
               selectedItems={selectedItems}
               additionalNotes={additionalNotes}
               customTreatmentGoals={customTreatmentGoals}
+              estimatedCost={estimatedCost}
               subcategories={subcategories}
               settings={settings}
               settingsLoading={settingsLoading}
@@ -221,6 +225,7 @@ export const ReportBuilder = ({
               items={items}
               selectedItems={selectedItems}
               customTreatmentGoals={customTreatmentGoals}
+              estimatedCost={estimatedCost}
               additionalNotes={additionalNotes}
               subcategories={subcategories}
               settings={settings}
