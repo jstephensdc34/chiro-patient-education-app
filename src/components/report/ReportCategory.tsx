@@ -19,6 +19,7 @@ interface ReportCategoryProps {
   subcategories: any[];
   getSubcategoryName: (id: string) => string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
 }
 
 export const ReportCategory = ({ 
@@ -27,7 +28,8 @@ export const ReportCategory = ({
   items, 
   subcategories,
   getSubcategoryName,
-  customTreatmentGoals
+  customTreatmentGoals,
+  estimatedCost,
 }: ReportCategoryProps) => {
   const style = sectionStyles[categoryId] || sectionStyles.diagnosis;
 
@@ -72,6 +74,20 @@ export const ReportCategory = ({
             </div>
             <div className="px-4 py-3">
               <p className="text-sm font-bold text-foreground/80">• {customTreatmentGoals}</p>
+            </div>
+          </div>
+        )}
+
+        {estimatedCost && (
+          <div className={`rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
+            <div className={`px-4 py-2 ${style.headerBg}`}>
+              <h4 className={`font-semibold text-sm ${style.headerText}`}>Estimated Cost</h4>
+            </div>
+            <div className="px-4 py-4 text-center">
+              <p className="text-2xl font-bold text-emerald-700">{estimatedCost}</p>
+              <p className="text-xs italic text-muted-foreground mt-2">
+                Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+              </p>
             </div>
           </div>
         )}

@@ -20,6 +20,7 @@ const Report = () => {
     selectedItems,
     additionalNotes,
     customTreatmentGoals,
+    estimatedCost,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
@@ -31,6 +32,7 @@ const Report = () => {
     handleShareReport,
     setAdditionalNotes,
     setCustomTreatmentGoals,
+    setEstimatedCost,
     setActiveCategory,
     setShareUrl,
     setPatient,
@@ -76,6 +78,7 @@ const Report = () => {
               selectedItems={selectedItems}
               additionalNotes={additionalNotes}
               customTreatmentGoals={customTreatmentGoals}
+              estimatedCost={estimatedCost}
               settings={settings}
               settingsLoading={settingsLoading}
               isLoading={isLoading}
@@ -90,6 +93,7 @@ const Report = () => {
               onCategoryChange={setActiveCategory as (category: CategoryType) => void}
               onNotesChange={setAdditionalNotes}
               onTreatmentGoalsChange={setCustomTreatmentGoals}
+              onEstimatedCostChange={setEstimatedCost}
               onGeneratePDF={handleGenerateReport}
               onShareReport={(format) => handleShareReport(format)}
               onShareUrlChange={setShareUrl}

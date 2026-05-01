@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
@@ -19,6 +20,8 @@ interface ReportItemsSelectorProps {
   subcategories: any[];
   customTreatmentGoals?: string;
   onTreatmentGoalsChange?: (goals: string) => void;
+  estimatedCost?: string;
+  onEstimatedCostChange?: (cost: string) => void;
 }
 
 export const ReportItemsSelector = ({
@@ -30,7 +33,9 @@ export const ReportItemsSelector = ({
   isLoading = false,
   subcategories = [],
   customTreatmentGoals = "",
-  onTreatmentGoalsChange
+  onTreatmentGoalsChange,
+  estimatedCost = "",
+  onEstimatedCostChange,
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
@@ -116,6 +121,22 @@ export const ReportItemsSelector = ({
                       value={customTreatmentGoals}
                       onChange={(e) => onTreatmentGoalsChange(e.target.value)}
                     />
+                  </div>
+                )}
+
+                {category === "treatment" && activeSubcategory === "estimated_cost" && onEstimatedCostChange && (
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-foreground mb-2 block">
+                      Estimated Cost (free text)
+                    </label>
+                    <Input
+                      placeholder="e.g. $1,500 or $50 per visit"
+                      value={estimatedCost}
+                      onChange={(e) => onEstimatedCostChange(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Shown prominently in the Treatment Plan section of the report.
+                    </p>
                   </div>
                 )}
               </div>

@@ -22,6 +22,7 @@ interface ReportPreviewProps {
   selectedItems: string[];
   additionalNotes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -33,6 +34,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   selectedItems,
   additionalNotes,
   customTreatmentGoals = "",
+  estimatedCost = "",
   subcategories = [],
   settings = [],
   settingsLoading = false
@@ -73,7 +75,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               
               <div className="space-y-8">
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
-                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && customTreatmentGoals)).map((category) => (
+                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost))).map((category) => (
                   <ReportCategory
                     key={category}
                     categoryId={category}
@@ -82,6 +84,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                     subcategories={subcategories}
                     getSubcategoryName={getSubcategoryName}
                     customTreatmentGoals={category === "treatment" ? customTreatmentGoals : undefined}
+                    estimatedCost={category === "treatment" ? estimatedCost : undefined}
                   />
                 ))}
                 

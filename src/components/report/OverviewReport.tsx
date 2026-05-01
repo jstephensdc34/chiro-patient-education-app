@@ -59,6 +59,7 @@ interface OverviewReportProps {
   items: ReportItem[];
   selectedItems: string[];
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
@@ -103,6 +104,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   items,
   selectedItems,
   customTreatmentGoals = "",
+  estimatedCost = "",
   additionalNotes = "",
   subcategories = [],
   settings = [],
@@ -194,6 +196,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     carePlanItems.length > 0 ||
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
+    estimatedCost ||
     homecareItems.length > 0 ||
     exerciseItems.length > 0 ||
     !!additionalNotes;
@@ -248,7 +251,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 )}
 
                 {/* Section 3: Care Plan + Treatment Goals */}
-                {(carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals) && (
+                {(carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
                   <div>
                     <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} />
                     <div className="grid grid-cols-2 gap-3">
@@ -270,6 +273,21 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                               ))}
                               {customTreatmentGoals && <li>{customTreatmentGoals}</li>}
                             </ul>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Estimated Cost card - spans full width */}
+                      {estimatedCost && (
+                        <div className={`col-span-2 rounded-lg border ${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg} overflow-hidden shadow-sm`}>
+                          <div className={`px-4 py-2 ${sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
+                          </div>
+                          <div className="px-4 py-4 text-center">
+                            <p className="text-2xl font-bold text-amber-700">{estimatedCost}</p>
+                            <p className="text-xs italic text-muted-foreground mt-2">
+                              Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+                            </p>
                           </div>
                         </div>
                       )}

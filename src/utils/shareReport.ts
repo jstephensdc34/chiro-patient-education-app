@@ -11,6 +11,7 @@ interface ShareReportParams {
   selectedItems: ReportItem[];
   notes: string;
   customTreatmentGoals?: string;
+  estimatedCost?: string;
   settings: ReportSetting[];
   subcategories: any[];
   format?: ShareReportFormat;

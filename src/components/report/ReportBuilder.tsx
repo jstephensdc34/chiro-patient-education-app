@@ -28,6 +28,7 @@ interface ReportBuilderProps {
   selectedItems: string[];
   additionalNotes: string;
   customTreatmentGoals: string;
+  estimatedCost: string;
   settings: ReportSetting[];
   settingsLoading: boolean;
   isLoading: boolean;
@@ -42,6 +43,7 @@ interface ReportBuilderProps {
   onCategoryChange: (category: CategoryType) => void;
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
+  onEstimatedCostChange: (cost: string) => void;
   onGeneratePDF: (element: HTMLElement | null) => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
@@ -54,6 +56,7 @@ export const ReportBuilder = ({
   selectedItems,
   additionalNotes,
   customTreatmentGoals,
+  estimatedCost,
   settings,
   settingsLoading,
   isLoading,
@@ -68,6 +71,7 @@ export const ReportBuilder = ({
   onCategoryChange,
   onNotesChange,
   onTreatmentGoalsChange,
+  onEstimatedCostChange,
   onGeneratePDF,
   onShareReport,
   onShareUrlChange,
@@ -98,6 +102,7 @@ export const ReportBuilder = ({
       selectedItems: selectedItemsData,
       notes: additionalNotes,
       customTreatmentGoals,
+      estimatedCost,
       settings,
       subcategories,
       recipientEmail: emailData.recipientEmail,
@@ -190,6 +195,8 @@ export const ReportBuilder = ({
           subcategories={subcategories}
           customTreatmentGoals={customTreatmentGoals}
           onTreatmentGoalsChange={onTreatmentGoalsChange}
+          estimatedCost={estimatedCost}
+          onEstimatedCostChange={onEstimatedCostChange}
         />
         
         <Tabs defaultValue="full" className="mt-6">
@@ -205,6 +212,7 @@ export const ReportBuilder = ({
               selectedItems={selectedItems}
               additionalNotes={additionalNotes}
               customTreatmentGoals={customTreatmentGoals}
+              estimatedCost={estimatedCost}
               subcategories={subcategories}
               settings={settings}
               settingsLoading={settingsLoading}
@@ -217,6 +225,7 @@ export const ReportBuilder = ({
               items={items}
               selectedItems={selectedItems}
               customTreatmentGoals={customTreatmentGoals}
+              estimatedCost={estimatedCost}
               additionalNotes={additionalNotes}
               subcategories={subcategories}
               settings={settings}
