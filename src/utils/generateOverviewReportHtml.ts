@@ -87,7 +87,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     </div>`;
   }
 
-  if (carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals) {
+  if (carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) {
     const carePlanCards = carePlanItems.map(item => renderCard(item.name, item.definition, item.infoLink, sectionColors.carePlan)).join("");
 
     let goalsCard = "";
@@ -108,10 +108,23 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
         </div>`;
     }
 
+    const costCard = estimatedCost ? `
+      <div style="grid-column:1 / -1;border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="padding:8px 16px;background:${sectionColors.carePlan.headerBg};">
+          <h4 style="margin:0;font-size:14px;font-weight:600;color:#fff;">Estimated Cost</h4>
+        </div>
+        <div style="padding:16px;text-align:center;">
+          <p style="margin:0;font-size:24px;font-weight:700;color:#b45309;">${estimatedCost}</p>
+          <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:#6b7280;">
+            Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+          </p>
+        </div>
+      </div>` : "";
+
     sections += `<div style="margin-bottom:24px;">
       ${renderSectionHeader("Care Plan", sectionColors.carePlan.headerBg)}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        ${carePlanCards}${goalsCard}
+        ${carePlanCards}${goalsCard}${costCard}
       </div>
     </div>`;
   }
