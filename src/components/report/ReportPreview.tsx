@@ -98,10 +98,6 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                 )}
               </div>
               
-              {/* Page number indicator (for preview only) */}
-              <div className="text-center text-xs text-muted-foreground mt-8">
-                Page 1
-              </div>
             </div>
             
             <div className="text-center text-xs text-muted-foreground">
