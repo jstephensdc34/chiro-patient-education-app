@@ -19,13 +19,14 @@ const sectionColors: Record<string, { bg: string; headerBg: string; border: stri
   exercises: { bg: "#faf5ff", headerBg: "#9333ea", border: "#e9d5ff" },
 };
 
-const renderCard = (name: string, definition: string | undefined, colors: typeof sectionColors.diagnosis) => `
+const renderCard = (name: string, definition: string | undefined, infoLink: string | undefined, colors: typeof sectionColors.diagnosis) => `
   <div style="border-radius:8px;border:1px solid ${colors.border};background:${colors.bg};overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
     <div style="padding:8px 16px;background:${colors.headerBg};">
       <h4 style="margin:0;font-size:14px;font-weight:600;color:#fff;">${name}</h4>
     </div>
     <div style="padding:12px 16px;">
-      <p style="margin:0;font-size:13px;color:#374151;">${definition || "No definition provided."}</p>
+      <p style="margin:0 0 ${infoLink ? "8px" : "0"} 0;font-size:13px;color:#374151;">${definition || "No definition provided."}</p>
+      ${infoLink ? `<p style="margin:0;font-size:11px;color:#6b7280;font-style:italic;">For more information: <a href="${infoLink}" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:underline;">${infoLink}</a></p>` : ""}
     </div>
   </div>
 `;
