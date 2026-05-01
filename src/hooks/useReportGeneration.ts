@@ -21,6 +21,7 @@ export const useReportGeneration = (
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
   const [customTreatmentGoals, setCustomTreatmentGoals] = useState<string>("");
+  const [estimatedCost, setEstimatedCost] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
