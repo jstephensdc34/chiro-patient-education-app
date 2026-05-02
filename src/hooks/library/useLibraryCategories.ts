@@ -47,7 +47,7 @@ export const useLibraryCategories = (initialCategory: CategoryType = "diagnosis"
     } else if (activeCategory === "homecare") {
       setActiveSubcategory("home_therapy");
     } else if (activeCategory === "exercises") {
-      setActiveSubcategory("cervical_exercises");
+      setActiveSubcategory("general_exercises");
     } else {
       setActiveSubcategory(null);
     }

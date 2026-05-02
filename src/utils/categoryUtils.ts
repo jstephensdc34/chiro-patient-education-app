@@ -91,6 +91,7 @@ export const getOrderedSubcategories = (categoryId: string, subcategories: any[]
   if (categoryId === "exercises") {
     // Define the desired order
     const exercisesOrder = [
+      "general_exercises",
       "cervical_exercises",
       "thoracic_exercises",
       "lumbopelvic_exercises",
@@ -121,7 +122,7 @@ export const getDefaultSubcategory = (categoryId: string): string | null => {
     case "homecare":
       return "home_therapy";
     case "exercises":
-      return "cervical_exercises";
+      return "general_exercises";
     default:
       return null;
   }

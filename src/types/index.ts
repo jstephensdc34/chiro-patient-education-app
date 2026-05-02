@@ -82,6 +82,7 @@ export const HOMECARE_SUBCATEGORIES = [
 ];
 
 export const EXERCISES_SUBCATEGORIES = [
+  'general_exercises',
   'cervical_exercises',
   'thoracic_exercises',
   'lumbopelvic_exercises',
