@@ -59,10 +59,32 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
         </div>
       </CardHeader>
       <CardContent className="pt-4">
-        <div 
-          className="text-gray-600 mb-4 prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
-        />
+        {item.definition && (
+          <div className="mb-3 pb-3 border-b border-gray-100">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Definition</p>
+            <p className="text-sm text-gray-700 italic">{item.definition}</p>
+          </div>
+        )}
+        <div className="mb-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Description</p>
+          <div
+            className="text-gray-600 prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
+          />
+        </div>
+        {item.infoLink && (
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Info Link</p>
+            <a
+              href={item.infoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-medical-600 hover:text-medical-700 underline break-all"
+            >
+              {item.infoLink}
+            </a>
+          </div>
+        )}
         <div className="flex space-x-2">
           {item.infoLink && (
             <Button variant="outline" size="sm" className="text-medical-600" asChild>
