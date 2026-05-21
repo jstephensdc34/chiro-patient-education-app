@@ -171,6 +171,14 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
       item.subcategoryId === "care_plan_type"
   );
 
+  // Phase of care items
+  const phaseOfCareItems = items.filter(
+    (item) =>
+      selectedItems.includes(item.id) &&
+      item.categoryId === "treatment" &&
+      item.subcategoryId === "phase_of_care"
+  );
+
   // Treatment goals items
   const treatmentGoalItems = items.filter(
     (item) =>
@@ -194,6 +202,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     extremityItems.length > 0 ||
     treatmentModalityItems.length > 0 ||
     carePlanItems.length > 0 ||
+    phaseOfCareItems.length > 0 ||
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
     estimatedCost ||
@@ -250,13 +259,18 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                   </div>
                 )}
 
-                {/* Section 3: Care Plan + Treatment Goals */}
-                {(carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
+                {/* Section 3: Care Plan + Phase of Care + Treatment Goals */}
+                {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
                   <div>
                     <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} />
                     <div className="grid grid-cols-2 gap-3">
                       {/* Care Plan Type cards */}
                       {carePlanItems.map((item) => (
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
+                      ))}
+
+                      {/* Phase of Care cards */}
+                      {phaseOfCareItems.map((item) => (
                         <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
                       ))}
 
