@@ -55,6 +55,7 @@ export const getOrderedSubcategories = (categoryId: string, subcategories: any[]
     // Define the desired order
     const treatmentOrder = [
       "care_plan_type",
+      "phase_of_care",
       "treatment_modalities",
       "treatment_goals",
       "estimated_cost"
