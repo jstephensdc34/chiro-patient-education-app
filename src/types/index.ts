@@ -68,6 +68,7 @@ export const EXTREMITY_SUBCATEGORIES = [
 
 export const TREATMENT_SUBCATEGORIES = [
   'care_plan_type',
+  'phase_of_care',
   'treatment_modalities',
   'treatment_goals',
   'estimated_cost'
