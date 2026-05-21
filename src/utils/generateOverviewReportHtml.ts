@@ -55,6 +55,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
   const extremityItems = byCategory("extremity");
   const treatmentModalityItems = byCategory("treatment", "treatment_modalities");
   const carePlanItems = byCategory("treatment", "care_plan_type");
+  const phaseOfCareItems = byCategory("treatment", "phase_of_care");
   const treatmentGoalItems = byCategory("treatment", "treatment_goals");
   const homecareItems = byCategory("homecare");
   const exerciseItems = byCategory("exercises");
@@ -87,8 +88,8 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     </div>`;
   }
 
-  if (carePlanItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) {
-    const carePlanCards = carePlanItems.map(item => renderCard(item.name, item.definition, item.infoLink, sectionColors.carePlan)).join("");
+  if (carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) {
+    const carePlanCards = [...carePlanItems, ...phaseOfCareItems].map(item => renderCard(item.name, item.definition, item.infoLink, sectionColors.carePlan)).join("");
 
     let goalsCard = "";
     if (treatmentGoalItems.length > 0 || customTreatmentGoals) {
