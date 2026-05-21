@@ -1,16 +1,24 @@
+# Fix: Definition not saved on first library item creation
 
-This is a documentation/research request, not an implementation task. The user wants a comprehensive written summary they can share with a business strategist. No code changes or planning needed — I'll deliver the summary directly in my next response (default mode).
+## Root cause
 
-Here's what I'll cover, drawing from the codebase I already have context on:
+In `src/hooks/library/useLibraryDialog.ts`, when creating a new item, the `newItemData` object passed to `createItem` is missing the `definition` field. The form captures it, and `createItem` in `itemService.ts` supports it, but it gets dropped in this hook between the form and the service call.
 
-1. **Executive summary** — what the app is, who it's for
-2. **Core functionality** — report builder, customizable library, multiple output formats (PDF, email, shareable link), patient info management, clinic branding
-3. **Problems it solves** — time spent writing patient education materials, inconsistency across reports, lack of professional branding, communication gap between clinician and patient
-4. **Primary UI components** — Report Builder (PatientInfoForm, ReportItemsSelector by category, ReportPreview with card-based color-coded sections, OverviewReport), Library Management (ItemsList, ItemForm, SubcategorySelector), Settings (ClinicInfoForm, LogoUpload), Auth, Admin tools
-5. **Categories supported** — Diagnosis, Extremity, Treatment, Homecare, Exercises (with subcategories like cervical, thoracic, lumbopelvic, shoulder, knee, etc.)
-6. **Output formats** — branded PDF, email delivery via Resend, public shareable HTML link (full or overview format)
-7. **Backend requirements** — Supabase tables (library_categories, library_subcategories, library_items, report_settings, patients, posture_assessments, posture_measurements, posture_photos), Storage buckets (clinic-assets, posture-photos, shared-reports), Edge Functions (send-report-email, serve-report, copy-library-items, search-users), RLS policies, auth
-8. **White-label considerations** — clinic branding via settings, logo upload, customizable library per clinician
-9. **Tech stack** — React 18, Vite, Tailwind, TypeScript, Supabase, Resend
+The edit path uses `updateItem` → `claim_and_update_library_item` RPC, which does pass `definition`, which is why editing the item afterward works.
 
-Since this is a pure documentation deliverable with no code changes, no plan tasks are needed. Switching to default mode lets me write the summary directly.
+## Change
+
+In `src/hooks/library/useLibraryDialog.ts`, add `definition: item.definition` to the `newItemData` object inside `handleSaveItem`:
+
+```ts
+const newItemData: Omit<ReportItem, "id"> = {
+  name: item.name,
+  definition: item.definition,
+  description: item.description,
+  infoLink: item.infoLink,
+  categoryId: activeCategory,
+  subcategoryId: ...
+};
+```
+
+No other files need to change — types, form, and service layer already support `definition`.

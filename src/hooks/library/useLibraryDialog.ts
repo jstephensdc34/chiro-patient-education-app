@@ -56,6 +56,7 @@ export const useLibraryDialog = (
         // Create new item
         const newItemData: Omit<ReportItem, "id"> = {
           name: item.name,
+          definition: item.definition,
           description: item.description,
           infoLink: item.infoLink,
           categoryId: activeCategory,
