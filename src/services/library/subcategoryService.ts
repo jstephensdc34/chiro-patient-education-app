@@ -39,7 +39,6 @@ export const mockSubcategories: Subcategory[] = [
   { id: "care_plan_type", name: "Care Plan Type", parentCategoryId: "treatment", description: "Types of care plans" },
   { id: "treatment_modalities", name: "Treatment Modalities", parentCategoryId: "treatment", description: "Treatment techniques and approaches" },
   { id: "treatment_goals", name: "Treatment Goals", parentCategoryId: "treatment", description: "Objectives of the treatment" },
-  { id: "estimated_cost", name: "Estimated Cost", parentCategoryId: "treatment", description: "Estimated costs for treatment" },
   // Home care subcategories
   { id: "home_therapy", name: "Home Therapy", parentCategoryId: "homecare", description: "Self-administered therapeutic techniques" },
   { id: "adls", name: "ADLs", parentCategoryId: "homecare", description: "Activities of Daily Living modifications" },
