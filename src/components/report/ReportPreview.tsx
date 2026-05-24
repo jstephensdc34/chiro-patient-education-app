@@ -56,6 +56,18 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     );
   };
 
+  const getSetting = (name: string, fallback = "") =>
+    settings.find(s => s.name === name)?.value || fallback;
+
+  const clinic = {
+    name: getSetting("clinic_name", "My Chiropractic Clinic"),
+    address: getSetting("clinic_address"),
+    phone: getSetting("clinic_phone"),
+    email: getSetting("clinic_email"),
+    website: getSetting("clinic_website"),
+    logoUrl: getSetting("logo_url"),
+  };
+
   return (
     <Card className="mt-6">
       <CardHeader className="bg-muted border-b">
@@ -64,7 +76,66 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
       <CardContent className="pt-6">
         {selectedItems.length > 0 ? (
           <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
-            {/* Page Container - simulating the PDF page layout */}
+            {/* Cover Page */}
+            <div
+              className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page"
+              style={{
+                padding: '20mm 15mm',
+                boxSizing: 'border-box',
+                minHeight: '297mm',
+                pageBreakAfter: 'always',
+                breakAfter: 'page',
+              }}
+            >
+              {/* Top spacer */}
+              <div />
+
+              {/* Hero block */}
+              <div className="flex flex-col items-center gap-8 w-full">
+                {clinic.logoUrl ? (
+                  <img
+                    src={clinic.logoUrl}
+                    alt={`${clinic.name} Logo`}
+                    className="h-48 w-auto max-w-md object-contain"
+                  />
+                ) : (
+                  <div className="h-48 w-48 bg-gray-100 flex items-center justify-center rounded">
+                    <span className="text-sm text-gray-400">Clinic Logo</span>
+                  </div>
+                )}
+
+                <h1 className="text-4xl font-bold text-gray-900 tracking-tight px-4">
+                  Clinical Report of Findings &amp; Care Plan
+                </h1>
+
+                <div className="h-px w-24 bg-gray-300" />
+
+                {patient.name && (
+                  <div className="text-gray-700 space-y-1">
+                    <p className="text-lg">
+                      <span className="font-semibold">Patient ID:</span> {patient.name}
+                    </p>
+                    <p className="text-lg">
+                      <span className="font-semibold">Date:</span>{" "}
+                      {new Date(patient.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Clinic info footer */}
+              <div className="text-sm text-gray-600 space-y-1 pt-8">
+                <p className="text-base font-semibold text-gray-800">{clinic.name}</p>
+                {clinic.address && <p>{clinic.address}</p>}
+                <p className="flex flex-wrap justify-center gap-x-4">
+                  {clinic.phone && <span>{clinic.phone}</span>}
+                  {clinic.website && <span>{clinic.website}</span>}
+                  {clinic.email && <span>{clinic.email}</span>}
+                </p>
+              </div>
+            </div>
+
+            {/* Content Page(s) */}
             <div className="bg-white p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               {/* Report Header */}
@@ -112,5 +183,6 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     </Card>
   );
 });
+
 
 ReportPreview.displayName = "ReportPreview";
