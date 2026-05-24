@@ -70,14 +70,9 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     logoUrl: getSetting("logo_url"),
   };
 
-  return (
-    <Card className="mt-6">
-      <CardHeader className="bg-muted border-b">
-        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {selectedItems.length > 0 ? (
-          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+  const innerContent = selectedItems.length > 0 ? (
+    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+
             {/* Cover Page */}
             <div
               className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
