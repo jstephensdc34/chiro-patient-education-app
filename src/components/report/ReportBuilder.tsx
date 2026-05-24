@@ -93,11 +93,14 @@ export const ReportBuilder = ({
   const handleSendEmail = async (emailData: {
     recipientEmail: string;
     subject: string;
-    message: string;
   }) => {
-    const selectedItemsData = items.filter(item => selectedItems.includes(item.id));
-    
-    await sendEmailReport({
+    const selectedItemsData = items.filter((item) => selectedItems.includes(item.id));
+    const getSetting = (n: string, f = "") =>
+      settings.find((s) => s.name === n)?.value || f;
+
+    const { shareReport } = await import("@/utils/shareReport");
+
+    const baseParams = {
       patient,
       selectedItems: selectedItemsData,
       notes: additionalNotes,
@@ -105,9 +108,24 @@ export const ReportBuilder = ({
       estimatedCost,
       settings,
       subcategories,
+    };
+
+    const [fullReportUrl, overviewReportUrl] = await Promise.all([
+      shareReport({ ...baseParams, format: "full" }),
+      shareReport({ ...baseParams, format: "overview" }),
+    ]);
+
+    await sendEmailReport({
       recipientEmail: emailData.recipientEmail,
       subject: emailData.subject,
-      message: emailData.message
+      patientName: patient.name,
+      clinicName: getSetting("clinic_name", "Chiropractic Clinic"),
+      clinicEmail: getSetting("clinic_email"),
+      clinicPhone: getSetting("clinic_phone"),
+      clinicWebsite: getSetting("clinic_website"),
+      logoUrl: getSetting("logo_url"),
+      fullReportUrl,
+      overviewReportUrl,
     });
   };
 
