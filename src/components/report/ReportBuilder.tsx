@@ -260,5 +260,6 @@ export const ReportBuilder = ({
         onSelect={handlePdfFormatSelect}
       />
     </div>
+    </>
   );
 };
