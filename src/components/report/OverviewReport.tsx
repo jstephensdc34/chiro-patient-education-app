@@ -408,12 +408,24 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
 
               <div className="text-center text-xs text-muted-foreground mt-8">Page 1</div>
             </div>
-          </div>
-        ) : (
-          <div className="p-8 text-center text-muted-foreground">
-            <p>Select items from the categories above to build your overview report.</p>
-          </div>
-        )}
+    </div>
+  ) : (
+    <div className="p-8 text-center text-muted-foreground">
+      <p>Select items from the categories above to build your overview report.</p>
+    </div>
+  );
+
+  if (printMode) {
+    return innerContent;
+  }
+
+  return (
+    <Card className="mt-6">
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Overview Report Preview</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        {innerContent}
       </CardContent>
     </Card>
   );
