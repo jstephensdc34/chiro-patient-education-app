@@ -217,14 +217,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     exerciseItems.length > 0 ||
     !!additionalNotes;
 
-  return (
-    <Card className="mt-6">
-      <CardHeader className="bg-muted border-b">
-        <CardTitle className="text-foreground text-lg">Overview Report Preview</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {hasContent ? (
-          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+  const innerContent = hasContent ? (
+    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+
             {/* Cover Page */}
             {(() => {
               const getSetting = (n: string, f = "") => settings.find((s) => s.name === n)?.value || f;
