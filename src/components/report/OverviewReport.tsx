@@ -115,6 +115,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   subcategories = [],
   settings = [],
   settingsLoading = false,
+  printMode = false,
 }, ref) => {
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
