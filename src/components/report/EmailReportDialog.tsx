@@ -1,10 +1,8 @@
-
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { EmailDeliveryStatus } from "@/types";
 import { EmailDeliveryProgress } from "./EmailDeliveryProgress";
 
@@ -17,7 +15,6 @@ interface EmailReportDialogProps {
   onSendEmail: (emailData: {
     recipientEmail: string;
     subject: string;
-    message: string;
   }) => void;
 }
 
@@ -27,37 +24,28 @@ export const EmailReportDialog = ({
   patientName,
   defaultEmail = "",
   emailStatus,
-  onSendEmail
+  onSendEmail,
 }: EmailReportDialogProps) => {
-  const [recipientEmail, setRecipientEmail] = useState("");
-  const [subject, setSubject] = useState(`Chiropractic report for ${patientName}`);
-  const [message, setMessage] = useState(`Dear Patient,
-
-Please find your chiropractic report below. This report contains important information about your consultation and treatment plan.
-
-If you have any questions about this report, please don't hesitate to contact our office.
-
-Best regards,
-Your Healthcare Team`);
+  const [recipientEmail, setRecipientEmail] = useState(defaultEmail);
+  const [subject, setSubject] = useState(
+    `Your Clinical Report of Findings & Care Plan${patientName ? ` – ${patientName}` : ""}`
+  );
 
   const handleSendEmail = () => {
-    onSendEmail({
-      recipientEmail,
-      subject,
-      message
-    });
+    onSendEmail({ recipientEmail, subject });
   };
-
-  const isLoading = emailStatus.status === 'preparing' || emailStatus.status === 'sending';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Send Email Report</DialogTitle>
+          <DialogDescription>
+            The recipient will receive a short email with secure links to view the Overview and Full reports online.
+          </DialogDescription>
         </DialogHeader>
-        
-        {emailStatus.status === 'idle' || emailStatus.status === 'error' ? (
+
+        {emailStatus.status === "idle" || emailStatus.status === "error" ? (
           <div className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="recipientEmail">Recipient Email*</Label>
@@ -70,7 +58,7 @@ Your Healthcare Team`);
                 required
               />
             </div>
-            
+
             <div className="grid gap-2">
               <Label htmlFor="subject">Subject</Label>
               <Input
@@ -79,33 +67,20 @@ Your Healthcare Team`);
                 onChange={(e) => setSubject(e.target.value)}
               />
             </div>
-            
-            <div className="grid gap-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea
-                id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={6}
-                className="resize-none"
-              />
-            </div>
-            
-            {emailStatus.status === 'error' && (
-              <div className="text-red-600 text-sm">
-                {emailStatus.error}
-              </div>
+
+            {emailStatus.status === "error" && (
+              <div className="text-red-600 text-sm">{emailStatus.error}</div>
             )}
-            
+
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleSendEmail}
-                disabled={!recipientEmail || !recipientEmail.includes('@')}
+                disabled={!recipientEmail || !recipientEmail.includes("@")}
               >
-                Send Email Report
+                Send Email
               </Button>
             </div>
           </div>
