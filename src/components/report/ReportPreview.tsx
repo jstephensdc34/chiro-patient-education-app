@@ -78,11 +78,11 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
           <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
             {/* Cover Page */}
             <div
-              className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page"
+              className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
               style={{
                 padding: '20mm 15mm',
                 boxSizing: 'border-box',
-                minHeight: '297mm',
+                height: '10in',
                 pageBreakAfter: 'always',
                 breakAfter: 'page',
               }}
@@ -138,11 +138,6 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
             {/* Content Page(s) */}
             <div className="bg-white p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
-              {/* Report Header */}
-              <ReportHeader settings={settings} loading={settingsLoading} />
-              
-              {/* Patient Information */}
-              <PatientInfoDisplay patient={patient} />
               
               <div className="space-y-8">
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
