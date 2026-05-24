@@ -7,6 +7,7 @@ import { PatientInfoDisplay } from "./PatientInfoDisplay";
 import { InfoLink } from "./InfoLink";
 import { PatientInfo } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { getSectionIcon } from "@/utils/sectionIcons";
 
 // Section color configs using HSL-based tokens
 const sectionStyles = {
@@ -93,11 +94,15 @@ const OverviewCard = ({
   </div>
 );
 
-const SectionHeader = ({ label, style }: { label: string; style: typeof sectionStyles.diagnosis }) => (
-  <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3`}>
-    <h3 className={`font-bold text-base ${style.headerText}`}>{label}</h3>
-  </div>
-);
+const SectionHeader = ({ label, style }: { label: string; style: typeof sectionStyles.diagnosis }) => {
+  const Icon = getSectionIcon(label);
+  return (
+    <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3 flex items-center gap-2`}>
+      <Icon className={`h-5 w-5 ${style.headerText}`} strokeWidth={2.25} />
+      <h3 className={`font-bold text-base ${style.headerText}`}>{label}</h3>
+    </div>
+  );
+};
 
 export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   patient,
