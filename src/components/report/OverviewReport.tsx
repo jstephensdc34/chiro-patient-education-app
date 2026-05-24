@@ -231,11 +231,11 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
               };
               return (
                 <div
-                  className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page"
+                  className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
                   style={{
                     padding: "20mm 15mm",
                     boxSizing: "border-box",
-                    minHeight: "297mm",
+                    height: "10in",
                     pageBreakAfter: "always",
                     breakAfter: "page",
                   }}
@@ -278,11 +278,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
             })()}
 
             <div className="bg-white p-6 border border-border shadow-sm mx-auto" style={{ padding: "15mm", boxSizing: "border-box" }}>
-
-              <ReportHeader settings={settings} loading={settingsLoading} />
-              <PatientInfoDisplay patient={patient} />
-
-              <div className="space-y-8 mt-6">
+              <div className="space-y-8">
                 {/* Section 1: Diagnosis */}
                 {diagnosisItems.length > 0 && (
                   <div>
