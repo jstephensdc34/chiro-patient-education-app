@@ -2,6 +2,7 @@
 import { ReportItem as ReportItemType } from "@/types";
 import { ReportSubcategory } from "./ReportSubcategory";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
+import { getSectionIcon } from "@/utils/sectionIcons";
 import { ReportItem } from "./ReportItem";
 
 const sectionStyles: Record<string, { bg: string; border: string; headerBg: string; headerText: string }> = {
@@ -95,9 +96,11 @@ export const ReportCategory = ({
     );
   };
 
+  const Icon = getSectionIcon(categoryName);
   return (
     <div className="mb-6">
-      <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3`}>
+      <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3 flex items-center gap-2`}>
+        <Icon className={`h-5 w-5 ${style.headerText}`} strokeWidth={2.25} />
         <h3 className={`font-bold text-base ${style.headerText}`}>{categoryName}</h3>
       </div>
       {renderSubcategoryItems()}
