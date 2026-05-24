@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
@@ -6,341 +5,138 @@ const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 interface EmailReportRequest {
-  patient: {
-    name: string;
-    age?: number;
-    gender?: string;
-    date: string;
-  };
-  selectedItems: Array<{
-    id: string;
-    name: string;
-    description: string;
-    infoLink?: string;
-    categoryId: string;
-    subcategoryId?: string;
-  }>;
-  notes: string;
-  settings: Array<{
-    name: string;
-    value: string;
-  }>;
-  subcategories: Array<{
-    id: string;
-    name: string;
-  }>;
   recipientEmail: string;
   subject?: string;
-  message?: string;
+  patientName: string;
+  clinicName: string;
+  clinicEmail?: string;
+  clinicPhone?: string;
+  clinicWebsite?: string;
+  logoUrl?: string;
+  fullReportUrl: string;
+  overviewReportUrl: string;
 }
 
-const generateEmailHtml = (data: EmailReportRequest): string => {
-  const { patient, selectedItems, notes, settings, subcategories, message } = data;
-  
-  // Get clinic info from settings
-  const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
-  const clinicAddress = settings.find(s => s.name === "clinic_address")?.value || "";
-  const clinicPhone = settings.find(s => s.name === "clinic_phone")?.value || "";
-  const clinicEmail = settings.find(s => s.name === "clinic_email")?.value || "";
-  const clinicWebsite = settings.find(s => s.name === "clinic_website")?.value || "";
-  const logoUrl = settings.find(s => s.name === "logo_url")?.value || "";
-  
-  // Category name mapping
-  const categoryNames: Record<string, string> = {
-    diagnosis: "Spinal Diagnosis",
-    extremity: "Extremity Diagnosis",
-    treatment: "Treatment Plan",
-    homecare: "Home Care",
-    exercises: "Therapeutic Exercises"
-  };
+const escapeHtml = (s = "") =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-  const getSubcategoryName = (subcategoryId: string) => {
-    const subcategory = subcategories.find(s => s.id === subcategoryId);
-    return subcategory ? subcategory.name : "";
-  };
+const buildHtml = (d: EmailReportRequest) => {
+  const clinicName = escapeHtml(d.clinicName);
+  const patient = escapeHtml(d.patientName);
+  const footerLine = [d.clinicPhone, d.clinicEmail, d.clinicWebsite]
+    .filter(Boolean)
+    .map((v) => escapeHtml(v!))
+    .join(" &middot; ");
 
-  // Build category sections
-  const categories = ['diagnosis', 'extremity', 'treatment', 'homecare', 'exercises'];
-  let categorySections = '';
-  
-  categories.forEach(categoryId => {
-    const categoryItems = selectedItems.filter(item => item.categoryId === categoryId);
-    
-    if (categoryItems.length > 0) {
-      const categoryName = categoryNames[categoryId] || categoryId;
-      
-      categorySections += `
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 25px; border: 1px solid #e5e7eb;">
-          <tr>
-            <td style="background-color: #3b82f6; color: #ffffff; padding: 12px 20px; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">
-              ${categoryName}
-            </td>
-          </tr>
-      `;
-      
-      // Group items by subcategory
-      const itemsBySubcategory: Record<string, any[]> = {};
-      const itemsWithoutSubcategory: any[] = [];
-      
-      categoryItems.forEach(item => {
-        if (item.subcategoryId) {
-          if (!itemsBySubcategory[item.subcategoryId]) {
-            itemsBySubcategory[item.subcategoryId] = [];
-          }
-          itemsBySubcategory[item.subcategoryId].push(item);
-        } else {
-          itemsWithoutSubcategory.push(item);
-        }
-      });
-      
-      // Render items without subcategory first
-      itemsWithoutSubcategory.forEach(item => {
-        categorySections += `
-          <tr>
-            <td style="padding: 15px 20px; border-bottom: 1px solid #f3f4f6;">
-              <h4 style="color: #1f2937; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">${item.name}</h4>
-              <p style="color: #6b7280; font-size: 14px; line-height: 1.5; margin: 0 0 10px 0;">${item.description}</p>
-              ${item.infoLink ? `
-                <a href="${item.infoLink}" target="_blank" style="display: inline-block; color: #3b82f6; text-decoration: none; font-size: 13px; padding: 6px 12px; background-color: #eff6ff; border-radius: 4px; border: 1px solid #dbeafe;">
-                  More Information
-                </a>
-              ` : ''}
-            </td>
-          </tr>
-        `;
-      });
-      
-      // Render items grouped by subcategory
-      Object.keys(itemsBySubcategory).forEach(subcategoryId => {
-        const subcategoryName = getSubcategoryName(subcategoryId);
-        const items = itemsBySubcategory[subcategoryId];
-        
-        if (subcategoryName) {
-          categorySections += `
-            <tr>
-              <td style="background-color: #e5e7eb; color: #374151; padding: 10px 20px; font-size: 16px; font-weight: 600; border-left: 4px solid #3b82f6;">
-                ${subcategoryName}
-              </td>
-            </tr>
-          `;
-        }
-        
-        items.forEach(item => {
-          categorySections += `
-            <tr>
-              <td style="padding: 15px 20px; border-bottom: 1px solid #f3f4f6;">
-                <h4 style="color: #1f2937; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">${item.name}</h4>
-                <p style="color: #6b7280; font-size: 14px; line-height: 1.5; margin: 0 0 10px 0;">${item.description}</p>
-                ${item.infoLink ? `
-                  <a href="${item.infoLink}" target="_blank" style="display: inline-block; color: #3b82f6; text-decoration: none; font-size: 13px; padding: 6px 12px; background-color: #eff6ff; border-radius: 4px; border: 1px solid #dbeafe;">
-                    More Information
-                  </a>
-                ` : ''}
-              </td>
-            </tr>
-          `;
-        });
-      });
-      
-      categorySections += `</table>`;
-    }
-  });
+  return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <tr><td style="padding:32px 36px 8px 36px;text-align:center;">
+          ${d.logoUrl ? `<img src="${escapeHtml(d.logoUrl)}" alt="${clinicName}" style="max-height:64px;margin-bottom:16px;" />` : ""}
+          <h1 style="margin:0;font-size:20px;color:#111827;font-weight:700;">${clinicName}</h1>
+        </td></tr>
 
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Medical Report - ${patient.name}</title>
-    </head>
-    <body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #ffffff; color: #374151;">
-      <table width="100%" max-width="600px" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
-        <tr>
-          <td>
-            ${message ? `
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
-                <tr>
-                  <td style="background-color: #f8f9fa; padding: 20px; border-left: 4px solid #3b82f6;">
-                    <p style="margin: 0; color: #374151; line-height: 1.6; font-size: 14px; white-space: pre-line;">${message}</p>
-                  </td>
-                </tr>
-              </table>
-            ` : ''}
-            
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
-              <tr>
-                <td style="text-align: center; padding: 20px; background-color: #f8f9fa; border-bottom: 3px solid #2563eb;">
-                  ${logoUrl ? `<img src="${logoUrl}" alt="Clinic Logo" style="max-height: 80px; margin-bottom: 15px;" />` : ''}
-                  <h1 style="margin: 0; color: #1f2937; font-size: 28px; font-weight: bold;">${clinicName}</h1>
-                  <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px; line-height: 1.4;">
-                    ${clinicAddress}<br/>
-                    ${clinicPhone} | ${clinicEmail} | ${clinicWebsite}
-                  </p>
-                </td>
-              </tr>
-            </table>
-            
-            <h2 style="color: #1f2937; font-size: 24px; margin: 0 0 10px 0; text-align: center;">${patient.name}</h2>
-            <p style="color: #6b7280; text-align: center; margin: 0 0 30px 0; font-size: 16px;">
-              ${patient.age ? `Age: ${patient.age} | ` : ''}
-              ${patient.gender ? `Gender: ${patient.gender} | ` : ''}
-              Date: ${new Date(patient.date).toLocaleDateString()}
-            </p>
-            
-            ${categorySections}
-            
-            ${notes ? `
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 30px;">
-                <tr>
-                  <td style="background-color: #f8f9fa; padding: 20px; border-left: 4px solid #3b82f6;">
-                    <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 18px;">Additional Notes</h3>
-                    <p style="margin: 0; color: #374151; line-height: 1.6; font-size: 14px;">${notes}</p>
-                  </td>
-                </tr>
-              </table>
-            ` : ''}
-            
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-              <tr>
-                <td style="text-align: center; color: #9ca3af; font-size: 12px;">
-                  <p style="margin: 0;">This is a confidential medical report. Please handle accordingly.</p>
-                  <p style="margin: 10px 0 0 0;">Generated by ${clinicName} on ${new Date().toLocaleDateString()}</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+        <tr><td style="padding:24px 36px 8px 36px;">
+          <p style="margin:0 0 16px 0;font-size:16px;line-height:1.55;color:#1f2937;">Hello${patient ? `, ${patient}` : ""},</p>
+          <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#374151;">
+            Your clinical <strong>Report of Findings</strong> and <strong>Care Plan</strong> is ready to view.
+            Please click the links below to securely access your documents:
+          </p>
+        </td></tr>
+
+        <tr><td align="center" style="padding:0 36px 8px 36px;">
+          <a href="${escapeHtml(d.overviewReportUrl)}" target="_blank"
+             style="display:inline-block;width:80%;padding:14px 20px;margin:6px 0;background:#059669;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px;text-align:center;">
+            View Overview Report
+          </a>
+        </td></tr>
+        <tr><td align="center" style="padding:0 36px 24px 36px;">
+          <a href="${escapeHtml(d.fullReportUrl)}" target="_blank"
+             style="display:inline-block;width:80%;padding:14px 20px;margin:6px 0;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px;text-align:center;">
+            View Full Report
+          </a>
+        </td></tr>
+
+        <tr><td style="padding:8px 36px 32px 36px;">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#4b5563;">
+            If you have any questions, please contact the clinic.
+          </p>
+        </td></tr>
+
+        <tr><td style="padding:20px 36px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;color:#6b7280;font-size:12px;">
+          <div style="font-weight:600;color:#374151;margin-bottom:4px;">${clinicName}</div>
+          ${footerLine ? `<div>${footerLine}</div>` : ""}
+        </td></tr>
       </table>
-    </body>
-    </html>
-  `;
+    </td></tr>
+  </table>
+</body></html>`;
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
-
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405, headers: corsHeaders });
   }
 
   try {
-    const emailData: EmailReportRequest = await req.json();
-    
-    console.log("Attempting to send email to:", emailData.recipientEmail);
-    
-    // Validate required fields
-    if (!emailData.recipientEmail || !emailData.patient.name) {
-      console.error("Missing required fields:", { 
-        hasEmail: !!emailData.recipientEmail, 
-        hasPatientName: !!emailData.patient.name 
-      });
+    const data: EmailReportRequest = await req.json();
+
+    if (!data.recipientEmail || !data.fullReportUrl || !data.overviewReportUrl) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        }
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Get clinic info for from address
-    const clinicName = emailData.settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
-    const clinicEmail = emailData.settings.find(s => s.name === "clinic_email")?.value;
-    
-    // Always use Resend's default domain for sending to avoid unverified domain errors.
-    // Use the clinic email as reply-to so patients can reply directly.
+    const clinicName = data.clinicName || "Chiropractic Clinic";
     const fromAddress = `${clinicName} <onboarding@resend.dev>`;
-    const replyTo = clinicEmail && clinicEmail.includes('@') ? clinicEmail : undefined;
-    
-    console.log("Sending from:", fromAddress, "Reply-To:", replyTo);
+    const replyTo = data.clinicEmail && data.clinicEmail.includes("@") ? data.clinicEmail : undefined;
 
-    // Generate HTML content
-    const htmlContent = generateEmailHtml(emailData);
-    
-    // Enhanced email configuration for better deliverability
+    const html = buildHtml(data);
+    const subject =
+      data.subject || `Your Clinical Report of Findings & Care Plan${data.patientName ? ` – ${data.patientName}` : ""}`;
+
     const emailConfig: any = {
       from: fromAddress,
-      to: [emailData.recipientEmail],
-      subject: emailData.subject || `Chiropractic Report for ${emailData.patient.name}`,
-      html: htmlContent,
-      text: `Chiropractic Report for ${emailData.patient.name}\n\nThis is an HTML email. Please view in an email client that supports HTML to see the full report.\n\nIf you have any questions, please contact our office.`,
-      headers: {
-        'X-Priority': '3',
-        'X-Mailer': 'Chiropractic Report System',
-      },
-      tags: [
-        { name: 'type', value: 'medical-report' },
-        { name: 'patient', value: emailData.patient.name.replace(/\s+/g, '-').toLowerCase() }
-      ]
+      to: [data.recipientEmail],
+      subject,
+      html,
+      text:
+        `Hello${data.patientName ? `, ${data.patientName}` : ""},\n\n` +
+        `Your clinical Report of Findings and Care Plan is ready to view.\n\n` +
+        `Overview Report: ${data.overviewReportUrl}\n` +
+        `Full Report: ${data.fullReportUrl}\n\n` +
+        `If you have any questions, please contact the clinic.\n\n` +
+        `${clinicName}`,
     };
-    
-    if (replyTo) {
-      emailConfig.reply_to = replyTo;
-    }
-    
-    console.log("Email configuration:", {
-      to: emailConfig.to,
-      from: emailConfig.from,
-      subject: emailConfig.subject,
-      hasHtml: !!emailConfig.html,
-      hasText: !!emailConfig.text
-    });
-    
-    // Send email using Resend
+    if (replyTo) emailConfig.reply_to = replyTo;
+
     const emailResponse = await resend.emails.send(emailConfig);
 
-    console.log("Resend response:", emailResponse);
-
     if (emailResponse.error) {
-      console.error("Resend error:", emailResponse.error);
-      throw new Error(`Email service error: ${emailResponse.error.message || 'Unknown error'}`);
+      throw new Error(`Email service error: ${emailResponse.error.message || "Unknown error"}`);
     }
 
-    console.log("Email sent successfully to:", emailData.recipientEmail, "with ID:", emailResponse.data?.id);
-
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        messageId: emailResponse.data?.id,
-        message: "Email sent successfully",
-        deliveryInfo: {
-          recipient: emailData.recipientEmail,
-          messageId: emailResponse.data?.id,
-          fromAddress: fromAddress
-        }
-      }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      JSON.stringify({ success: true, messageId: emailResponse.data?.id }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-    
   } catch (error: any) {
-    console.error("Error in send-report-email function:", error);
-    console.error("Error stack:", error.stack);
-    
-    // Log more details about the error
-    if (error.name) console.error("Error name:", error.name);
-    if (error.code) console.error("Error code:", error.code);
-    
+    console.error("send-report-email error:", error);
     return new Response(
-      JSON.stringify({ 
-        error: error.message || "Failed to send email",
-        details: error.toString(),
-        type: error.name || 'UnknownError'
-      }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      JSON.stringify({ error: error.message || "Failed to send email" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 };

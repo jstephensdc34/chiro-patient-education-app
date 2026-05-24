@@ -65,6 +65,7 @@ interface OverviewReportProps {
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
+  printMode?: boolean;
 }
 
 const OverviewCard = ({
@@ -114,6 +115,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   subcategories = [],
   settings = [],
   settingsLoading = false,
+  printMode = false,
 }, ref) => {
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
@@ -215,14 +217,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     exerciseItems.length > 0 ||
     !!additionalNotes;
 
-  return (
-    <Card className="mt-6">
-      <CardHeader className="bg-muted border-b">
-        <CardTitle className="text-foreground text-lg">Overview Report Preview</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {hasContent ? (
-          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+  const innerContent = hasContent ? (
+    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+
             {/* Cover Page */}
             {(() => {
               const getSetting = (n: string, f = "") => settings.find((s) => s.name === n)?.value || f;
@@ -411,12 +408,24 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
 
               <div className="text-center text-xs text-muted-foreground mt-8">Page 1</div>
             </div>
-          </div>
-        ) : (
-          <div className="p-8 text-center text-muted-foreground">
-            <p>Select items from the categories above to build your overview report.</p>
-          </div>
-        )}
+    </div>
+  ) : (
+    <div className="p-8 text-center text-muted-foreground">
+      <p>Select items from the categories above to build your overview report.</p>
+    </div>
+  );
+
+  if (printMode) {
+    return innerContent;
+  }
+
+  return (
+    <Card className="mt-6">
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Overview Report Preview</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        {innerContent}
       </CardContent>
     </Card>
   );

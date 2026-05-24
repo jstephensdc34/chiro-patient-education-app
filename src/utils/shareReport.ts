@@ -1,8 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { PatientInfo, ReportItem } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
-import { generateReportHtml } from "./pdf/generateReportHtml";
-import { generateOverviewReportHtml } from "./generateOverviewReportHtml";
+import { renderReportToHtml } from "./renderReportToHtml";
 
 export type ShareReportFormat = "full" | "overview";
 
@@ -18,16 +17,13 @@ interface ShareReportParams {
 }
 
 export const shareReport = async (params: ShareReportParams): Promise<string> => {
-  const html = params.format === "overview"
-    ? generateOverviewReportHtml(params)
-    : generateReportHtml(params);
+  const format: ShareReportFormat = params.format ?? "full";
+  const html = renderReportToHtml({ ...params, format });
 
-  // Create a unique filename
   const timestamp = Date.now();
   const safeName = params.patient.name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
-  const fileName = `report-${safeName}-${timestamp}.html`;
+  const fileName = `report-${format}-${safeName}-${timestamp}.html`;
 
-  // Upload to Supabase Storage
   const { error } = await supabase.storage
     .from("shared-reports")
     .upload(fileName, new Blob([html], { type: "text/html" }), {

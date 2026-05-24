@@ -1,8 +1,20 @@
-
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { EmailDeliveryStatus, EmailReportData } from "@/types";
+import { EmailDeliveryStatus } from "@/types";
+
+export interface EmailReportPayload {
+  recipientEmail: string;
+  subject?: string;
+  patientName: string;
+  clinicName: string;
+  clinicEmail?: string;
+  clinicPhone?: string;
+  clinicWebsite?: string;
+  logoUrl?: string;
+  fullReportUrl: string;
+  overviewReportUrl: string;
+}
 
 export const useEmailDelivery = () => {
   const { toast } = useToast();
@@ -11,17 +23,12 @@ export const useEmailDelivery = () => {
     progress: 0
   });
 
-  const sendEmailReport = async (emailData: EmailReportData) => {
+  const sendEmailReport = async (emailData: EmailReportPayload) => {
     setEmailStatus({ status: 'preparing', progress: 10 });
 
     try {
-      // Validate email
       if (!emailData.recipientEmail || !emailData.recipientEmail.includes('@')) {
         throw new Error('Please enter a valid email address');
-      }
-
-      if (emailData.selectedItems.length === 0) {
-        throw new Error('Please select at least one item for the report');
       }
 
       setEmailStatus({ status: 'sending', progress: 50 });
@@ -35,29 +42,29 @@ export const useEmailDelivery = () => {
       }
 
       setEmailStatus({ status: 'sent', progress: 100 });
-      
+
       toast({
         title: "Email Sent Successfully",
-        description: `Report for ${emailData.patient.name} has been sent to ${emailData.recipientEmail}`,
+        description: `Report for ${emailData.patientName} has been sent to ${emailData.recipientEmail}`,
       });
 
       return data;
     } catch (error) {
       console.error("Error sending email:", error);
       const errorMessage = error instanceof Error ? error.message : "Failed to send email";
-      
-      setEmailStatus({ 
-        status: 'error', 
-        progress: 0, 
-        error: errorMessage 
+
+      setEmailStatus({
+        status: 'error',
+        progress: 0,
+        error: errorMessage
       });
-      
+
       toast({
         title: "Email Delivery Failed",
         description: errorMessage,
         variant: "destructive"
       });
-      
+
       throw error;
     }
   };

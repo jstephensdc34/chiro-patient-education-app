@@ -26,6 +26,7 @@ interface ReportPreviewProps {
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
+  printMode?: boolean;
 }
 
 export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
@@ -37,7 +38,8 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   estimatedCost = "",
   subcategories = [],
   settings = [],
-  settingsLoading = false
+  settingsLoading = false,
+  printMode = false,
 }, ref) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
@@ -68,14 +70,9 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     logoUrl: getSetting("logo_url"),
   };
 
-  return (
-    <Card className="mt-6">
-      <CardHeader className="bg-muted border-b">
-        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {selectedItems.length > 0 ? (
-          <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+  const innerContent = selectedItems.length > 0 ? (
+    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+
             {/* Cover Page */}
             <div
               className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
@@ -168,12 +165,24 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               </div>
               
             </div>
-          </div>
-        ) : (
-          <div className="p-8 text-center text-muted-foreground">
-            <p>Select items from the categories above to build your report.</p>
-          </div>
-        )}
+    </div>
+  ) : (
+    <div className="p-8 text-center text-muted-foreground">
+      <p>Select items from the categories above to build your report.</p>
+    </div>
+  );
+
+  if (printMode) {
+    return innerContent;
+  }
+
+  return (
+    <Card className="mt-6">
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        {innerContent}
       </CardContent>
     </Card>
   );
