@@ -110,7 +110,7 @@ const SharedReport = () => {
             <iframe
               title="Shared patient report"
               className="h-[calc(100vh-7rem)] min-h-[720px] w-full bg-background"
-              sandbox="allow-popups allow-popups-to-escape-sandbox"
+              sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
               srcDoc={html}
             />
           </div>
