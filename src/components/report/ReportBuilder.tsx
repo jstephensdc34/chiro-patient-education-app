@@ -117,19 +117,8 @@ export const ReportBuilder = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {/* Left Column - Patient Info */}
-      <div className="lg:col-span-1">
-        <PatientInfoForm 
-          patient={patient}
-          onPatientInfoChange={onPatientInfoChange}
-        />
-        
-        <NotesField
-          notes={additionalNotes}
-          onChange={onNotesChange}
-        />
-
+    <>
+      <div className="mb-6">
         <CarePlansPanel
           savedPlans={carePlans.savedPlans}
           loadingPlans={carePlans.loadingPlans}
@@ -144,6 +133,19 @@ export const ReportBuilder = ({
           onRename={carePlans.rename}
           onNew={carePlans.newPlan}
           hasContent={!!patient.name || selectedItems.length > 0}
+        />
+      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Left Column - Patient Info */}
+      <div className="lg:col-span-1">
+        <PatientInfoForm 
+          patient={patient}
+          onPatientInfoChange={onPatientInfoChange}
+        />
+        
+        <NotesField
+          notes={additionalNotes}
+          onChange={onNotesChange}
         />
         
         <div className="space-y-3 mt-6">
@@ -258,5 +260,6 @@ export const ReportBuilder = ({
         onSelect={handlePdfFormatSelect}
       />
     </div>
+    </>
   );
 };
