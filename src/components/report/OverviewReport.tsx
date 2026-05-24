@@ -65,6 +65,7 @@ interface OverviewReportProps {
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
+  printMode?: boolean;
 }
 
 const OverviewCard = ({
