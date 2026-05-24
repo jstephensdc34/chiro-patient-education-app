@@ -26,6 +26,7 @@ interface ReportPreviewProps {
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
+  printMode?: boolean;
 }
 
 export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
@@ -37,7 +38,8 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   estimatedCost = "",
   subcategories = [],
   settings = [],
-  settingsLoading = false
+  settingsLoading = false,
+  printMode = false,
 }, ref) => {
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
