@@ -165,12 +165,24 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               </div>
               
             </div>
-          </div>
-        ) : (
-          <div className="p-8 text-center text-muted-foreground">
-            <p>Select items from the categories above to build your report.</p>
-          </div>
-        )}
+    </div>
+  ) : (
+    <div className="p-8 text-center text-muted-foreground">
+      <p>Select items from the categories above to build your report.</p>
+    </div>
+  );
+
+  if (printMode) {
+    return innerContent;
+  }
+
+  return (
+    <Card className="mt-6">
+      <CardHeader className="bg-muted border-b">
+        <CardTitle className="text-foreground text-lg">Report Preview</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        {innerContent}
       </CardContent>
     </Card>
   );
