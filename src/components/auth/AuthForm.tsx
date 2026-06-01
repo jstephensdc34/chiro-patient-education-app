@@ -41,13 +41,8 @@ export const AuthForm = ({ mode, toggleMode }: AuthFormProps) => {
 
         if (error) throw error;
         
-        if (data.session) {
-          toast.success("Account created and logged in successfully!");
-          navigate("/report");
-        } else {
-          // If email confirmation is required
-          toast.success("Please check your email to confirm your account.");
-        }
+        toast.success("Account created and logged in successfully!");
+        navigate("/report");
       }
     } catch (error: any) {
       toast.error(error.message || "An error occurred during authentication");
