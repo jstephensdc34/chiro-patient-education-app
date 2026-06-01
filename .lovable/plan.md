@@ -1,27 +1,22 @@
-## Goal
-Import the `library_items` CSV into the new Supabase project as shared/system items (no owner), so the FK constraint to `auth.users` no longer fails.
+## Plan: Use verified Resend domain for report emails
 
-## Approach
-Transform the CSV locally to null out the `user_id` column for every row, then import the cleaned CSV via the Supabase dashboard. No schema or app code changes required — the existing RLS policy `Allow public read access for library_items` already lets all users read owner-less items, and the `claim_and_update_library_item` RPC already handles the "first edit clones to current user" flow.
+Update the `send-report-email` edge function to send from your verified domain `info.chiropracticspecialistsmn.com` instead of Resend's shared sandbox sender. This unblocks sending to any recipient (not just your own Resend account email).
 
-## Steps
+### Changes
 
-1. **User uploads the CSV** to this chat (e.g. `library_items_rows.csv`).
-2. **Transform the CSV** with a short Python script:
-   - Copy upload to `/tmp/library_items_rows.csv`
-   - Load with pandas
-   - Set `user_id` column to empty string (NULL on import) for every row
-   - Optionally also blank out `id` so Supabase generates fresh UUIDs (avoids collisions if any seed IDs already exist) — confirm with user
-   - Write cleaned file to `/mnt/documents/library_items_rows_cleaned.csv`
-3. **Deliver the cleaned CSV** as a `presentation-artifact` for download.
-4. **User imports** the cleaned CSV in the new Supabase project via Table Editor → `library_items` → Import data from CSV.
-5. **Verify**: user signs in to the new project's app and confirms the library items appear and are editable (first edit will claim ownership via the RPC).
+1. **`supabase/functions/send-report-email/index.ts`**
+   - Replace `onboarding@resend.dev` with `reports@info.chiropracticspecialistsmn.com`.
+   - Keep the `From` display name as the clinic name from settings (e.g. `Chiropractic Specialists MN <reports@info.chiropracticspecialistsmn.com>`).
+   - Keep `reply_to` pointing at the clinic email from settings so patient replies go to the clinic, not the sender mailbox.
 
-## Open question before building
-- Should I also blank out the `id` column so Supabase generates new UUIDs on import? Recommended to avoid any conflicts, but skip if you want to preserve the original IDs.
+2. **Deploy** the updated edge function.
 
-## Technical notes
-- `library_items.user_id` is already nullable — no migration needed.
-- RLS `Allow public read access for library_items` (USING `true`) covers anonymous-owned rows.
-- `claim_and_update_library_item` RPC handles the case `_owner_id IS NULL` by updating in place and setting `user_id` to the editor — perfect for this seed pattern.
-- CSV NULL representation: Supabase CSV import treats empty cells as NULL for nullable columns.
+3. **Verify** by sending a test report email to a non-Resend-account address.
+
+### White-label note
+
+Hardcoding the sender domain ties every cloned clinic to *your* Resend domain. If you plan to clone this app per clinic via Vercel/GitHub, a cleaner pattern is to read the from-address from an env var (e.g. `REPORT_FROM_ADDRESS`) or from a clinic setting, so each clone uses its own verified domain.
+
+**Question:** Do you want me to:
+- **(A)** Hardcode `reports@info.chiropracticspecialistsmn.com` now (simplest, works immediately for your clinic), or
+- **(B)** Make it configurable via a `REPORT_FROM_ADDRESS` secret, defaulting to your domain (white-label friendly)?
