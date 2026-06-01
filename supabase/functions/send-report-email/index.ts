@@ -100,7 +100,8 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const clinicName = data.clinicName || "Chiropractic Clinic";
-    const fromAddress = `${clinicName} <onboarding@resend.dev>`;
+    const fromEmail = Deno.env.get("REPORT_FROM_ADDRESS") || "reports@info.chiropracticspecialistsmn.com";
+    const fromAddress = `${clinicName} <${fromEmail}>`;
     const replyTo = data.clinicEmail && data.clinicEmail.includes("@") ? data.clinicEmail : undefined;
 
     const html = buildHtml(data);
