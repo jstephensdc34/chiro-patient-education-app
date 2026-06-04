@@ -4,11 +4,9 @@ import {
   CarePlanPayload,
   CarePlanRow,
   deleteCarePlan,
-  getMyDraft,
   listSavedCarePlans,
   renameCarePlan,
   saveNamedCarePlan,
-  upsertDraft,
 } from "@/services/carePlansService";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,10 +30,7 @@ export const useCarePlans = (args: UseCarePlansArgs) => {
   const [loadingPlans, setLoadingPlans] = useState(false);
   const [currentPlanId, setCurrentPlanId] = useState<string | null>(null);
   const [currentPlanTitle, setCurrentPlanTitle] = useState<string | null>(null);
-  const [draftRestored, setDraftRestored] = useState(false);
-  const [lastAutoSavedAt, setLastAutoSavedAt] = useState<Date | null>(null);
   const isAuthenticatedRef = useRef(false);
-  const hasInitializedRef = useRef(false);
 
   const buildPayload = useCallback((): CarePlanPayload => ({
     patient_name: args.patient.name || null,
@@ -59,57 +54,16 @@ export const useCarePlans = (args: UseCarePlansArgs) => {
     }
   }, []);
 
-  // Initial load: check auth, restore draft, load saved
+  // Initial load: check auth and load saved plans (no auto-save/draft restore)
   useEffect(() => {
-    let mounted = true;
     (async () => {
       const { data } = await supabase.auth.getUser();
       isAuthenticatedRef.current = !!data.user;
-      if (!data.user) {
-        hasInitializedRef.current = true;
-        return;
-      }
-      try {
-        const draft = await getMyDraft();
-        if (draft && mounted) {
-          args.setPatient({
-            name: draft.patient_name ?? "",
-            date: draft.report_date ?? new Date().toISOString().split("T")[0],
-          });
-          args.setSelectedItems(draft.selected_item_ids);
-          args.setAdditionalNotes(draft.additional_notes ?? "");
-          args.setCustomTreatmentGoals(draft.custom_treatment_goals ?? "");
-          if (draft.active_category) args.setActiveCategory(draft.active_category as CategoryType);
-          setDraftRestored(true);
-        }
-        await refreshSavedPlans();
-      } finally {
-        hasInitializedRef.current = true;
-      }
+      if (!data.user) return;
+      await refreshSavedPlans();
     })();
-    return () => {
-      mounted = false;
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Debounced auto-save
-  useEffect(() => {
-    if (!hasInitializedRef.current || !isAuthenticatedRef.current) return;
-    // Don't auto-save empty plans
-    if (!args.patient.name && args.selectedItems.length === 0 && !args.additionalNotes && !args.customTreatmentGoals) {
-      return;
-    }
-    const handle = setTimeout(async () => {
-      try {
-        await upsertDraft(buildPayload());
-        setLastAutoSavedAt(new Date());
-      } catch (e) {
-        console.error("Auto-save failed", e);
-      }
-    }, 1500);
-    return () => clearTimeout(handle);
-  }, [buildPayload, args.patient.name, args.selectedItems, args.additionalNotes, args.customTreatmentGoals]);
 
   const saveAs = useCallback(async (title: string) => {
     try {
@@ -188,8 +142,8 @@ export const useCarePlans = (args: UseCarePlansArgs) => {
     loadingPlans,
     currentPlanId,
     currentPlanTitle,
-    draftRestored,
-    lastAutoSavedAt,
+    draftRestored: false,
+    lastAutoSavedAt: null as Date | null,
     saveAs,
     updateCurrent,
     loadPlan,
