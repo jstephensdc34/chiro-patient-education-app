@@ -10,13 +10,11 @@ import { ReportPreview } from "@/components/report/ReportPreview";
 import { OverviewReport } from "@/components/report/OverviewReport";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { PDFGenerationProgress } from "@/components/report/PDFGenerationProgress";
-import { EmailReportDialog } from "@/components/report/EmailReportDialog";
 import { ShareReportDialog } from "@/components/report/ShareReportDialog";
 import { PdfFormatDialog, PdfFormat } from "@/components/report/PdfFormatDialog";
 import { ShareReportFormat } from "@/utils/shareReport";
 import { RenderPdfProgress } from "@/utils/pdf";
-import { useEmailDelivery } from "@/hooks/useEmailDelivery";
-import { generateEmailHtml } from "@/utils/email";
+import { ShareReportActions } from "@/components/report/ShareReportActions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "lucide-react";
 import { CarePlansPanel } from "@/components/report/CarePlansPanel";
@@ -77,61 +75,15 @@ export const ReportBuilder = ({
   onShareUrlChange,
   carePlans,
 }: ReportBuilderProps) => {
-  const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
   const reportPreviewRef = useRef<HTMLDivElement>(null);
   const overviewReportRef = useRef<HTMLDivElement>(null);
-  const { emailStatus, sendEmailReport, resetEmailStatus } = useEmailDelivery();
 
   const handlePdfFormatSelect = (format: PdfFormat) => {
     setShowPdfDialog(false);
     const target = format === "overview" ? overviewReportRef.current : reportPreviewRef.current;
     onGeneratePDF(target);
-  };
-
-  const handleSendEmail = async (emailData: {
-    recipientEmail: string;
-    subject: string;
-  }) => {
-    const selectedItemsData = items.filter((item) => selectedItems.includes(item.id));
-    const getSetting = (n: string, f = "") =>
-      settings.find((s) => s.name === n)?.value || f;
-
-    const { shareReport } = await import("@/utils/shareReport");
-
-    const baseParams = {
-      patient,
-      selectedItems: selectedItemsData,
-      notes: additionalNotes,
-      customTreatmentGoals,
-      estimatedCost,
-      settings,
-      subcategories,
-    };
-
-    const [fullReportUrl, overviewReportUrl] = await Promise.all([
-      shareReport({ ...baseParams, format: "full" }),
-      shareReport({ ...baseParams, format: "overview" }),
-    ]);
-
-    await sendEmailReport({
-      recipientEmail: emailData.recipientEmail,
-      subject: emailData.subject,
-      patientName: patient.name,
-      clinicName: getSetting("clinic_name", "Chiropractic Clinic"),
-      clinicEmail: getSetting("clinic_email"),
-      clinicPhone: getSetting("clinic_phone"),
-      clinicWebsite: getSetting("clinic_website"),
-      logoUrl: getSetting("logo_url"),
-      fullReportUrl,
-      overviewReportUrl,
-    });
-  };
-
-  const handleEmailDialogClose = () => {
-    setShowEmailDialog(false);
-    resetEmailStatus();
   };
 
   return (
@@ -179,14 +131,18 @@ export const ReportBuilder = ({
             </Button>
           )}
           
-          <Button 
-            variant="outline"
-            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50 text-lg py-6"
-            onClick={() => setShowEmailDialog(true)}
+          <ShareReportActions
+            patient={patient}
+            items={items}
+            selectedItems={selectedItems}
+            additionalNotes={additionalNotes}
+            customTreatmentGoals={customTreatmentGoals}
+            estimatedCost={estimatedCost}
+            settings={settings}
+            subcategories={subcategories}
             disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
-          >
-            Send Email Report
-          </Button>
+          />
+
           
           <Button 
             variant="outline"
@@ -255,14 +211,8 @@ export const ReportBuilder = ({
         </Tabs>
       </div>
 
-      <EmailReportDialog
-        open={showEmailDialog}
-        onOpenChange={handleEmailDialogClose}
-        patientName={patient.name}
-        defaultEmail=""
-        emailStatus={emailStatus}
-        onSendEmail={handleSendEmail}
-      />
+
+
 
       <ShareReportDialog
         open={showShareDialog}
