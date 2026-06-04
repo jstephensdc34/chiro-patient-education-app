@@ -64,10 +64,26 @@ export const ShareReportActions = ({
   const handleCopy = async () => {
     setPending("copy");
     try {
-      const { subject, body } = await buildEmail();
+      const { subject, body, html } = await buildEmail();
       const text = `Subject: ${subject}\n\n${body}`;
-      await navigator.clipboard.writeText(text);
-      toast.success("Email copied to clipboard");
+      const richHtml = `<p><strong>Subject:</strong> ${subject}</p>${html}`;
+
+      try {
+        if (typeof ClipboardItem !== "undefined" && navigator.clipboard?.write) {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              "text/html": new Blob([richHtml], { type: "text/html" }),
+              "text/plain": new Blob([text], { type: "text/plain" }),
+            }),
+          ]);
+        } else {
+          await navigator.clipboard.writeText(text);
+        }
+        toast.success("Email copied to clipboard");
+      } catch {
+        await navigator.clipboard.writeText(text);
+        toast.success("Email copied to clipboard");
+      }
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : "Failed to copy email");
@@ -104,7 +120,7 @@ export const ShareReportActions = ({
         ) : (
           <Copy className="mr-2 h-4 w-4" />
         )}
-        Copy to Clipboard
+        Copy Email to Clipboard
       </Button>
       <Button
         variant="outline"
