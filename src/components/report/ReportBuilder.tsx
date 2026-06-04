@@ -131,14 +131,18 @@ export const ReportBuilder = ({
             </Button>
           )}
           
-          <Button 
-            variant="outline"
-            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50 text-lg py-6"
-            onClick={() => setShowEmailDialog(true)}
+          <ShareReportActions
+            patient={patient}
+            items={items}
+            selectedItems={selectedItems}
+            additionalNotes={additionalNotes}
+            customTreatmentGoals={customTreatmentGoals}
+            estimatedCost={estimatedCost}
+            settings={settings}
+            subcategories={subcategories}
             disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
-          >
-            Send Email Report
-          </Button>
+          />
+
           
           <Button 
             variant="outline"
@@ -207,14 +211,8 @@ export const ReportBuilder = ({
         </Tabs>
       </div>
 
-      <EmailReportDialog
-        open={showEmailDialog}
-        onOpenChange={handleEmailDialogClose}
-        patientName={patient.name}
-        defaultEmail=""
-        emailStatus={emailStatus}
-        onSendEmail={handleSendEmail}
-      />
+
+
 
       <ShareReportDialog
         open={showShareDialog}
