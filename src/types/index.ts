@@ -98,22 +98,3 @@ export interface ReportSetting {
   created_at: string;
 }
 
-export interface EmailDeliveryStatus {
-  status: 'idle' | 'preparing' | 'sending' | 'sent' | 'error';
-  progress: number;
-  message?: string;
-  error?: string;
-}
-
-export interface EmailReportData {
-  patient: PatientInfo;
-  selectedItems: ReportItem[];
-  notes: string;
-  customTreatmentGoals?: string;
-  estimatedCost?: string;
-  settings: ReportSetting[];
-  subcategories: Subcategory[];
-  recipientEmail: string;
-  subject?: string;
-  message?: string;
-}
