@@ -27,6 +27,7 @@ interface ReportPreviewProps {
   settings?: ReportSetting[];
   settingsLoading?: boolean;
   printMode?: boolean;
+  reportStyle?: ReportStyle;
 }
 
 export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
@@ -40,7 +41,9 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   settings = [],
   settingsLoading = false,
   printMode = false,
+  reportStyle = DEFAULT_REPORT_STYLE,
 }, ref) => {
+
   const getSelectedItems = (categoryId: string) => {
     return items.filter(item => 
       item.categoryId === categoryId && selectedItems.includes(item.id)
