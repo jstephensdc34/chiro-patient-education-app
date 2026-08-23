@@ -1,6 +1,6 @@
 
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
@@ -19,6 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "lucide-react";
 import { CarePlansPanel } from "@/components/report/CarePlansPanel";
 import { useCarePlans } from "@/hooks/useCarePlans";
+import { ReportStyleToggle } from "@/components/report/ReportStyleToggle";
+import {
+  ReportStyle,
+  DEFAULT_REPORT_STYLE,
+  REPORT_STYLE_SETTING_NAME,
+  isReportStyle,
+} from "@/components/report/reportStyleVariants";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
