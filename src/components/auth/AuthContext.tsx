@@ -7,6 +7,7 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   signOut: () => Promise<void>;
 };
 
