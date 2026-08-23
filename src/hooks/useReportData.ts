@@ -7,7 +7,7 @@ import { useAuth } from "@/components/auth/AuthContext";
 
 export const useReportData = () => {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isAuthLoading } = useAuth();
   const [items, setItems] = useState<ReportItem[]>([]);
   const [subcategories, setSubcategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
