@@ -210,7 +210,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   settings = [],
   settingsLoading = false,
   printMode = false,
+  reportStyle = DEFAULT_REPORT_STYLE,
 }, ref) => {
+  const gridClass = reportStyle === "dossier" ? "space-y-4" : "grid grid-cols-2 gap-3";
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
       if (!selectedItems.includes(item.id)) return false;
