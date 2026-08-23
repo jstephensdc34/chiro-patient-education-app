@@ -53,6 +53,7 @@ interface ReportBuilderProps {
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
   carePlans: ReturnType<typeof useCarePlans>;
+  onSettingsUpdated?: () => void;
 }
 
 export const ReportBuilder = ({
@@ -81,17 +82,29 @@ export const ReportBuilder = ({
   onShareReport,
   onShareUrlChange,
   carePlans,
+  onSettingsUpdated,
 }: ReportBuilderProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const [reportStyle, setReportStyle] = useState<ReportStyle>(DEFAULT_REPORT_STYLE);
+  const [styleInitialized, setStyleInitialized] = useState(false);
   const reportPreviewRef = useRef<HTMLDivElement>(null);
   const overviewReportRef = useRef<HTMLDivElement>(null);
+
+  // Initialize the layout from the saved default (falls back to Modern Clinical Dossier)
+  useEffect(() => {
+    if (styleInitialized || settingsLoading) return;
+    const saved = settings.find((s) => s.name === REPORT_STYLE_SETTING_NAME)?.value;
+    setReportStyle(isReportStyle(saved) ? saved : DEFAULT_REPORT_STYLE);
+    setStyleInitialized(true);
+  }, [settings, settingsLoading, styleInitialized]);
 
   const handlePdfFormatSelect = (format: PdfFormat) => {
     setShowPdfDialog(false);
     const target = format === "overview" ? overviewReportRef.current : reportPreviewRef.current;
     onGeneratePDF(target);
   };
+
 
   return (
     <>
