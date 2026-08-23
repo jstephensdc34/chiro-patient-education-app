@@ -125,6 +125,12 @@ export const ReportBuilder = ({
           hasContent={!!patient.name || selectedItems.length > 0}
         />
       </div>
+      <ReportStyleToggle
+        value={reportStyle}
+        onChange={setReportStyle}
+        settings={settings}
+        onSaved={onSettingsUpdated}
+      />
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Left Column - Patient Info */}
       <div className="lg:col-span-1">
@@ -212,6 +218,7 @@ export const ReportBuilder = ({
               subcategories={subcategories}
               settings={settings}
               settingsLoading={settingsLoading}
+              reportStyle={reportStyle}
             />
           </TabsContent>
           <TabsContent value="overview" forceMount className="data-[state=inactive]:hidden">
