@@ -76,7 +76,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   };
 
   const innerContent = selectedItems.length > 0 ? (
-    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-white`}>
 
             {/* Cover Page */}
             <div
@@ -141,7 +141,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
             <div className="bg-white p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               
-              <div className="space-y-8">
+              <div className={reportStyle === "dossier" ? "space-y-10" : "space-y-8"}>
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
                 {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost))).map((category) => (
                   <ReportCategory
@@ -153,6 +153,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                     getSubcategoryName={getSubcategoryName}
                     customTreatmentGoals={category === "treatment" ? customTreatmentGoals : undefined}
                     estimatedCost={category === "treatment" ? estimatedCost : undefined}
+                    variant={reportStyle}
                   />
                 ))}
                 
