@@ -64,6 +64,19 @@ const Report = () => {
     }
   }, [activeTab, reloadSettings]);
 
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto py-8 px-4 text-gray-600">Loading…</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace state={{ from: "/report" }} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
