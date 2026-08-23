@@ -430,9 +430,20 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
 
                       {/* Treatment Goals as bullet list card */}
                       {(treatmentGoalItems.length > 0 || customTreatmentGoals) && (
-                        <div className={`rounded-lg border ${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg} overflow-hidden shadow-sm`}>
-                          <div className={`px-4 py-2 ${sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Treatment Goals</h4>
+                            <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80 mt-1">
+                              {treatmentGoalItems.map((item) => (
+                                <li key={item.id}>{item.name}</li>
+                              ))}
+                              {customTreatmentGoals && <li>{customTreatmentGoals}</li>}
+                            </ul>
+                          </div>
+                        ) : (
+                        <div className={`rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
                           </div>
                           <div className="px-4 py-3">
                             <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80">
@@ -443,13 +454,23 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </ul>
                           </div>
                         </div>
+                        )
                       )}
 
                       {/* Estimated Cost card - spans full width */}
                       {estimatedCost && (
-                        <div className={`col-span-2 rounded-lg border ${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg} overflow-hidden shadow-sm`}>
-                          <div className={`px-4 py-2 ${sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Estimated Cost</h4>
+                            <p className="text-2xl font-bold mt-1" style={{ color: DOSSIER_PRIMARY }}>{estimatedCost}</p>
+                            <p className="text-xs italic text-muted-foreground mt-2">
+                              Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+                            </p>
+                          </div>
+                        ) : (
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
                           </div>
                           <div className="px-4 py-4 text-center">
                             <p className="text-2xl font-bold text-amber-700">{estimatedCost}</p>
@@ -458,6 +479,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </p>
                           </div>
                         </div>
+                        )
                       )}
                     </div>
                   </div>
