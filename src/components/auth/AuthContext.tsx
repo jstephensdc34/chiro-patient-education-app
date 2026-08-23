@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setIsAuthenticated(!!session);
+        setIsAuthLoading(false);
       }
     );
 
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session);
+      setIsAuthLoading(false);
     });
 
     return () => subscription.unsubscribe();
