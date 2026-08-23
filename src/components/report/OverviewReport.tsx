@@ -314,7 +314,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     !!additionalNotes;
 
   const innerContent = hasContent ? (
-    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-white`}>
 
             {/* Cover Page */}
             {(() => {
