@@ -10,8 +10,11 @@ import { useReportGeneration } from "@/hooks/useReportGeneration";
 import { useCarePlans } from "@/hooks/useCarePlans";
 import { ReportBuilder } from "@/components/report/ReportBuilder";
 import { CategoryType } from "@/types";
+import { useAuth } from "@/components/auth/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const Report = () => {
+  const { isAuthenticated, isAuthLoading } = useAuth();
   const { connectionStatus } = useSupabaseConnection();
   const { settings, loading: settingsLoading, reloadSettings } = useReportSettings(connectionStatus);
   const { items, subcategories, isLoading } = useReportData();
@@ -60,6 +63,19 @@ const Report = () => {
       reloadSettings();
     }
   }, [activeTab, reloadSettings]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto py-8 px-4 text-gray-600">Loading…</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace state={{ from: "/report" }} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

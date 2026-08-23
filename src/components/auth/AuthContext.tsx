@@ -7,6 +7,7 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   signOut: () => Promise<void>;
 };
 
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Set up auth state listener
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setIsAuthenticated(!!session);
+        setIsAuthLoading(false);
       }
     );
 
@@ -32,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session);
+      setIsAuthLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -42,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user, isAuthenticated, signOut }}>
+    <AuthContext.Provider value={{ session, user, isAuthenticated, isAuthLoading, signOut }}>
       {children}
     </AuthContext.Provider>
   );
