@@ -233,6 +233,7 @@ export const ReportBuilder = ({
               subcategories={subcategories}
               settings={settings}
               settingsLoading={settingsLoading}
+              reportStyle={reportStyle}
             />
           </TabsContent>
         </Tabs>

@@ -8,6 +8,12 @@ import { InfoLink } from "./InfoLink";
 import { PatientInfo } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { getSectionIcon } from "@/utils/sectionIcons";
+import {
+  ReportStyle,
+  DEFAULT_REPORT_STYLE,
+  DOSSIER_PRIMARY,
+  DOSSIER_ACCENT,
+} from "./reportStyleVariants";
 
 // Section color configs using HSL-based tokens
 const sectionStyles = {
@@ -66,6 +72,7 @@ interface OverviewReportProps {
   settings?: ReportSetting[];
   settingsLoading?: boolean;
   printMode?: boolean;
+  reportStyle?: ReportStyle;
 }
 
 const OverviewCard = ({
@@ -73,51 +80,117 @@ const OverviewCard = ({
   definition,
   infoLink,
   style,
+  variant = DEFAULT_REPORT_STYLE,
 }: {
   name: string;
   definition?: string;
   infoLink?: string;
   style: typeof sectionStyles.diagnosis;
-}) => (
-  <div className={`rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
-    <div className={`px-4 py-2 ${style.headerBg} flex items-center gap-2`}>
-      <h4 className={`font-semibold text-sm ${style.headerText}`}>{name}</h4>
-      {infoLink && <InfoLink link={infoLink} />}
-    </div>
-    <div className="px-4 py-3 space-y-2">
-      <p className="text-sm text-foreground/80">{definition || "No definition provided."}</p>
-      {infoLink && (
-        <a
-          href={infoLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
-        >
-          More Information
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        </a>
-      )}
-    </div>
-  </div>
-);
+  variant?: ReportStyle;
+}) => {
+  const linkIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
 
-const SectionHeader = ({ label, style }: { label: string; style: typeof sectionStyles.diagnosis }) => {
+  if (variant === "dossier") {
+    return (
+      <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+        <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>
+          {name}
+        </h4>
+        <p className="text-sm text-foreground/80 mt-1">{definition || "No definition provided."}</p>
+        {infoLink && (
+          <a
+            href={infoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90"
+            style={{ backgroundColor: DOSSIER_ACCENT }}
+          >
+            More Information
+            {linkIcon}
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  const isClassic = variant === "classic";
+
+  return (
+    <div
+      className={`rounded-lg border overflow-hidden shadow-sm ${
+        isClassic ? "border-border bg-white" : `${style.border} ${style.bg}`
+      }`}
+    >
+      <div className={`px-4 py-2 flex items-center gap-2 ${isClassic ? "bg-muted border-b" : style.headerBg}`}>
+        <h4 className={`font-semibold text-sm ${isClassic ? "text-foreground" : style.headerText}`}>{name}</h4>
+        {infoLink && <InfoLink link={infoLink} />}
+      </div>
+      <div className="px-4 py-3 space-y-2">
+        <p className="text-sm text-foreground/80">{definition || "No definition provided."}</p>
+        {infoLink && (
+          <a
+            href={infoLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
+          >
+            More Information
+            {linkIcon}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const SectionHeader = ({
+  label,
+  style,
+  variant = DEFAULT_REPORT_STYLE,
+}: {
+  label: string;
+  style: typeof sectionStyles.diagnosis;
+  variant?: ReportStyle;
+}) => {
   const Icon = getSectionIcon(label);
+
+  if (variant === "dossier") {
+    return (
+      <div className="mb-3 flex items-center gap-2 border-b pb-2" style={{ borderColor: DOSSIER_PRIMARY }}>
+        <Icon className="h-5 w-5" style={{ color: DOSSIER_PRIMARY }} strokeWidth={2.25} />
+        <h3 className="font-bold text-lg tracking-tight" style={{ color: DOSSIER_PRIMARY }}>
+          {label}
+        </h3>
+      </div>
+    );
+  }
+
+  if (variant === "classic") {
+    return (
+      <div className="mb-3 flex items-center gap-2 border-b border-border pb-2">
+        <Icon className="h-5 w-5 text-foreground" strokeWidth={2.25} />
+        <h3 className="font-bold text-base text-foreground uppercase tracking-wide">{label}</h3>
+      </div>
+    );
+  }
+
   return (
     <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3 flex items-center gap-2`}>
       <Icon className={`h-5 w-5 ${style.headerText}`} strokeWidth={2.25} />
@@ -137,7 +210,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   settings = [],
   settingsLoading = false,
   printMode = false,
+  reportStyle = DEFAULT_REPORT_STYLE,
 }, ref) => {
+  const gridClass = reportStyle === "dossier" ? "space-y-4" : "grid grid-cols-2 gap-3";
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
       if (!selectedItems.includes(item.id)) return false;
@@ -239,7 +314,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     !!additionalNotes;
 
   const innerContent = hasContent ? (
-    <div ref={ref} className="space-y-6 max-w-[210mm] mx-auto bg-white">
+    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-white`}>
 
             {/* Cover Page */}
             {(() => {
@@ -305,10 +380,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Section 1: Diagnosis */}
                 {diagnosisItems.length > 0 && (
                   <div>
-                    <SectionHeader label={sectionStyles.diagnosis.label} style={sectionStyles.diagnosis} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.diagnosis.label} style={sectionStyles.diagnosis} variant={reportStyle} />
+                    <div className={gridClass}>
                       {diagnosisItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.diagnosis} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.diagnosis} variant={reportStyle} />
                       ))}
                     </div>
                   </div>
@@ -317,10 +392,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Extremity Diagnosis */}
                 {extremityItems.length > 0 && (
                   <div>
-                    <SectionHeader label={sectionStyles.extremity.label} style={sectionStyles.extremity} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.extremity.label} style={sectionStyles.extremity} variant={reportStyle} />
+                    <div className={gridClass}>
                       {extremityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.extremity} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.extremity} variant={reportStyle} />
                       ))}
                     </div>
                   </div>
@@ -329,10 +404,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Section 2: Treatment Modalities */}
                 {treatmentModalityItems.length > 0 && (
                   <div>
-                    <SectionHeader label={sectionStyles.treatment.label} style={sectionStyles.treatment} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.treatment.label} style={sectionStyles.treatment} variant={reportStyle} />
+                    <div className={gridClass}>
                       {treatmentModalityItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.treatment} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.treatment} variant={reportStyle} />
                       ))}
                     </div>
                   </div>
@@ -341,23 +416,34 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Section 3: Care Plan + Phase of Care + Treatment Goals */}
                 {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
                   <div>
-                    <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} variant={reportStyle} />
+                    <div className={gridClass}>
                       {/* Care Plan Type cards */}
                       {carePlanItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} variant={reportStyle} />
                       ))}
 
                       {/* Phase of Care cards */}
                       {phaseOfCareItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.carePlan} variant={reportStyle} />
                       ))}
 
                       {/* Treatment Goals as bullet list card */}
                       {(treatmentGoalItems.length > 0 || customTreatmentGoals) && (
-                        <div className={`rounded-lg border ${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg} overflow-hidden shadow-sm`}>
-                          <div className={`px-4 py-2 ${sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Treatment Goals</h4>
+                            <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80 mt-1">
+                              {treatmentGoalItems.map((item) => (
+                                <li key={item.id}>{item.name}</li>
+                              ))}
+                              {customTreatmentGoals && <li>{customTreatmentGoals}</li>}
+                            </ul>
+                          </div>
+                        ) : (
+                        <div className={`rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
                           </div>
                           <div className="px-4 py-3">
                             <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80">
@@ -368,13 +454,23 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </ul>
                           </div>
                         </div>
+                        )
                       )}
 
                       {/* Estimated Cost card - spans full width */}
                       {estimatedCost && (
-                        <div className={`col-span-2 rounded-lg border ${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg} overflow-hidden shadow-sm`}>
-                          <div className={`px-4 py-2 ${sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Estimated Cost</h4>
+                            <p className="text-2xl font-bold mt-1" style={{ color: DOSSIER_PRIMARY }}>{estimatedCost}</p>
+                            <p className="text-xs italic text-muted-foreground mt-2">
+                              Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
+                            </p>
+                          </div>
+                        ) : (
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
                           </div>
                           <div className="px-4 py-4 text-center">
                             <p className="text-2xl font-bold text-amber-700">{estimatedCost}</p>
@@ -383,6 +479,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </p>
                           </div>
                         </div>
+                        )
                       )}
                     </div>
                   </div>
@@ -391,10 +488,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Section 4: Home Care */}
                 {homecareItems.length > 0 && (
                   <div>
-                    <SectionHeader label={sectionStyles.homecare.label} style={sectionStyles.homecare} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.homecare.label} style={sectionStyles.homecare} variant={reportStyle} />
+                    <div className={gridClass}>
                       {homecareItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.homecare} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.homecare} variant={reportStyle} />
                       ))}
                     </div>
                   </div>
@@ -403,10 +500,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Section 5: Exercises */}
                 {exerciseItems.length > 0 && (
                   <div>
-                    <SectionHeader label={sectionStyles.exercises.label} style={sectionStyles.exercises} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <SectionHeader label={sectionStyles.exercises.label} style={sectionStyles.exercises} variant={reportStyle} />
+                    <div className={gridClass}>
                       {exerciseItems.map((item) => (
-                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.exercises} />
+                        <OverviewCard key={item.id} name={item.name} definition={item.definition} infoLink={item.infoLink} style={sectionStyles.exercises} variant={reportStyle} />
                       ))}
                     </div>
                   </div>
