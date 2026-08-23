@@ -57,8 +57,11 @@ export const useReportData = () => {
     
     if (user) {
       loadAllItems();
+    } else if (!isAuthLoading) {
+      setItems([]);
+      setIsLoading(false);
     }
-  }, [user, toast]);
+  }, [user, isAuthLoading, toast]);
 
   return {
     items,
