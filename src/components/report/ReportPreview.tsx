@@ -6,6 +6,8 @@ import { ReportHeader } from "./ReportHeader";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { PatientInfoDisplay } from "./PatientInfoDisplay";
 import { ReportCategory } from "./ReportCategory";
+import { ReportStyle, DEFAULT_REPORT_STYLE } from "./reportStyleVariants";
+
 
 // Category name mapping
 const categoryNames: Record<string, string> = {
