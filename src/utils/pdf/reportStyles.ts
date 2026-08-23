@@ -90,13 +90,6 @@ export const getReportStyles = (): string => {
         color: #666;
         margin: 0 0 6px 0;
       }
-      .item-card-body .item-link {
-        font-size: 11px;
-        color: #1890ff;
-        font-style: italic;
-        margin: 0;
-      }
-      .item-card-body .item-link a { color: #1890ff; text-decoration: none; }
 
       .category-section { margin-bottom: 24px; }
 
