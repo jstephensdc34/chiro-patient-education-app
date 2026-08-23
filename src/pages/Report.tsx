@@ -114,6 +114,7 @@ const Report = () => {
               onShareReport={(format) => handleShareReport(format)}
               onShareUrlChange={setShareUrl}
               carePlans={carePlans}
+              onSettingsUpdated={reloadSettings}
             />
           </TabsContent>
           

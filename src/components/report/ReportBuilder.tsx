@@ -1,6 +1,6 @@
 
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PatientInfo, ReportItem, CategoryType } from "@/types";
 import { PatientInfoForm } from "@/components/report/PatientInfoForm";
@@ -19,6 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "lucide-react";
 import { CarePlansPanel } from "@/components/report/CarePlansPanel";
 import { useCarePlans } from "@/hooks/useCarePlans";
+import { ReportStyleToggle } from "@/components/report/ReportStyleToggle";
+import {
+  ReportStyle,
+  DEFAULT_REPORT_STYLE,
+  REPORT_STYLE_SETTING_NAME,
+  isReportStyle,
+} from "@/components/report/reportStyleVariants";
 
 interface ReportBuilderProps {
   patient: PatientInfo;
@@ -46,6 +53,7 @@ interface ReportBuilderProps {
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
   carePlans: ReturnType<typeof useCarePlans>;
+  onSettingsUpdated?: () => void;
 }
 
 export const ReportBuilder = ({
@@ -74,17 +82,29 @@ export const ReportBuilder = ({
   onShareReport,
   onShareUrlChange,
   carePlans,
+  onSettingsUpdated,
 }: ReportBuilderProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const [reportStyle, setReportStyle] = useState<ReportStyle>(DEFAULT_REPORT_STYLE);
+  const [styleInitialized, setStyleInitialized] = useState(false);
   const reportPreviewRef = useRef<HTMLDivElement>(null);
   const overviewReportRef = useRef<HTMLDivElement>(null);
+
+  // Initialize the layout from the saved default (falls back to Modern Clinical Dossier)
+  useEffect(() => {
+    if (styleInitialized || settingsLoading) return;
+    const saved = settings.find((s) => s.name === REPORT_STYLE_SETTING_NAME)?.value;
+    setReportStyle(isReportStyle(saved) ? saved : DEFAULT_REPORT_STYLE);
+    setStyleInitialized(true);
+  }, [settings, settingsLoading, styleInitialized]);
 
   const handlePdfFormatSelect = (format: PdfFormat) => {
     setShowPdfDialog(false);
     const target = format === "overview" ? overviewReportRef.current : reportPreviewRef.current;
     onGeneratePDF(target);
   };
+
 
   return (
     <>
@@ -105,6 +125,12 @@ export const ReportBuilder = ({
           hasContent={!!patient.name || selectedItems.length > 0}
         />
       </div>
+      <ReportStyleToggle
+        value={reportStyle}
+        onChange={setReportStyle}
+        settings={settings}
+        onSaved={onSettingsUpdated}
+      />
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Left Column - Patient Info */}
       <div className="lg:col-span-1">
@@ -192,6 +218,7 @@ export const ReportBuilder = ({
               subcategories={subcategories}
               settings={settings}
               settingsLoading={settingsLoading}
+              reportStyle={reportStyle}
             />
           </TabsContent>
           <TabsContent value="overview" forceMount className="data-[state=inactive]:hidden">
