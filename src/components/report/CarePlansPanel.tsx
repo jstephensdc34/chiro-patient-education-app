@@ -13,6 +13,17 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Save, FolderOpen, Trash2, Pencil, Plus, Check, X } from "lucide-react";
 import { CarePlanRow } from "@/services/carePlansService";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface CarePlansPanelProps {
   savedPlans: CarePlanRow[];
@@ -156,13 +167,13 @@ export const CarePlansPanel = ({
                             className="h-8"
                             autoFocus
                           />
-                          <Button size="icon" variant="ghost" onClick={async () => {
+                          <Button size="icon" variant="ghost" aria-label={`Save new name for ${plan.title}`} onClick={async () => {
                             if (renameValue.trim()) await onRename(plan.id, renameValue.trim());
                             setRenamingId(null);
                           }}>
                             <Check className="h-4 w-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setRenamingId(null)}>
+                          <Button size="icon" variant="ghost" aria-label={`Cancel renaming ${plan.title}`} onClick={() => setRenamingId(null)}>
                             <X className="h-4 w-4" />
                           </Button>
                         </div>
@@ -183,15 +194,33 @@ export const CarePlansPanel = ({
                       }}>
                         Load
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => {
+                      <Button size="icon" variant="ghost" aria-label={`Rename ${plan.title}`} onClick={() => {
                         setRenamingId(plan.id);
                         setRenameValue(plan.title);
                       }}>
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => onDelete(plan.id)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button size="icon" variant="ghost" aria-label={`Delete ${plan.title}`}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete care plan?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This permanently deletes “{plan.title}”. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => onDelete(plan.id)}>
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </li>
                 ))}

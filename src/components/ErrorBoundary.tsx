@@ -1,5 +1,6 @@
 
 import { Component, ErrorInfo, ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -37,15 +38,16 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <pre className="mt-2 p-2 bg-muted/50 text-xs overflow-auto max-h-40 rounded">
             {this.state.error?.stack || "No stack trace available"}
           </pre>
-          <button
-            className="mt-4 px-4 py-2 bg-destructive text-primary-foreground rounded hover:bg-destructive"
+          <Button
+            className="mt-4"
+            variant="destructive"
             onClick={() => {
               console.log("Attempting to recover from error");
               this.setState({ hasError: false, error: null });
             }}
           >
             Try again
-          </button>
+          </Button>
         </div>
       );
     }

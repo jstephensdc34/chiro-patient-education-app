@@ -110,7 +110,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                   Clinical Report of Findings &amp; Care Plan
                 </h1>
 
-                <div className="h-px w-24 bg-gray-300" />
+                <div className="h-px w-24 bg-border" />
 
                 {patient.name && (
                   <div className="text-foreground/80 space-y-1">
@@ -160,7 +160,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                 {/* Additional Notes Section */}
                 {additionalNotes && (
                   <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
-                    <div className="px-4 py-2 bg-gray-600">
+                    <div className="bg-muted-foreground px-4 py-2">
                       <h4 className="font-semibold text-sm text-primary-foreground">Additional Notes</h4>
                     </div>
                     <div className="px-4 py-3">

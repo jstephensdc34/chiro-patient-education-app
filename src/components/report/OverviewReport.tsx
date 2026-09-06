@@ -350,7 +350,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     <h1 className="text-4xl font-bold text-foreground tracking-tight px-4">
                       Clinical Report of Findings &amp; Care Plan
                     </h1>
-                    <div className="h-px w-24 bg-gray-300" />
+                    <div className="h-px w-24 bg-border" />
                     {patient.name && (
                       <div className="text-foreground/80 space-y-1">
                         <p className="text-lg">
@@ -512,7 +512,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {/* Additional Notes */}
                 {additionalNotes && (
                   <div>
-                    <div className="rounded-lg px-4 py-2.5 bg-gray-600 mb-3">
+                    <div className="mb-3 rounded-lg bg-muted-foreground px-4 py-2.5">
                       <h3 className="font-bold text-base text-primary-foreground">Additional Notes</h3>
                     </div>
                     <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">

@@ -11,7 +11,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-soft to-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center space-y-8 text-center">
           <div className="space-y-3">
             <h1 className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
@@ -121,7 +121,7 @@ const Index = () => {
             </div>
           )}
         </div>
-      </div>
+      </main>
       
       <footer className="bg-card py-6 border-t border-border mt-12">
         <div className="container mx-auto px-4">
