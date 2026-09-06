@@ -86,7 +86,7 @@ export const Scene4Output = () => {
                 alignItems: "center",
               }}
             >
-              <div style={{ fontSize: 46 }}>{o.icon}</div>
+              {o.icon}
               <div>
                 <div style={{ fontFamily: displayFont, fontWeight: 700, fontSize: 28, color: COLORS.ink, marginBottom: 6 }}>
                   {o.title}
