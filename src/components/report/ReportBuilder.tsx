@@ -150,9 +150,9 @@ export const ReportBuilder = ({
           hasContent={!!patient.name || selectedItems.length > 0}
         />
       </div>
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className={gridClass}>
       {/* Left Column - Patient Info */}
-      <div className="lg:col-span-1">
+      <div className={leftColClass}>
         <PatientInfoForm 
           patient={patient}
           onPatientInfoChange={onPatientInfoChange}
@@ -205,7 +205,7 @@ export const ReportBuilder = ({
       </div>
       
       {/* Right Column - Report Items */}
-      <div className="lg:col-span-2">
+      <div className={rightColClass}>
         <ReportItemsSelector
           items={items}
           activeCategory={activeCategory}
