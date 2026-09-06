@@ -1,12 +1,12 @@
 
-import { CategoryType } from "@/types";
+import { CategoryType, Subcategory } from "@/types";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
 import { Button } from "@/components/ui/button";
 
 interface SubcategorySelectorProps {
   category: CategoryType;
   activeSubcategory: string | null;
-  subcategories: any[];
+  subcategories: Subcategory[];
   onSubcategoryClick: (subcategoryId: string, event: React.MouseEvent) => void;
 }
 
