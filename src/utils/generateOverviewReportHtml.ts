@@ -14,7 +14,9 @@ interface GenerateOverviewHtmlParams {
 
 const sectionColors = reportColors;
 
-const renderCard = (name: string, definition: string | undefined, infoLink: string | undefined, colors: typeof sectionColors.diagnosis) => `
+type SectionColors = { bg: string; headerBg: string; border: string };
+
+const renderCard = (name: string, definition: string | undefined, infoLink: string | undefined, colors: SectionColors) => `
   <div style="border-radius:8px;border:1px solid ${colors.border};background:${colors.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
     <div style="padding:8px 16px;background:${colors.headerBg};">
       <h4 style="margin:0;font-size:14px;font-weight:600;color:${reportColors.primaryForeground};">${name}</h4>
@@ -54,7 +56,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
   const homecareItems = byCategory("homecare");
   const exerciseItems = byCategory("exercises");
 
-  const renderGrid = (items: ReportItem[], colors: typeof sectionColors.diagnosis) =>
+  const renderGrid = (items: ReportItem[], colors: SectionColors) =>
     `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       ${items.map(item => renderCard(item.name, item.definition, item.infoLink, colors)).join("")}
     </div>`;
