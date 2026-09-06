@@ -91,6 +91,7 @@ const Report = () => {
           </TabsList>
           
           <TabsContent value="report">
+            <UILayoutSwitcher value={uiLayout} onChange={setUiLayout} />
             <ReportBuilder 
               patient={patient}
               items={items}
@@ -118,6 +119,7 @@ const Report = () => {
               onShareUrlChange={setShareUrl}
               carePlans={carePlans}
               onSettingsUpdated={reloadSettings}
+              uiLayout={uiLayout}
             />
           </TabsContent>
           
