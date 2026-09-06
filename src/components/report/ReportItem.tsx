@@ -70,6 +70,31 @@ export const ReportItem = ({ item, style, variant = "classic" }: ReportItemProps
     );
   }
 
+  if (variant === "workspace") {
+    return (
+      <div className="item-card pdf-avoid-break rounded-md border border-border bg-card overflow-hidden">
+        <div className="flex items-center gap-2 border-b border-border bg-muted px-3 py-1.5">
+          <h4 className="text-[13px] font-semibold leading-tight text-foreground">{item.name}</h4>
+          {item.infoLink && <InfoLink link={item.infoLink} />}
+        </div>
+        <div className="space-y-1.5 px-3 py-2 text-[13px] leading-snug">
+          {body}
+          {item.infoLink && (
+            <a
+              href={item.infoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded border border-border px-2 py-1 text-[11px] font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              More Information
+              <ExternalIcon />
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`item-card pdf-avoid-break rounded-lg border ${style.border} ${style.bg} overflow-hidden shadow-sm`}>
       <div className={`px-4 py-2 ${style.headerBg} flex items-center gap-2`}>

@@ -157,6 +157,18 @@ export const ReportCategory = ({
     );
   }
 
+  if (variant === "workspace") {
+    return (
+      <div className="mb-4 rounded-md border border-border">
+        <div className="flex items-center gap-2 border-b border-border bg-muted px-3 py-1.5">
+          <Icon className="h-4 w-4 text-foreground" strokeWidth={2.25} />
+          <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-foreground">{categoryName}</h3>
+        </div>
+        <div className="p-3">{renderSubcategoryItems()}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-6">
       <div className={`rounded-lg px-4 py-2.5 ${style.headerBg} mb-3 flex items-center gap-2`}>

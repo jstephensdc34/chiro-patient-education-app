@@ -108,6 +108,12 @@ export const ReportBuilder = ({
 
   return (
     <>
+      <ReportStyleToggle
+        value={reportStyle}
+        onChange={setReportStyle}
+        settings={settings}
+        onSaved={onSettingsUpdated}
+      />
       <div className="mb-6">
         <CarePlansPanel
           savedPlans={carePlans.savedPlans}
@@ -200,12 +206,6 @@ export const ReportBuilder = ({
             <TabsTrigger value="full">Full Report</TabsTrigger>
             <TabsTrigger value="overview">Overview Report</TabsTrigger>
           </TabsList>
-          <ReportStyleToggle
-            value={reportStyle}
-            onChange={setReportStyle}
-            settings={settings}
-            onSaved={onSettingsUpdated}
-          />
           <TabsContent value="full" forceMount className="data-[state=inactive]:hidden">
             <ReportPreview
               ref={reportPreviewRef}

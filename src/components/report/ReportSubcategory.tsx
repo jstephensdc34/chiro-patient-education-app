@@ -16,6 +16,8 @@ export const ReportSubcategory = ({ title, items, style, variant = "classic" }: 
   const containerClass =
     variant === "dashboard"
       ? "grid grid-cols-2 gap-3 items-start"
+      : variant === "workspace"
+      ? "grid grid-cols-2 gap-2 items-start"
       : variant === "dossier"
       ? "space-y-4"
       : "space-y-3";
