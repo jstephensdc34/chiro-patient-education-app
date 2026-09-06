@@ -1,3 +1,5 @@
+import { reportColors } from "@/utils/reportColorTokens";
+
 export interface ComposeReportEmailParams {
   patientName: string;
   clinicName: string;
@@ -36,15 +38,15 @@ export const composeReportEmail = ({
     s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
   const button = (href: string, label: string, bg: string) => `
-    <a href="${escape(href)}" style="display:inline-block;background:${bg};color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:600;font-family:Arial,Helvetica,sans-serif;font-size:14px;margin:4px 8px 4px 0;">${label}</a>`;
+    <a href="${escape(href)}" style="display:inline-block;background:${bg};color:${reportColors.primaryForeground};text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:600;font-family:Arial,Helvetica,sans-serif;font-size:14px;margin:4px 8px 4px 0;">${label}</a>`;
 
   const html = `
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333;line-height:1.5;">
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${reportColors.foreground};line-height:1.5;">
   <p>Hi${patientName ? ` ${escape(patientName)}` : ""},</p>
   <p>Your Clinical Report of Findings &amp; Care Plan is ready to view.</p>
   <p>
-    ${button(fullReportUrl, "View Full Report", "#096dd9")}
-    ${button(overviewReportUrl, "View Overview", "#059669")}
+    ${button(fullReportUrl, "View Full Report", reportColors.primaryAccent)}
+    ${button(overviewReportUrl, "View Overview", reportColors.success)}
   </p>
   <p>Please reply to this email with any questions.</p>
   <p>— ${escape(clinicName)}</p>

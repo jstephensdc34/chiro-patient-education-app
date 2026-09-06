@@ -28,9 +28,9 @@ const Library = () => {
   } = useLibrary();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto py-8 px-4">
+      <main className="container mx-auto px-4 py-8">
         <LibraryHeader 
           onAddNewItem={handleAddNewItem} 
           isSubmitting={isSubmitting} 
@@ -62,7 +62,7 @@ const Library = () => {
           isSubmitting={isSubmitting}
           availableSubcategories={getSubcategoriesForCategory(activeCategory)}
         />
-      </div>
+      </main>
     </div>
   );
 };

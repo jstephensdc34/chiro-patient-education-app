@@ -2,7 +2,7 @@
 import { ReportItem as ReportItemType } from "@/types";
 import { InfoLink } from "./InfoLink";
 import { sanitizeHtml } from "@/components/ui/rich-text-editor";
-import { ReportStyle, DOSSIER_ACCENT } from "./reportStyleVariants";
+import { ReportStyle, DOSSIER_ACCENT, DOSSIER_ACCENT_SOFT } from "./reportStyleVariants";
 
 interface ReportItemProps {
   item: ReportItemType;
@@ -46,7 +46,7 @@ export const ReportItem = ({ item, style, variant = "classic" }: ReportItemProps
 
   if (variant === "dossier") {
     return (
-      <div className="item-card pdf-avoid-break pl-4 py-1" style={{ borderLeft: `2px solid ${DOSSIER_ACCENT}33` }}>
+      <div className="item-card pdf-avoid-break pl-4 py-1" style={{ borderLeft: `2px solid ${DOSSIER_ACCENT_SOFT}` }}>
         <div className="flex items-center gap-2">
           <h4 className="text-sm font-semibold tracking-tight" style={{ color: DOSSIER_ACCENT }}>
             {item.name}
@@ -59,7 +59,7 @@ export const ReportItem = ({ item, style, variant = "classic" }: ReportItemProps
             href={item.infoLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:opacity-90"
             style={{ backgroundColor: DOSSIER_ACCENT }}
           >
             More Information
@@ -85,7 +85,7 @@ export const ReportItem = ({ item, style, variant = "classic" }: ReportItemProps
             href={item.infoLink}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
           >
             More Information
             <ExternalIcon />

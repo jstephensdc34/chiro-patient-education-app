@@ -111,7 +111,7 @@ export const ShareReportActions = ({
     <div className="flex gap-2">
       <Button
         variant="outline"
-        className="flex-1 border-medical-600 text-medical-700 hover:bg-medical-50 text-base py-6"
+        className="flex-1 border-primary text-primary hover:bg-primary-soft text-base py-6"
         onClick={handleCopy}
         disabled={isDisabled}
       >
@@ -124,7 +124,7 @@ export const ShareReportActions = ({
       </Button>
       <Button
         variant="outline"
-        className="flex-1 border-medical-600 text-medical-700 hover:bg-medical-50 text-base py-6"
+        className="flex-1 border-primary text-primary hover:bg-primary-soft text-base py-6"
         onClick={handleDraft}
         disabled={isDisabled}
       >

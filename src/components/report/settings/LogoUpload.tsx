@@ -133,7 +133,7 @@ export const LogoUpload = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
-        <div className="w-24 h-24 border rounded flex items-center justify-center bg-gray-50">
+        <div className="w-24 h-24 border rounded flex items-center justify-center bg-muted/50">
           {currentLogoUrl ? (
             <img
               src={currentLogoUrl}
@@ -141,7 +141,7 @@ export const LogoUpload = ({
               className="max-w-full max-h-full object-contain"
             />
           ) : (
-            <span className="text-gray-400 text-sm">No logo</span>
+            <span className="text-muted-foreground/70 text-sm">No logo</span>
           )}
         </div>
         
@@ -191,7 +191,7 @@ export const LogoUpload = ({
           </div>
         </div>
       </div>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         Recommended size: 200x200px. Maximum size: 2MB.
       </p>
     </div>

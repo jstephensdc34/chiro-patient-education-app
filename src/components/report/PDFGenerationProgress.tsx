@@ -19,11 +19,11 @@ export const PDFGenerationProgress: React.FC<PDFGenerationProgressProps> = ({ pr
   };
 
   const statusIcons = {
-    preparing: <Loader2 className="h-5 w-5 animate-spin text-medical-600" />,
-    rendering: <Loader2 className="h-5 w-5 animate-spin text-medical-600" />,
-    generating: <FileText className="h-5 w-5 text-medical-600" />,
-    finalizing: <Loader2 className="h-5 w-5 animate-spin text-medical-600" />,
-    complete: <FileDown className="h-5 w-5 text-green-600" />,
+    preparing: <Loader2 className="h-5 w-5 animate-spin text-primary-accent" />,
+    rendering: <Loader2 className="h-5 w-5 animate-spin text-primary-accent" />,
+    generating: <FileText className="h-5 w-5 text-primary-accent" />,
+    finalizing: <Loader2 className="h-5 w-5 animate-spin text-primary-accent" />,
+    complete: <FileDown className="h-5 w-5 text-success" />,
   };
 
   return (
@@ -37,7 +37,7 @@ export const PDFGenerationProgress: React.FC<PDFGenerationProgressProps> = ({ pr
         </div>
         <Progress value={progress.percentage} className="h-2" />
       </CardContent>
-      <CardFooter className="pt-2 pb-4 text-xs text-gray-500">
+      <CardFooter className="pt-2 pb-4 text-xs text-muted-foreground">
         {progress.status === "complete" 
           ? "Your PDF has been downloaded." 
           : "Please don't refresh the page while generating..."}

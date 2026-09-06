@@ -16,16 +16,16 @@ const Admin = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="mb-8 text-3xl font-bold text-foreground">Admin Dashboard</h1>
         
         <div className="grid gap-6">
           <CopyLibraryItems />
           {/* Add more admin tools here as needed */}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

@@ -3,33 +3,42 @@ import { PatientInfo, ReportItem } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { ReportPreview } from "@/components/report/ReportPreview";
 import { OverviewReport } from "@/components/report/OverviewReport";
+import { reportColors } from "@/utils/reportColorTokens";
 
 const CSS_VARS = `
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --background: 210 33% 98%;
+  --foreground: 208 65% 12%;
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 205 100% 27.5%;
+  --primary-foreground: 0 0% 100%;
+  --primary-accent: 211 92% 44%;
+  --primary-soft: 202 100% 95%;
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
   --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted-foreground: 211 20% 38%;
   --accent: 210 40% 96.1%;
   --accent-foreground: 222.2 47.4% 11.2%;
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --ring: 211 92% 44%;
+  --diagnosis: 221 83% 53%; --diagnosis-soft: 214 100% 97%; --diagnosis-border: 213 97% 87%;
+  --extremity: 239 84% 67%; --extremity-soft: 226 100% 97%; --extremity-border: 228 96% 89%;
+  --treatment: 160 84% 30%; --treatment-soft: 152 81% 96%; --treatment-border: 152 69% 81%;
+  --homecare: 347 77% 50%; --homecare-soft: 356 100% 97%; --homecare-border: 353 96% 90%;
+  --exercise: 271 81% 56%; --exercise-soft: 270 100% 98%; --exercise-border: 269 100% 92%;
+  --warning: 32 95% 35%; --warning-soft: 48 96% 96%;
   --radius: 0.5rem;
 }
-html, body { margin: 0; padding: 0; background: #f3f4f6; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: hsl(var(--foreground)); }
+html, body { margin: 0; padding: 0; background: ${reportColors.background}; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: hsl(var(--foreground)); }
 .printable-report-wrapper { padding: 24px 16px; }
-.printable-report-wrapper > div { background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.printable-report-wrapper > div { background: ${reportColors.card}; box-shadow: 0 4px 20px hsl(0 0% 0% / 0.06); }
 @media print {
-  body { background: #fff; }
+  body { background: ${reportColors.card}; }
   .printable-report-wrapper { padding: 0; }
   .printable-report-wrapper > div { box-shadow: none; }
 }
@@ -45,12 +54,18 @@ tailwind.config = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))', accent: 'hsl(var(--primary-accent))', soft: 'hsl(var(--primary-soft))' },
         secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
         muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
         accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
         popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+        warning: { DEFAULT: 'hsl(var(--warning))', soft: 'hsl(var(--warning-soft))' },
+        diagnosis: { DEFAULT: 'hsl(var(--diagnosis))', soft: 'hsl(var(--diagnosis-soft))', border: 'hsl(var(--diagnosis-border))' },
+        extremity: { DEFAULT: 'hsl(var(--extremity))', soft: 'hsl(var(--extremity-soft))', border: 'hsl(var(--extremity-border))' },
+        treatment: { DEFAULT: 'hsl(var(--treatment))', soft: 'hsl(var(--treatment-soft))', border: 'hsl(var(--treatment-border))' },
+        homecare: { DEFAULT: 'hsl(var(--homecare))', soft: 'hsl(var(--homecare-soft))', border: 'hsl(var(--homecare-border))' },
+        exercise: { DEFAULT: 'hsl(var(--exercise))', soft: 'hsl(var(--exercise-soft))', border: 'hsl(var(--exercise-border))' },
       },
       borderRadius: {
         lg: 'var(--radius)',

@@ -1,11 +1,12 @@
 
-import { CategoryType } from "@/types";
+import { CategoryType, Subcategory } from "@/types";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
+import { Button } from "@/components/ui/button";
 
 interface SubcategorySelectorProps {
   category: CategoryType;
   activeSubcategory: string | null;
-  subcategories: any[];
+  subcategories: Subcategory[];
   onSubcategoryClick: (subcategoryId: string, event: React.MouseEvent) => void;
 }
 
@@ -23,19 +24,23 @@ export const SubcategorySelector = ({
 
   return (
     <div className="mb-4">
-      <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
+      <div className="flex flex-wrap gap-2 bg-muted/50 p-2 rounded-md">
         {orderedSubcategories.map((subcategory) => (
-          <button
+          <Button
+            type="button"
+            variant={activeSubcategory === subcategory.id ? "secondary" : "ghost"}
+            size="sm"
             key={subcategory.id}
             onClick={(e) => onSubcategoryClick(subcategory.id, e)}
-            className={`px-4 py-2 text-sm rounded-md transition-colors ${
+            aria-pressed={activeSubcategory === subcategory.id}
+            className={`px-4 ${
               activeSubcategory === subcategory.id 
-                ? 'bg-medical-100 text-medical-700' 
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                ? 'bg-primary-soft text-primary' 
+                : 'bg-card text-muted-foreground'
             }`}
           >
             {subcategory.name}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

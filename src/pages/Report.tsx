@@ -66,9 +66,9 @@ const Report = () => {
 
   if (isAuthLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="container mx-auto py-8 px-4 text-gray-600">Loading…</div>
+        <main className="container mx-auto px-4 py-8 text-muted-foreground">Loading…</main>
       </div>
     );
   }
@@ -78,9 +78,10 @@ const Report = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto py-8 px-4">
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="mb-6 text-3xl font-bold text-foreground">Patient Reports</h1>
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "report" | "settings")} className="mb-6">
           <TabsList className="mb-4">
             <TabsTrigger value="report">Report Builder</TabsTrigger>
@@ -122,7 +123,7 @@ const Report = () => {
             <ReportSettings onSettingsUpdated={reloadSettings} />
           </TabsContent>
         </Tabs>
-      </div>
+      </main>
     </div>
   );
 };

@@ -80,7 +80,7 @@ export const AuthForm = ({ mode, toggleMode }: AuthFormProps) => {
       
       <Button 
         type="submit" 
-        className="w-full bg-medical-600 hover:bg-medical-700"
+        className="w-full bg-primary-accent hover:bg-primary/90"
         disabled={loading}
       >
         {loading ? "Processing..." : mode === "login" ? "Login" : "Sign Up"}
@@ -90,7 +90,7 @@ export const AuthForm = ({ mode, toggleMode }: AuthFormProps) => {
         {mode === "login" ? "Don't have an account?" : "Already have an account?"}
         <Button 
           variant="link" 
-          className="ml-1 text-medical-600"
+          className="ml-1 text-primary-accent"
           onClick={toggleMode}
           type="button"
         >

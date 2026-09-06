@@ -1,5 +1,6 @@
 
 import { Subcategory } from "@/types";
+import { Button } from "@/components/ui/button";
 
 interface SubcategorySelectorProps {
   subcategories: Subcategory[];
@@ -16,19 +17,23 @@ export const SubcategorySelector = ({
 
   return (
     <div className="mb-6">
-      <div className="flex flex-wrap gap-2 bg-gray-50 p-2 rounded-md">
+      <div className="flex flex-wrap gap-2 bg-muted/50 p-2 rounded-md">
         {subcategories.map((subcategory) => (
-          <button
+          <Button
+            type="button"
+            variant={activeSubcategory === subcategory.id ? "secondary" : "ghost"}
+            size="sm"
             key={subcategory.id}
             onClick={() => onSubcategoryClick(subcategory.id)}
-            className={`px-4 py-2 text-sm rounded-md transition-colors ${
+            aria-pressed={activeSubcategory === subcategory.id}
+            className={`px-4 ${
               activeSubcategory === subcategory.id 
-                ? 'bg-medical-100 text-medical-700' 
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                ? 'bg-primary-soft text-primary' 
+                : 'bg-card text-muted-foreground'
             }`}
           >
             {subcategory.name}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

@@ -50,11 +50,11 @@ export const ShareReportDialog = ({
 
         {!shareUrl && !isLoading && (
           <div className="flex flex-col gap-3">
-            <Button onClick={() => onShare("full")} className="w-full bg-medical-700 hover:bg-medical-800">
+            <Button onClick={() => onShare("full")} className="w-full bg-primary hover:bg-primary/90">
               <Link className="mr-2 h-4 w-4" />
               Share Full Report
             </Button>
-            <Button onClick={() => onShare("overview")} variant="outline" className="w-full border-medical-600 text-medical-700 hover:bg-medical-50">
+            <Button onClick={() => onShare("overview")} variant="outline" className="w-full border-primary text-primary hover:bg-primary-soft">
               <Link className="mr-2 h-4 w-4" />
               Share Overview Report
             </Button>
@@ -63,7 +63,7 @@ export const ShareReportDialog = ({
 
         {isLoading && (
           <div className="flex items-center justify-center py-6">
-            <Loader2 className="h-6 w-6 animate-spin text-medical-700 mr-2" />
+            <Loader2 className="h-6 w-6 animate-spin text-primary mr-2" />
             <span>Generating report link...</span>
           </div>
         )}
@@ -71,7 +71,7 @@ export const ShareReportDialog = ({
         {shareUrl && (
           <div className="flex items-center gap-2">
             <Input value={shareUrl} readOnly className="flex-1 text-sm" />
-            <Button size="icon" variant="outline" onClick={handleCopy}>
+            <Button size="icon" variant="outline" onClick={handleCopy} aria-label={copied ? "Report link copied" : "Copy report link"}>
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </Button>
           </div>

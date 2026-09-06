@@ -144,10 +144,10 @@ export const CopyLibraryItems = () => {
   };
 
   return (
-    <div className="space-y-8 p-6 bg-white rounded-lg shadow-sm border">
+    <div className="space-y-8 p-6 bg-card rounded-lg shadow-sm border">
       <div>
         <h2 className="text-2xl font-bold mb-6">Copy Library Items</h2>
-        <p className="text-gray-500 mb-4">
+        <p className="text-muted-foreground mb-4">
           Use this tool to copy all library items from one user to another user.
         </p>
       </div>
@@ -182,20 +182,20 @@ export const CopyLibraryItems = () => {
 
         {sourceUsers.length > 0 && (
           <div className="border rounded-md overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-muted/50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Sign In</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Last Sign In</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Created</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-card divide-y divide-border">
                 {sourceUsers.map((user) => (
                   <tr 
                     key={user.id} 
-                    className={selectedSourceUser?.id === user.id ? "bg-blue-50" : ""}
+                    className={selectedSourceUser?.id === user.id ? "bg-diagnosis-soft" : ""}
                   >
                     <td className="px-4 py-3 whitespace-nowrap">{user.email}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{formatDate(user.lastSignIn)}</td>
@@ -255,20 +255,20 @@ export const CopyLibraryItems = () => {
 
         {targetUsers.length > 0 && (
           <div className="border rounded-md overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-muted/50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Sign In</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Last Sign In</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Created</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-card divide-y divide-border">
                 {targetUsers.map((user) => (
                   <tr 
                     key={user.id} 
-                    className={selectedTargetUser?.id === user.id ? "bg-blue-50" : ""}
+                    className={selectedTargetUser?.id === user.id ? "bg-diagnosis-soft" : ""}
                   >
                     <td className="px-4 py-3 whitespace-nowrap">{user.email}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{formatDate(user.lastSignIn)}</td>

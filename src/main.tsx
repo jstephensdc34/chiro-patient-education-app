@@ -9,7 +9,7 @@ const rootElement = document.getElementById("root");
 
 if (!rootElement) {
   console.error("Failed to find the root element");
-  document.body.innerHTML = '<div style="color: red; padding: 20px;">Failed to find the root element</div>';
+  document.body.innerHTML = '<div class="m-5 border border-destructive bg-destructive/10 p-5 text-destructive">Failed to find the root element</div>';
 } else {
   const root = createRoot(rootElement);
   
@@ -18,11 +18,7 @@ if (!rootElement) {
     console.error('Global error caught:', event.error);
     // Display error in the DOM for visibility even if console isn't open
     const errorDiv = document.createElement('div');
-    errorDiv.style.padding = '20px';
-    errorDiv.style.color = 'red';
-    errorDiv.style.backgroundColor = '#ffeeee';
-    errorDiv.style.border = '1px solid red';
-    errorDiv.style.margin = '20px';
+    errorDiv.className = 'm-5 border border-destructive bg-destructive/10 p-5 text-destructive';
     errorDiv.innerHTML = `<h3>Error Loading Application</h3>
                           <p>${event.error?.message || 'Unknown error'}</p>
                           <pre style="overflow: auto; max-height: 300px;">${event.error?.stack || ''}</pre>`;
@@ -47,7 +43,7 @@ if (!rootElement) {
   } catch (error) {
     console.error("Error rendering the application:", error);
     root.render(
-      <div style={{color: "red", padding: "20px"}}>
+      <div className="p-5 text-destructive">
         <h1>Error rendering the application</h1>
         <p>{error instanceof Error ? error.message : String(error)}</p>
       </div>

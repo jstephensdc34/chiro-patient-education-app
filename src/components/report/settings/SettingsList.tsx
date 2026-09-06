@@ -87,7 +87,7 @@ export const SettingsList = ({
 
   if (settings.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted-foreground">
         No settings found. Create some settings to get started.
       </div>
     );

@@ -1,26 +1,22 @@
 
-const sectionColors: Record<string, { bg: string; headerBg: string; border: string }> = {
-  diagnosis: { bg: "#eff6ff", headerBg: "#2563eb", border: "#bfdbfe" },
-  extremity: { bg: "#eef2ff", headerBg: "#4f46e5", border: "#c7d2fe" },
-  treatment: { bg: "#ecfdf5", headerBg: "#059669", border: "#a7f3d0" },
-  homecare: { bg: "#fff1f2", headerBg: "#e11d48", border: "#fecdd3" },
-  exercises: { bg: "#faf5ff", headerBg: "#9333ea", border: "#e9d5ff" },
-};
+import { reportColors } from "@/utils/reportColorTokens";
+
+const sectionColors = reportColors;
 
 export const getSectionColors = (categoryId: string) => sectionColors[categoryId] || sectionColors.diagnosis;
 
 export const getReportStyles = (): string => {
   return `
     <style>
-      body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; margin: 0; padding: 0; }
+      body { font-family: Arial, sans-serif; line-height: 1.5; color: ${reportColors.foreground}; margin: 0; padding: 0; }
       
       .page-container {
         width: 210mm;
         min-height: 297mm;
         padding: 15mm 15mm 20mm 15mm;
         margin: 0 auto 5mm auto;
-        background-color: white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        background-color: ${reportColors.card};
+        box-shadow: 0 0 10px hsl(0 0% 0% / 0.1);
         position: relative;
         box-sizing: border-box;
         overflow: hidden;
@@ -29,22 +25,22 @@ export const getReportStyles = (): string => {
       }
       
       @media screen {
-        body { background: #f0f0f0; padding: 20px 0; }
-        .page-container { border: 1px solid #ddd; }
+        body { background: ${reportColors.background}; padding: 20px 0; }
+        .page-container { border: 1px solid ${reportColors.border}; }
       }
       
       @media print {
         .page-container { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
       }
       
-      .page-number { position: absolute; bottom: 10mm; width: 100%; left: 0; text-align: center; font-size: 10px; color: #666; }
+      .page-number { position: absolute; bottom: 10mm; width: 100%; left: 0; text-align: center; font-size: 10px; color: ${reportColors.mutedForeground}; }
       
-      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid ${reportColors.border}; padding-bottom: 10px; }
       .header-content { flex-grow: 1; margin-left: 20px; }
-      .clinic-name { font-size: 20px; margin: 0; color: #333; font-weight: bold; }
-      .clinic-info { font-size: 14px; margin: 5px 0; color: #666; }
+      .clinic-name { font-size: 20px; margin: 0; color: ${reportColors.foreground}; font-weight: bold; }
+      .clinic-info { font-size: 14px; margin: 5px 0; color: ${reportColors.mutedForeground}; }
       .patient-name { font-size: 18px; margin-bottom: 10px; font-weight: bold; }
-      .patient-info { font-size: 14px; margin-bottom: 20px; color: #666; }
+      .patient-info { font-size: 14px; margin-bottom: 20px; color: ${reportColors.mutedForeground}; }
       .logo { max-height: 80px; max-width: 200px; }
 
       /* Section header bar */
@@ -57,7 +53,7 @@ export const getReportStyles = (): string => {
         margin: 0;
         font-size: 16px;
         font-weight: 700;
-        color: #fff;
+        color: ${reportColors.primaryForeground};
       }
 
       /* Item card */
@@ -65,7 +61,7 @@ export const getReportStyles = (): string => {
         border-radius: 8px;
         overflow: hidden;
         margin-bottom: 10px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 2px hsl(0 0% 0% / 0.05);
       }
       .item-card-header {
         padding: 8px 16px;
@@ -74,7 +70,7 @@ export const getReportStyles = (): string => {
         margin: 0;
         font-size: 14px;
         font-weight: 600;
-        color: #fff;
+        color: ${reportColors.primaryForeground};
         display: inline;
       }
       .item-card-body {
@@ -83,24 +79,24 @@ export const getReportStyles = (): string => {
       .item-card-body .definition {
         margin: 0 0 6px 0;
         font-size: 13px;
-        color: #374151;
+        color: ${reportColors.foreground};
       }
       .item-card-body .description {
         font-size: 13px;
-        color: #666;
+        color: ${reportColors.mutedForeground};
         margin: 0 0 6px 0;
       }
 
       .category-section { margin-bottom: 24px; }
 
-      .info-link { font-size: 11px; color: #fff; text-decoration: none; margin-left: 5px; opacity: 0.9; }
+      .info-link { font-size: 11px; color: ${reportColors.primaryForeground}; text-decoration: none; margin-left: 5px; opacity: 0.9; }
       .info-link:hover { text-decoration: underline; }
 
       .notes-section { margin-top: 20px; }
-      .notes-title { font-size: 16px; color: #1890ff; margin-bottom: 10px; font-weight: bold; }
+      .notes-title { font-size: 16px; color: ${reportColors.primaryAccent}; margin-bottom: 10px; font-weight: bold; }
       .notes-content { white-space: pre-wrap; font-size: 14px; }
 
-      a { color: #1890ff; text-decoration: none; }
+      a { color: ${reportColors.primaryAccent}; text-decoration: none; }
       a[target="_blank"]::after { content: ""; margin-left: 3px; }
     </style>
   `;

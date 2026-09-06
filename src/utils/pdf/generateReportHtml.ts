@@ -3,6 +3,7 @@ import { PatientInfo, ReportItem, MAIN_CATEGORIES } from '@/types';
 import { ReportSetting } from '@/services/reportSettingsService';
 import { getReportStyles } from './reportStyles';
 import { renderCategorySection } from './reportCategoryRenderer';
+import { reportColors } from '@/utils/reportColorTokens';
 
 interface GenerateReportHtmlParams {
   patient: PatientInfo;
@@ -82,11 +83,11 @@ export const generateReportHtml = ({
       }
       if (categoryId === "treatment" && estimatedCost) {
         inserts += `
-          <div style="margin-top:12px;border:1px solid #a7f3d0;background:#ecfdf5;border-radius:8px;overflow:hidden;">
-            <div style="padding:8px 16px;background:#059669;color:#fff;font-weight:600;font-size:14px;">Estimated Cost</div>
+          <div style="margin-top:12px;border:1px solid ${reportColors.treatment.border};background:${reportColors.treatment.bg};border-radius:8px;overflow:hidden;">
+            <div style="padding:8px 16px;background:${reportColors.treatment.headerBg};color:${reportColors.primaryForeground};font-weight:600;font-size:14px;">Estimated Cost</div>
             <div style="padding:16px;text-align:center;">
-              <p style="margin:0;font-size:24px;font-weight:700;color:#047857;">${estimatedCost}</p>
-              <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:#6b7280;">
+              <p style="margin:0;font-size:24px;font-weight:700;color:${reportColors.success};">${estimatedCost}</p>
+              <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:${reportColors.mutedForeground};">
                 Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
               </p>
             </div>

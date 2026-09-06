@@ -10,8 +10,8 @@ interface CustomTreatmentGoalsProps {
 export const CustomTreatmentGoals = ({ goals, onChange }: CustomTreatmentGoalsProps) => {
   return (
     <Card className="mt-6">
-      <CardHeader className="bg-medical-600">
-        <CardTitle className="text-white">Additional Treatment Goals</CardTitle>
+      <CardHeader className="bg-primary-accent">
+        <CardTitle className="text-primary-foreground">Additional Treatment Goals</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <Textarea 

@@ -35,7 +35,7 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
 
   if (loading) {
     return (
-      <Card className="mb-6 bg-gray-50 border border-gray-200">
+      <Card className="mb-6 bg-muted/50 border border-border">
         <CardContent className="pt-4 flex items-center gap-6">
           <Skeleton className="w-28 h-28" />
           <div className="flex-grow space-y-2">
@@ -49,7 +49,7 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
   }
 
   return (
-    <Card className="mb-6 bg-gray-50 border border-gray-200">
+    <Card className="mb-6 bg-muted/50 border border-border">
       <CardContent className="pt-4 flex items-center gap-6">
         <div className="flex-shrink-0 h-28 w-auto max-w-[14rem] flex items-center justify-center">
           {clinicInfo.logoUrl ? (
@@ -59,14 +59,14 @@ export const ReportHeader = ({ settings = [], loading = false }: ReportHeaderPro
               className="h-28 max-h-28 w-auto max-w-[14rem] object-contain"
             />
           ) : (
-            <div className="h-28 w-28 bg-gray-200 flex items-center justify-center rounded">
-              <span className="text-xs text-gray-500">Logo</span>
+            <div className="h-28 w-28 bg-muted flex items-center justify-center rounded">
+              <span className="text-xs text-muted-foreground">Logo</span>
             </div>
           )}
         </div>
         <div className="flex-grow">
-          <h2 className="text-xl font-bold text-medical-700">{clinicInfo.name}</h2>
-          <div className="text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-primary">{clinicInfo.name}</h2>
+          <div className="text-sm text-muted-foreground">
             <p>{clinicInfo.address}</p>
             <p className="flex flex-wrap gap-x-4">
               <span>{clinicInfo.phone}</span>

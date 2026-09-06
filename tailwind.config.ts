@@ -25,9 +25,12 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				overlay: 'hsl(var(--overlay))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					accent: 'hsl(var(--primary-accent))',
+					soft: 'hsl(var(--primary-soft))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -53,6 +56,21 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))',
+					soft: 'hsl(var(--success-soft))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))',
+					soft: 'hsl(var(--warning-soft))'
+				},
+				diagnosis: { DEFAULT: 'hsl(var(--diagnosis))', soft: 'hsl(var(--diagnosis-soft))', border: 'hsl(var(--diagnosis-border))' },
+				extremity: { DEFAULT: 'hsl(var(--extremity))', soft: 'hsl(var(--extremity-soft))', border: 'hsl(var(--extremity-border))' },
+				treatment: { DEFAULT: 'hsl(var(--treatment))', soft: 'hsl(var(--treatment-soft))', border: 'hsl(var(--treatment-border))' },
+				homecare: { DEFAULT: 'hsl(var(--homecare))', soft: 'hsl(var(--homecare-soft))', border: 'hsl(var(--homecare-border))' },
+				exercise: { DEFAULT: 'hsl(var(--exercise))', soft: 'hsl(var(--exercise-soft))', border: 'hsl(var(--exercise-border))' },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -63,17 +81,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				medical: {
-					100: '#e6f7ff',
-					200: '#bae7ff',
-					300: '#91d5ff',
-					400: '#69c0ff',
-					500: '#40a9ff',
-					600: '#1890ff',
-					700: '#096dd9',
-					800: '#0050b3',
-					900: '#003a8c',
-				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -39,12 +39,12 @@ export const LibraryContent = ({
 
   return (
     <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as CategoryType)}>
-      <TabsList className="mb-6 bg-white border border-gray-200">
+      <TabsList className="mb-6 bg-card border border-border">
         {MAIN_CATEGORIES.map((category) => (
           <TabsTrigger
             key={category}
             value={category}
-            className="data-[state=active]:bg-medical-100 data-[state=active]:text-medical-800"
+            className="data-[state=active]:bg-primary-soft data-[state=active]:text-primary"
           >
             {getCategoryName(category)}
           </TabsTrigger>

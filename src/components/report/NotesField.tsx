@@ -10,8 +10,8 @@ interface NotesFieldProps {
 export const NotesField = ({ notes, onChange }: NotesFieldProps) => {
   return (
     <Card className="mt-6">
-      <CardHeader className="bg-medical-600">
-        <CardTitle className="text-white">Additional Notes</CardTitle>
+      <CardHeader className="bg-primary-accent">
+        <CardTitle className="text-primary-foreground">Additional Notes</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <Textarea 

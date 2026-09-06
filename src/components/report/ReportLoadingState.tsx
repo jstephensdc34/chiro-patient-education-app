@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export const ReportLoadingState = () => {
   return (
     <Card>
-      <CardHeader className="bg-medical-600">
-        <CardTitle className="text-white">Report Contents</CardTitle>
+      <CardHeader className="bg-primary-accent">
+        <CardTitle className="text-primary-foreground">Report Contents</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <div className="space-y-4">
