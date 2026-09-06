@@ -20,6 +20,7 @@ import { Link } from "lucide-react";
 import { CarePlansPanel } from "@/components/report/CarePlansPanel";
 import { useCarePlans } from "@/hooks/useCarePlans";
 import { ReportStyleToggle } from "@/components/report/ReportStyleToggle";
+import { UILayout } from "@/components/report/UILayoutSwitcher";
 import {
   ReportStyle,
   DEFAULT_REPORT_STYLE,
@@ -54,6 +55,7 @@ interface ReportBuilderProps {
   onShareUrlChange: (url: string | null) => void;
   carePlans: ReturnType<typeof useCarePlans>;
   onSettingsUpdated?: () => void;
+  uiLayout?: UILayout;
 }
 
 export const ReportBuilder = ({
@@ -83,6 +85,7 @@ export const ReportBuilder = ({
   onShareUrlChange,
   carePlans,
   onSettingsUpdated,
+  uiLayout = "ui-dossier",
 }: ReportBuilderProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
@@ -106,14 +109,30 @@ export const ReportBuilder = ({
   };
 
 
+  // UI layout preview variants (temporary, client-side only)
+  const isModular = uiLayout === "ui-modular";
+  const isWorkspace = uiLayout === "ui-workspace";
+
+  const gridClass = isModular
+    ? "grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+    : isWorkspace
+    ? "grid grid-cols-1 lg:grid-cols-4 gap-4 items-start"
+    : "grid grid-cols-1 gap-10 max-w-4xl mx-auto";
+
+  const leftColClass = isModular
+    ? "rounded-xl border bg-card p-5 shadow-sm"
+    : isWorkspace
+    ? "lg:sticky lg:top-4 self-start rounded-md border bg-card p-3"
+    : "";
+
+  const rightColClass = isModular
+    ? "rounded-xl border bg-card p-5 shadow-sm"
+    : isWorkspace
+    ? "lg:col-span-3"
+    : "";
+
   return (
     <>
-      <ReportStyleToggle
-        value={reportStyle}
-        onChange={setReportStyle}
-        settings={settings}
-        onSaved={onSettingsUpdated}
-      />
       <div className="mb-6">
         <CarePlansPanel
           savedPlans={carePlans.savedPlans}
@@ -131,9 +150,9 @@ export const ReportBuilder = ({
           hasContent={!!patient.name || selectedItems.length > 0}
         />
       </div>
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className={gridClass}>
       {/* Left Column - Patient Info */}
-      <div className="lg:col-span-1">
+      <div className={leftColClass}>
         <PatientInfoForm 
           patient={patient}
           onPatientInfoChange={onPatientInfoChange}
@@ -186,7 +205,7 @@ export const ReportBuilder = ({
       </div>
       
       {/* Right Column - Report Items */}
-      <div className="lg:col-span-2">
+      <div className={rightColClass}>
         <ReportItemsSelector
           items={items}
           activeCategory={activeCategory}
@@ -206,6 +225,12 @@ export const ReportBuilder = ({
             <TabsTrigger value="full">Full Report</TabsTrigger>
             <TabsTrigger value="overview">Overview Report</TabsTrigger>
           </TabsList>
+          <ReportStyleToggle
+            value={reportStyle}
+            onChange={setReportStyle}
+            settings={settings}
+            onSaved={onSettingsUpdated}
+          />
           <TabsContent value="full" forceMount className="data-[state=inactive]:hidden">
             <ReportPreview
               ref={reportPreviewRef}

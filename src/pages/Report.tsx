@@ -9,6 +9,7 @@ import { useReportData } from "@/hooks/useReportData";
 import { useReportGeneration } from "@/hooks/useReportGeneration";
 import { useCarePlans } from "@/hooks/useCarePlans";
 import { ReportBuilder } from "@/components/report/ReportBuilder";
+import { UILayoutSwitcher, UILayout } from "@/components/report/UILayoutSwitcher";
 import { CategoryType } from "@/types";
 import { useAuth } from "@/components/auth/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -56,6 +57,7 @@ const Report = () => {
   });
   
   const [activeTab, setActiveTab] = useState<"report" | "settings">("report");
+  const [uiLayout, setUiLayout] = useState<UILayout>("ui-dossier");
   
   // Reload settings when active tab changes to report
   useEffect(() => {
@@ -89,6 +91,7 @@ const Report = () => {
           </TabsList>
           
           <TabsContent value="report">
+            <UILayoutSwitcher value={uiLayout} onChange={setUiLayout} />
             <ReportBuilder 
               patient={patient}
               items={items}
@@ -116,6 +119,7 @@ const Report = () => {
               onShareUrlChange={setShareUrl}
               carePlans={carePlans}
               onSettingsUpdated={reloadSettings}
+              uiLayout={uiLayout}
             />
           </TabsContent>
           
