@@ -72,17 +72,17 @@ export const ReportItemsSelector = ({
 
   return (
     <Card>
-      <CardHeader className="bg-medical-600">
-        <CardTitle className="text-white">Report Contents</CardTitle>
+      <CardHeader className="bg-primary-accent">
+        <CardTitle className="text-primary-foreground">Report Contents</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <Tabs value={activeCategory} onValueChange={(value) => handleCategoryChange(value as CategoryType)}>
-          <TabsList className="w-full bg-gray-100 mb-6">
+          <TabsList className="w-full bg-muted mb-6">
             {MAIN_CATEGORIES.map((category) => (
               <TabsTrigger
                 key={category}
                 value={category}
-                className="flex-1 data-[state=active]:bg-medical-100 data-[state=active]:text-medical-800"
+                className="flex-1 data-[state=active]:bg-primary-soft data-[state=active]:text-primary"
               >
                 {categoryNames[category]}
               </TabsTrigger>

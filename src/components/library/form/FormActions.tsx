@@ -25,7 +25,7 @@ export const FormActions = ({
         Cancel
       </Button>
       <Button 
-        className="bg-medical-600" 
+        className="bg-primary-accent" 
         onClick={handleSave}
         disabled={isSubmitting}
       >

@@ -18,45 +18,45 @@ import {
 // Section color configs using HSL-based tokens
 const sectionStyles = {
   diagnosis: {
-    bg: "bg-blue-50",
-    border: "border-blue-200",
-    headerBg: "bg-blue-600",
-    headerText: "text-white",
+    bg: "bg-diagnosis-soft",
+    border: "border-diagnosis-border",
+    headerBg: "bg-diagnosis",
+    headerText: "text-primary-foreground",
     label: "Diagnosis",
   },
   extremity: {
-    bg: "bg-indigo-50",
-    border: "border-indigo-200",
-    headerBg: "bg-indigo-600",
-    headerText: "text-white",
+    bg: "bg-extremity-soft",
+    border: "border-extremity-border",
+    headerBg: "bg-extremity",
+    headerText: "text-primary-foreground",
     label: "Extremity Diagnosis",
   },
   treatment: {
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    headerBg: "bg-emerald-600",
-    headerText: "text-white",
+    bg: "bg-treatment-soft",
+    border: "border-treatment-border",
+    headerBg: "bg-treatment",
+    headerText: "text-primary-foreground",
     label: "Treatment Modalities",
   },
   carePlan: {
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    headerBg: "bg-amber-600",
-    headerText: "text-white",
+    bg: "bg-warning-soft",
+    border: "border-warning/30",
+    headerBg: "bg-warning",
+    headerText: "text-primary-foreground",
     label: "Care Plan",
   },
   homecare: {
-    bg: "bg-rose-50",
-    border: "border-rose-200",
-    headerBg: "bg-rose-600",
-    headerText: "text-white",
+    bg: "bg-homecare-soft",
+    border: "border-homecare-border",
+    headerBg: "bg-homecare",
+    headerText: "text-primary-foreground",
     label: "Home Care Recommendations",
   },
   exercises: {
-    bg: "bg-purple-50",
-    border: "border-purple-200",
-    headerBg: "bg-purple-600",
-    headerText: "text-white",
+    bg: "bg-exercise-soft",
+    border: "border-exercise-border",
+    headerBg: "bg-exercise",
+    headerText: "text-primary-foreground",
     label: "Therapeutic Exercises",
   },
 };
@@ -119,7 +119,7 @@ const OverviewCard = ({
             href={infoLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:opacity-90"
             style={{ backgroundColor: DOSSIER_ACCENT }}
           >
             More Information
@@ -135,7 +135,7 @@ const OverviewCard = ({
   return (
     <div
       className={`rounded-lg border overflow-hidden shadow-sm ${
-        isClassic ? "border-border bg-white" : `${style.border} ${style.bg}`
+        isClassic ? "border-border bg-card" : `${style.border} ${style.bg}`
       }`}
     >
       <div className={`px-4 py-2 flex items-center gap-2 ${isClassic ? "bg-muted border-b" : style.headerBg}`}>
@@ -149,7 +149,7 @@ const OverviewCard = ({
             href={infoLink}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:opacity-90 ${style.headerBg}`}
           >
             More Information
             {linkIcon}
@@ -314,7 +314,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     !!additionalNotes;
 
   const innerContent = hasContent ? (
-    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-white`}>
+    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-card`}>
 
             {/* Cover Page */}
             {(() => {
@@ -329,7 +329,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
               };
               return (
                 <div
-                  className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
+                  className="bg-card border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
                   style={{
                     padding: "20mm 15mm",
                     boxSizing: "border-box",
@@ -343,16 +343,16 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                     {clinic.logoUrl ? (
                       <img src={clinic.logoUrl} alt={`${clinic.name} Logo`} className="h-48 w-auto max-w-md object-contain" />
                     ) : (
-                      <div className="h-48 w-48 bg-gray-100 flex items-center justify-center rounded">
-                        <span className="text-sm text-gray-400">Clinic Logo</span>
+                      <div className="h-48 w-48 bg-muted flex items-center justify-center rounded">
+                        <span className="text-sm text-muted-foreground/70">Clinic Logo</span>
                       </div>
                     )}
-                    <h1 className="text-4xl font-bold text-gray-900 tracking-tight px-4">
+                    <h1 className="text-4xl font-bold text-foreground tracking-tight px-4">
                       Clinical Report of Findings &amp; Care Plan
                     </h1>
                     <div className="h-px w-24 bg-gray-300" />
                     {patient.name && (
-                      <div className="text-gray-700 space-y-1">
+                      <div className="text-foreground/80 space-y-1">
                         <p className="text-lg">
                           <span className="font-semibold">Patient ID:</span> {patient.name}
                         </p>
@@ -362,8 +362,8 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                       </div>
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 space-y-1 pt-8">
-                    <p className="text-base font-semibold text-gray-800">{clinic.name}</p>
+                  <div className="text-sm text-muted-foreground space-y-1 pt-8">
+                    <p className="text-base font-semibold text-foreground">{clinic.name}</p>
                     {clinic.address && <p>{clinic.address}</p>}
                     <p className="flex flex-wrap justify-center gap-x-4">
                       {clinic.phone && <span>{clinic.phone}</span>}
@@ -375,7 +375,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
               );
             })()}
 
-            <div className="bg-white p-6 border border-border shadow-sm mx-auto" style={{ padding: "15mm", boxSizing: "border-box" }}>
+            <div className="bg-card p-6 border border-border shadow-sm mx-auto" style={{ padding: "15mm", boxSizing: "border-box" }}>
               <div className="space-y-8">
                 {/* Section 1: Diagnosis */}
                 {diagnosisItems.length > 0 && (
@@ -441,7 +441,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </ul>
                           </div>
                         ) : (
-                        <div className={`rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                        <div className={`rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
                           <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
                             <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
                           </div>
@@ -468,12 +468,12 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </p>
                           </div>
                         ) : (
-                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-white" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
                           <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
                             <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
                           </div>
                           <div className="px-4 py-4 text-center">
-                            <p className="text-2xl font-bold text-amber-700">{estimatedCost}</p>
+                            <p className="text-2xl font-bold text-warning">{estimatedCost}</p>
                             <p className="text-xs italic text-muted-foreground mt-2">
                               Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
                             </p>
@@ -513,7 +513,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 {additionalNotes && (
                   <div>
                     <div className="rounded-lg px-4 py-2.5 bg-gray-600 mb-3">
-                      <h3 className="font-bold text-base text-white">Additional Notes</h3>
+                      <h3 className="font-bold text-base text-primary-foreground">Additional Notes</h3>
                     </div>
                     <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
                       <div className="px-4 py-3">

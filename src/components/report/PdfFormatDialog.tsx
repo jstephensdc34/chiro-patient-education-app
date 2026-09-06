@@ -30,7 +30,7 @@ export const PdfFormatDialog = ({ open, onOpenChange, onSelect }: PdfFormatDialo
         <div className="flex flex-col gap-3">
           <Button
             onClick={() => onSelect("full")}
-            className="w-full bg-medical-700 hover:bg-medical-800"
+            className="w-full bg-primary hover:bg-primary/90"
           >
             <FileText className="mr-2 h-4 w-4" />
             Full Report PDF
@@ -38,7 +38,7 @@ export const PdfFormatDialog = ({ open, onOpenChange, onSelect }: PdfFormatDialo
           <Button
             onClick={() => onSelect("overview")}
             variant="outline"
-            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50"
+            className="w-full border-primary text-primary hover:bg-primary-soft"
           >
             <FileText className="mr-2 h-4 w-4" />
             Overview Report PDF

@@ -76,11 +76,11 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   };
 
   const innerContent = selectedItems.length > 0 ? (
-    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-white`}>
+    <div ref={ref} data-report-style={reportStyle} className={`report-style-${reportStyle} space-y-6 max-w-[210mm] mx-auto bg-card`}>
 
             {/* Cover Page */}
             <div
-              className="bg-white border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
+              className="bg-card border border-border shadow-sm mx-auto flex flex-col items-center justify-between text-center break-after-page max-h-[10.5in]"
               style={{
                 padding: '20mm 15mm',
                 boxSizing: 'border-box',
@@ -101,19 +101,19 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                     className="h-48 w-auto max-w-md object-contain"
                   />
                 ) : (
-                  <div className="h-48 w-48 bg-gray-100 flex items-center justify-center rounded">
-                    <span className="text-sm text-gray-400">Clinic Logo</span>
+                  <div className="h-48 w-48 bg-muted flex items-center justify-center rounded">
+                    <span className="text-sm text-muted-foreground/70">Clinic Logo</span>
                   </div>
                 )}
 
-                <h1 className="text-4xl font-bold text-gray-900 tracking-tight px-4">
+                <h1 className="text-4xl font-bold text-foreground tracking-tight px-4">
                   Clinical Report of Findings &amp; Care Plan
                 </h1>
 
                 <div className="h-px w-24 bg-gray-300" />
 
                 {patient.name && (
-                  <div className="text-gray-700 space-y-1">
+                  <div className="text-foreground/80 space-y-1">
                     <p className="text-lg">
                       <span className="font-semibold">Patient ID:</span> {patient.name}
                     </p>
@@ -126,8 +126,8 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               </div>
 
               {/* Clinic info footer */}
-              <div className="text-sm text-gray-600 space-y-1 pt-8">
-                <p className="text-base font-semibold text-gray-800">{clinic.name}</p>
+              <div className="text-sm text-muted-foreground space-y-1 pt-8">
+                <p className="text-base font-semibold text-foreground">{clinic.name}</p>
                 {clinic.address && <p>{clinic.address}</p>}
                 <p className="flex flex-wrap justify-center gap-x-4">
                   {clinic.phone && <span>{clinic.phone}</span>}
@@ -138,7 +138,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
             </div>
 
             {/* Content Page(s) */}
-            <div className="bg-white p-6 border border-border shadow-sm mx-auto"
+            <div className="bg-card p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               
               <div className={reportStyle === "dossier" ? "space-y-10" : "space-y-8"}>
@@ -161,7 +161,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                 {additionalNotes && (
                   <div className="rounded-lg border border-border bg-muted/50 overflow-hidden shadow-sm">
                     <div className="px-4 py-2 bg-gray-600">
-                      <h4 className="font-semibold text-sm text-white">Additional Notes</h4>
+                      <h4 className="font-semibold text-sm text-primary-foreground">Additional Notes</h4>
                     </div>
                     <div className="px-4 py-3">
                       <p className="whitespace-pre-wrap text-sm text-foreground/80">{additionalNotes}</p>

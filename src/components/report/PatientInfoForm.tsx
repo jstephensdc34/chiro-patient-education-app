@@ -13,8 +13,8 @@ interface PatientInfoFormProps {
 export const PatientInfoForm = ({ patient, onPatientInfoChange }: PatientInfoFormProps) => {
   return (
     <Card>
-      <CardHeader className="bg-medical-600">
-        <CardTitle className="text-white">Patient Information</CardTitle>
+      <CardHeader className="bg-primary-accent">
+        <CardTitle className="text-primary-foreground">Patient Information</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
         <div className="space-y-4">

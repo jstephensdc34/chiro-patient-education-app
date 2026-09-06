@@ -12,7 +12,7 @@ export const InfoLink = ({ link }: InfoLinkProps) => (
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-white/90 hover:text-white underline ml-1 cursor-pointer"
+          className="text-xs text-primary-foreground/90 hover:text-primary-foreground underline ml-1 cursor-pointer"
         >
           [info]
         </a>

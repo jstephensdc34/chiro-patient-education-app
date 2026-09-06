@@ -143,7 +143,7 @@ export const ReportBuilder = ({
             <PDFGenerationProgress progress={pdfProgress} />
           ) : (
             <Button 
-              className="w-full bg-medical-700 hover:bg-medical-800 text-lg py-6"
+              className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
               onClick={() => setShowPdfDialog(true)}
               disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
             >
@@ -166,7 +166,7 @@ export const ReportBuilder = ({
           
           <Button 
             variant="outline"
-            className="w-full border-medical-600 text-medical-700 hover:bg-medical-50 text-lg py-6"
+            className="w-full border-primary text-primary hover:bg-primary-soft text-lg py-6"
             onClick={() => {
               onShareUrlChange(null);
               setShowShareDialog(true);

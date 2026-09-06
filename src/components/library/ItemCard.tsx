@@ -47,12 +47,12 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
-      <CardHeader className="bg-gray-50 border-b border-gray-100">
+    <Card className="overflow-hidden border-border hover:shadow-md transition-shadow">
+      <CardHeader className="bg-muted/50 border-b border-border/60">
         <div className="flex justify-between items-start">
           <CardTitle className="text-lg">{item.name}</CardTitle>
           {item.subcategoryId && (
-            <Badge variant="outline" className="bg-medical-50 text-medical-700 border-medical-200">
+            <Badge variant="outline" className="bg-primary-soft text-primary border-primary/20">
               {/* The subcategory name will come directly from the server */}
             </Badge>
           )}
@@ -60,26 +60,26 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
       </CardHeader>
       <CardContent className="pt-4">
         {item.definition && (
-          <div className="mb-3 pb-3 border-b border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Definition</p>
-            <p className="text-sm text-gray-700 italic">{item.definition}</p>
+          <div className="mb-3 pb-3 border-b border-border/60">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Definition</p>
+            <p className="text-sm text-foreground/80 italic">{item.definition}</p>
           </div>
         )}
         <div className="mb-3">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Description</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Description</p>
           <div
-            className="text-gray-600 prose prose-sm max-w-none"
+            className="text-muted-foreground prose prose-sm max-w-none"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
           />
         </div>
         {item.infoLink && (
           <div className="mb-4">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Info Link</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Info Link</p>
             <a
               href={item.infoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-medical-600 hover:text-medical-700 underline break-all"
+              className="text-sm text-primary-accent hover:text-primary underline break-all"
             >
               {item.infoLink}
             </a>
@@ -87,7 +87,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
         )}
         <div className="flex space-x-2">
           {item.infoLink && (
-            <Button variant="outline" size="sm" className="text-medical-600" asChild>
+            <Button variant="outline" size="sm" className="text-primary-accent" asChild>
               <a href={item.infoLink} target="_blank" rel="noopener noreferrer">
                 Info Link
               </a>
@@ -96,7 +96,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
           <Button 
             variant="outline" 
             size="sm" 
-            className="text-amber-600"
+            className="text-warning"
             onClick={() => onEdit(item)}
           >
             Edit
@@ -107,7 +107,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="text-red-600"
+                className="text-destructive"
                 disabled={isDeleting}
               >
                 {isDeleting ? "Deleting..." : "Delete"}
@@ -125,7 +125,7 @@ export const ItemCard = ({ item, onEdit, onDelete }: ItemCardProps) => {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction 
                   onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="bg-destructive hover:bg-destructive"
                   disabled={isDeleting}
                 >
                   {isDeleting ? "Deleting..." : "Delete"}

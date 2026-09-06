@@ -16,7 +16,7 @@ export const ReportItemList = ({
 }: ReportItemListProps) => {
   if (items.length === 0) {
     return (
-      <div className="p-4 text-center text-gray-500 bg-gray-50 border border-dashed border-gray-200 rounded-md">
+      <div className="p-4 text-center text-muted-foreground bg-muted/50 border border-dashed border-border rounded-md">
         <p>No items available in this category. Add items in the Library.</p>
       </div>
     );
@@ -25,7 +25,7 @@ export const ReportItemList = ({
   return (
     <div className="space-y-3">
       {items.map(item => (
-        <div key={item.id} className="flex items-center space-x-3 p-3 bg-white border border-gray-200 rounded-md">
+        <div key={item.id} className="flex items-center space-x-3 p-3 bg-card border border-border rounded-md">
           <Checkbox
             id={item.id}
             checked={selectedItems.includes(item.id)}

@@ -55,7 +55,7 @@ export const ReportSettings = ({ onSettingsUpdated }: ReportSettingsProps) => {
 
           <TabsContent value="view">
             {error ? (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             ) : (
@@ -89,7 +89,7 @@ export const ReportSettings = ({ onSettingsUpdated }: ReportSettingsProps) => {
         </Tabs>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-muted-foreground">
           {isAuthenticated 
             ? "You can create, update, and delete settings"
             : "Log in to manage settings"}

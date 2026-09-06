@@ -13,8 +13,8 @@ export const ItemsList = ({ items, onEdit, onDelete, categoryName }: ItemsListPr
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.length === 0 ? (
-        <div className="col-span-3 p-8 bg-white rounded-lg border border-gray-200 text-center">
-          <p className="text-gray-500">No items found in this category. Add a new item to get started.</p>
+        <div className="col-span-3 p-8 bg-card rounded-lg border border-border text-center">
+          <p className="text-muted-foreground">No items found in this category. Add a new item to get started.</p>
         </div>
       ) : (
         items.map((item) => (
