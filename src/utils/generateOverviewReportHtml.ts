@@ -1,5 +1,6 @@
 import { PatientInfo, ReportItem } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
+import { reportColors } from "@/utils/reportColorTokens";
 
 interface GenerateOverviewHtmlParams {
   patient: PatientInfo;
@@ -11,30 +12,23 @@ interface GenerateOverviewHtmlParams {
   subcategories: any[];
 }
 
-const sectionColors: Record<string, { bg: string; headerBg: string; border: string }> = {
-  diagnosis: { bg: "#eff6ff", headerBg: "#2563eb", border: "#bfdbfe" },
-  extremity: { bg: "#eef2ff", headerBg: "#4f46e5", border: "#c7d2fe" },
-  treatment: { bg: "#ecfdf5", headerBg: "#059669", border: "#a7f3d0" },
-  carePlan: { bg: "#fffbeb", headerBg: "#d97706", border: "#fde68a" },
-  homecare: { bg: "#fff1f2", headerBg: "#e11d48", border: "#fecdd3" },
-  exercises: { bg: "#faf5ff", headerBg: "#9333ea", border: "#e9d5ff" },
-};
+const sectionColors = reportColors;
 
 const renderCard = (name: string, definition: string | undefined, infoLink: string | undefined, colors: typeof sectionColors.diagnosis) => `
-  <div style="border-radius:8px;border:1px solid ${colors.border};background:${colors.bg};overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+  <div style="border-radius:8px;border:1px solid ${colors.border};background:${colors.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
     <div style="padding:8px 16px;background:${colors.headerBg};">
-      <h4 style="margin:0;font-size:14px;font-weight:600;color:#fff;">${name}</h4>
+      <h4 style="margin:0;font-size:14px;font-weight:600;color:${reportColors.primaryForeground};">${name}</h4>
     </div>
     <div style="padding:12px 16px;">
-      <p style="margin:0 0 ${infoLink ? "12px" : "0"} 0;font-size:13px;color:#374151;">${definition || "No definition provided."}</p>
-      ${infoLink ? `<a href="${infoLink}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:6px 12px;background:${colors.headerBg};color:#fff;font-size:12px;font-weight:600;text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,0.1);">More Information <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : ""}
+      <p style="margin:0 0 ${infoLink ? "12px" : "0"} 0;font-size:13px;color:${reportColors.foreground};">${definition || "No definition provided."}</p>
+      ${infoLink ? `<a href="${infoLink}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:6px 12px;background:${colors.headerBg};color:${reportColors.primaryForeground};font-size:12px;font-weight:600;text-decoration:none;box-shadow:0 1px 2px hsl(0 0% 0% / 0.1);">More Information <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : ""}
     </div>
   </div>
 `;
 
 const renderSectionHeader = (label: string, headerBg: string) => `
   <div style="border-radius:8px;padding:10px 16px;background:${headerBg};margin-bottom:12px;">
-    <h3 style="margin:0;font-size:16px;font-weight:700;color:#fff;">${label}</h3>
+    <h3 style="margin:0;font-size:16px;font-weight:700;color:${reportColors.primaryForeground};">${label}</h3>
   </div>
 `;
 
@@ -147,10 +141,10 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
   if (notes && notes.trim()) {
     const escapedNotes = notes.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     sections += `<div style="margin-bottom:24px;">
-      ${renderSectionHeader("Additional Notes", "#4b5563")}
-      <div style="border-radius:8px;border:1px solid #e5e7eb;background:#f9fafb;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+      ${renderSectionHeader("Additional Notes", reportColors.mutedForeground)}
+      <div style="border-radius:8px;border:1px solid ${reportColors.border};background:${reportColors.muted};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
         <div style="padding:12px 16px;">
-          <p style="margin:0;font-size:13px;color:#374151;white-space:pre-wrap;">${escapedNotes}</p>
+          <p style="margin:0;font-size:13px;color:${reportColors.foreground};white-space:pre-wrap;">${escapedNotes}</p>
         </div>
       </div>
     </div>`;
@@ -160,14 +154,14 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Patient Report - ${patient.name}</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f3f4f6; color: #333; }
-  .page { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: ${reportColors.background}; color: ${reportColors.foreground}; }
+  .page { max-width: 800px; margin: 0 auto; background: ${reportColors.card}; padding: 40px; border-radius: 8px; box-shadow: 0 2px 8px hsl(0 0% 0% / 0.08); }
   .header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
   .logo { max-height: 60px; }
   .clinic-name { font-size: 22px; font-weight: 700; margin: 0; }
-  .clinic-info { font-size: 12px; color: #6b7280; margin: 4px 0 0; }
+  .clinic-info { font-size: 12px; color: ${reportColors.mutedForeground}; margin: 4px 0 0; }
   .patient-name { font-size: 18px; font-weight: 600; margin: 16px 0 4px; }
-  .patient-info { font-size: 13px; color: #6b7280; margin: 0 0 24px; }
+  .patient-info { font-size: 13px; color: ${reportColors.mutedForeground}; margin: 0 0 24px; }
 </style></head><body>
 <div class="page">
   <div class="header">
