@@ -141,7 +141,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
             <div className="bg-card p-6 border border-border shadow-sm mx-auto"
                  style={{ padding: '15mm', boxSizing: 'border-box' }}>
               
-              <div className={reportStyle === "dossier" ? "space-y-10" : "space-y-8"}>
+              <div className={reportStyle === "dossier" ? "space-y-10" : reportStyle === "workspace" ? "space-y-4" : "space-y-8"}>
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
                 {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost))).map((category) => (
                   <ReportCategory

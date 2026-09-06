@@ -130,7 +130,7 @@ const OverviewCard = ({
     );
   }
 
-  const isClassic = variant === "classic";
+  const isClassic = variant === "classic" || variant === "workspace";
 
   return (
     <div
@@ -182,7 +182,7 @@ const SectionHeader = ({
     );
   }
 
-  if (variant === "classic") {
+  if (variant === "classic" || variant === "workspace") {
     return (
       <div className="mb-3 flex items-center gap-2 border-b border-border pb-2">
         <Icon className="h-5 w-5 text-foreground" strokeWidth={2.25} />
@@ -212,7 +212,8 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   printMode = false,
   reportStyle = DEFAULT_REPORT_STYLE,
 }, ref) => {
-  const gridClass = reportStyle === "dossier" ? "space-y-4" : "grid grid-cols-2 gap-3";
+  const isNeutral = reportStyle === "classic" || reportStyle === "workspace";
+  const gridClass = reportStyle === "dossier" ? "space-y-4" : reportStyle === "workspace" ? "grid grid-cols-2 gap-2" : "grid grid-cols-2 gap-3";
   const getSelected = (categoryId: string, subcategoryFilter?: string[]) => {
     return items.filter((item) => {
       if (!selectedItems.includes(item.id)) return false;
@@ -441,9 +442,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </ul>
                           </div>
                         ) : (
-                        <div className={`rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
-                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
+                        <div className={`rounded-lg border overflow-hidden shadow-sm ${isNeutral ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${isNeutral ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${isNeutral ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Goals</h4>
                           </div>
                           <div className="px-4 py-3">
                             <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80">
@@ -468,9 +469,9 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                             </p>
                           </div>
                         ) : (
-                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${reportStyle === "classic" ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
-                          <div className={`px-4 py-2 ${reportStyle === "classic" ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${reportStyle === "classic" ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${isNeutral ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${isNeutral ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${isNeutral ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Estimated Cost</h4>
                           </div>
                           <div className="px-4 py-4 text-center">
                             <p className="text-2xl font-bold text-warning">{estimatedCost}</p>
