@@ -1,11 +1,46 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
 import { COLORS, displayFont, bodyFont } from "../theme";
 
+const Icon = ({ color, children }: { color: string; children: React.ReactNode }) => (
+  <div
+    style={{
+      width: 64,
+      height: 64,
+      borderRadius: 16,
+      background: `${color}14`,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+    }}
+  >
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      {children}
+    </svg>
+  </div>
+);
+
 const OUTPUTS = [
-  { icon: "📄", title: "Full & Overview PDFs", desc: "Styled cover page, your clinic logo, one click" },
-  { icon: "🔗", title: "Shareable report links", desc: "Send patients a secure link to their report" },
-  { icon: "✉️", title: "Copy or draft the email", desc: "One tap into your own email client" },
-  { icon: "🎨", title: "Three report styles", desc: "Dossier, Dashboard, or Classic — set your default" },
+  {
+    icon: <Icon color={COLORS.accent}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M9 13h6" /><path d="M9 17h6" /></Icon>,
+    title: "Full & Overview PDFs",
+    desc: "Styled cover page, your clinic logo, one click",
+  },
+  {
+    icon: <Icon color={COLORS.emerald}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></Icon>,
+    title: "Shareable report links",
+    desc: "Send patients a secure link to their report",
+  },
+  {
+    icon: <Icon color={COLORS.rose}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 6L2 7" /></Icon>,
+    title: "Copy or draft the email",
+    desc: "One tap into your own email client",
+  },
+  {
+    icon: <Icon color={COLORS.primary}><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></Icon>,
+    title: "Three report styles",
+    desc: "Dossier, Dashboard, or Classic — set your default",
+  },
 ];
 
 export const Scene4Output = () => {
