@@ -20,6 +20,7 @@ import { Link } from "lucide-react";
 import { CarePlansPanel } from "@/components/report/CarePlansPanel";
 import { useCarePlans } from "@/hooks/useCarePlans";
 import { ReportStyleToggle } from "@/components/report/ReportStyleToggle";
+import { UILayout } from "@/components/report/UILayoutSwitcher";
 import {
   ReportStyle,
   DEFAULT_REPORT_STYLE,
