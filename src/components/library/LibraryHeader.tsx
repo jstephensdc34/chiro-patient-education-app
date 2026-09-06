@@ -13,9 +13,8 @@ export const LibraryHeader = ({
 }: LibraryHeaderProps) => {
   return (
     <div className="flex justify-between items-center mb-6">
-      <h1 className="text-3xl font-bold text-gray-900">Report Library</h1>
+      <h1 className="text-3xl font-bold text-foreground">Report Library</h1>
       <Button 
-        className="bg-medical-600 hover:bg-medical-700"
         onClick={onAddNewItem}
         disabled={isSubmitting}
       >

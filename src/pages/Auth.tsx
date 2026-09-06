@@ -29,12 +29,12 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto py-16 px-4 flex justify-center">
+      <main className="container mx-auto flex justify-center px-4 py-8">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-center text-2xl text-medical-700">
+            <CardTitle className="text-center text-2xl text-primary">
               {mode === "login" ? "Login to Your Account" : "Create a New Account"}
             </CardTitle>
             <CardDescription className="text-center">
@@ -47,7 +47,7 @@ const Auth = () => {
             <AuthForm mode={mode} toggleMode={toggleMode} />
           </CardContent>
         </Card>
-      </div>
+      </main>
     </div>
   );
 };

@@ -10,8 +10,8 @@ export const REPORT_STYLE_OPTIONS: { value: ReportStyle; label: string }[] = [
   { value: "classic", label: "Classic Clinical" },
 ];
 
-export const DOSSIER_PRIMARY = "#00528c";
-export const DOSSIER_ACCENT = "#096dd9";
+export const DOSSIER_PRIMARY = "hsl(var(--primary))";
+export const DOSSIER_ACCENT = "hsl(var(--primary-accent))";
 
 export const isReportStyle = (value: string | undefined): value is ReportStyle =>
   value === "dossier" || value === "dashboard" || value === "classic";
