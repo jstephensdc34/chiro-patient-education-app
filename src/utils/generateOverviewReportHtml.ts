@@ -95,24 +95,24 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
       ].join("");
 
       goalsCard = `
-        <div style="border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
           <div style="padding:8px 16px;background:${sectionColors.carePlan.headerBg};">
-            <h4 style="margin:0;font-size:14px;font-weight:600;color:#fff;">Treatment Goals</h4>
+            <h4 style="margin:0;font-size:14px;font-weight:600;color:${reportColors.primaryForeground};">Treatment Goals</h4>
           </div>
           <div style="padding:12px 16px;">
-            <ul style="margin:0;padding-left:20px;font-size:13px;color:#374151;">${bullets}</ul>
+            <ul style="margin:0;padding-left:20px;font-size:13px;color:${reportColors.foreground};">${bullets}</ul>
           </div>
         </div>`;
     }
 
     const costCard = estimatedCost ? `
-      <div style="grid-column:1 / -1;border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+      <div style="grid-column:1 / -1;border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
         <div style="padding:8px 16px;background:${sectionColors.carePlan.headerBg};">
-          <h4 style="margin:0;font-size:14px;font-weight:600;color:#fff;">Estimated Cost</h4>
+          <h4 style="margin:0;font-size:14px;font-weight:600;color:${reportColors.primaryForeground};">Estimated Cost</h4>
         </div>
         <div style="padding:16px;text-align:center;">
-          <p style="margin:0;font-size:24px;font-weight:700;color:#b45309;">${estimatedCost}</p>
-          <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:#6b7280;">
+          <p style="margin:0;font-size:24px;font-weight:700;color:${reportColors.warning};">${estimatedCost}</p>
+          <p style="margin:8px 0 0 0;font-size:11px;font-style:italic;color:${reportColors.mutedForeground};">
             Note: This is an estimate based on the recommended clinical care plan. Please refer to your official financial breakdown for detailed billing, insurance, and payment information.
           </p>
         </div>

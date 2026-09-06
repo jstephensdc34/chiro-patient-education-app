@@ -1,4 +1,5 @@
 import html2pdf from 'html2pdf.js';
+import { reportColors } from '@/utils/reportColorTokens';
 
 export interface RenderPdfProgress {
   status: 'preparing' | 'rendering' | 'generating' | 'finalizing' | 'complete';
@@ -45,7 +46,7 @@ export const renderPdfFromElement = async (
       scale: 2,
       useCORS: true,
       logging: false,
-      backgroundColor: '#ffffff',
+      backgroundColor: reportColors.card,
       windowWidth: element.scrollWidth,
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },

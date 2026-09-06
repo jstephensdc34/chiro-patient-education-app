@@ -3,7 +3,7 @@ import { ReportItem as ReportItemType } from "@/types";
 import { ReportSubcategory } from "./ReportSubcategory";
 import { getOrderedSubcategories } from "@/utils/categoryUtils";
 import { getSectionIcon } from "@/utils/sectionIcons";
-import { ReportStyle, DOSSIER_PRIMARY } from "./reportStyleVariants";
+import { ReportStyle, DOSSIER_PRIMARY, DOSSIER_PRIMARY_SOFT } from "./reportStyleVariants";
 
 const sectionStyles: Record<string, { bg: string; border: string; headerBg: string; headerText: string }> = {
   diagnosis: { bg: "bg-diagnosis-soft", border: "border-diagnosis-border", headerBg: "bg-diagnosis", headerText: "text-primary-foreground" },
@@ -88,7 +88,7 @@ export const ReportCategory = ({
         })()}
 
         {customTreatmentGoals && (
-          <div className={panelClass} style={isDossier ? { borderLeft: `2px solid ${DOSSIER_PRIMARY}33` } : undefined}>
+          <div className={panelClass} style={isDossier ? { borderLeft: `2px solid ${DOSSIER_PRIMARY_SOFT}` } : undefined}>
             {isDossier ? (
               <h4 className="text-sm font-semibold" style={{ color: DOSSIER_PRIMARY }}>Custom Treatment Goal</h4>
             ) : (
@@ -103,7 +103,7 @@ export const ReportCategory = ({
         )}
 
         {estimatedCost && (
-          <div className={panelClass} style={isDossier ? { borderLeft: `2px solid ${DOSSIER_PRIMARY}33` } : undefined}>
+          <div className={panelClass} style={isDossier ? { borderLeft: `2px solid ${DOSSIER_PRIMARY_SOFT}` } : undefined}>
             {isDossier ? (
               <h4 className="text-sm font-semibold" style={{ color: DOSSIER_PRIMARY }}>Estimated Cost</h4>
             ) : (
@@ -130,7 +130,7 @@ export const ReportCategory = ({
       <div className="mb-8">
         <div
           className="mb-4 flex items-center gap-2 pb-2"
-          style={{ borderBottom: `1px solid ${DOSSIER_PRIMARY}33` }}
+          style={{ borderBottom: `1px solid ${DOSSIER_PRIMARY_SOFT}` }}
         >
           <Icon className="h-5 w-5" style={{ color: DOSSIER_PRIMARY }} strokeWidth={2.25} />
           <h3

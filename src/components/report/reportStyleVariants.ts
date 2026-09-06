@@ -12,6 +12,8 @@ export const REPORT_STYLE_OPTIONS: { value: ReportStyle; label: string }[] = [
 
 export const DOSSIER_PRIMARY = "hsl(var(--primary))";
 export const DOSSIER_ACCENT = "hsl(var(--primary-accent))";
+export const DOSSIER_PRIMARY_SOFT = "hsl(var(--primary) / 0.2)";
+export const DOSSIER_ACCENT_SOFT = "hsl(var(--primary-accent) / 0.2)";
 
 export const isReportStyle = (value: string | undefined): value is ReportStyle =>
   value === "dossier" || value === "dashboard" || value === "classic";

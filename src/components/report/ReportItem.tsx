@@ -2,7 +2,7 @@
 import { ReportItem as ReportItemType } from "@/types";
 import { InfoLink } from "./InfoLink";
 import { sanitizeHtml } from "@/components/ui/rich-text-editor";
-import { ReportStyle, DOSSIER_ACCENT } from "./reportStyleVariants";
+import { ReportStyle, DOSSIER_ACCENT, DOSSIER_ACCENT_SOFT } from "./reportStyleVariants";
 
 interface ReportItemProps {
   item: ReportItemType;
@@ -46,7 +46,7 @@ export const ReportItem = ({ item, style, variant = "classic" }: ReportItemProps
 
   if (variant === "dossier") {
     return (
-      <div className="item-card pdf-avoid-break pl-4 py-1" style={{ borderLeft: `2px solid ${DOSSIER_ACCENT}33` }}>
+      <div className="item-card pdf-avoid-break pl-4 py-1" style={{ borderLeft: `2px solid ${DOSSIER_ACCENT_SOFT}` }}>
         <div className="flex items-center gap-2">
           <h4 className="text-sm font-semibold tracking-tight" style={{ color: DOSSIER_ACCENT }}>
             {item.name}
