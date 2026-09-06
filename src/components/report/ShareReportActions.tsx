@@ -108,10 +108,10 @@ export const ShareReportActions = ({
   const isDisabled = disabled || pending !== null;
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col gap-2">
       <Button
         variant="outline"
-        className="flex-1 border-primary text-primary hover:bg-primary-soft text-base py-6"
+        className="w-full border-primary text-primary hover:bg-primary-soft text-lg py-6"
         onClick={handleCopy}
         disabled={isDisabled}
       >
@@ -124,7 +124,7 @@ export const ShareReportActions = ({
       </Button>
       <Button
         variant="outline"
-        className="flex-1 border-primary text-primary hover:bg-primary-soft text-base py-6"
+        className="w-full border-primary text-primary hover:bg-primary-soft text-lg py-6"
         onClick={handleDraft}
         disabled={isDisabled}
       >
