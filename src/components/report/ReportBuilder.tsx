@@ -55,6 +55,7 @@ interface ReportBuilderProps {
   onShareUrlChange: (url: string | null) => void;
   carePlans: ReturnType<typeof useCarePlans>;
   onSettingsUpdated?: () => void;
+  uiLayout?: UILayout;
 }
 
 export const ReportBuilder = ({
@@ -84,6 +85,7 @@ export const ReportBuilder = ({
   onShareUrlChange,
   carePlans,
   onSettingsUpdated,
+  uiLayout = "ui-dossier",
 }: ReportBuilderProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
