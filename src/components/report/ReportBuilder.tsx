@@ -109,14 +109,30 @@ export const ReportBuilder = ({
   };
 
 
+  // UI layout preview variants (temporary, client-side only)
+  const isModular = uiLayout === "ui-modular";
+  const isWorkspace = uiLayout === "ui-workspace";
+
+  const gridClass = isModular
+    ? "grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+    : isWorkspace
+    ? "grid grid-cols-1 lg:grid-cols-4 gap-4 items-start"
+    : "grid grid-cols-1 gap-10 max-w-4xl mx-auto";
+
+  const leftColClass = isModular
+    ? "rounded-xl border bg-card p-5 shadow-sm"
+    : isWorkspace
+    ? "lg:sticky lg:top-4 self-start rounded-md border bg-card p-3"
+    : "";
+
+  const rightColClass = isModular
+    ? "rounded-xl border bg-card p-5 shadow-sm"
+    : isWorkspace
+    ? "lg:col-span-3"
+    : "";
+
   return (
     <>
-      <ReportStyleToggle
-        value={reportStyle}
-        onChange={setReportStyle}
-        settings={settings}
-        onSaved={onSettingsUpdated}
-      />
       <div className="mb-6">
         <CarePlansPanel
           savedPlans={carePlans.savedPlans}
