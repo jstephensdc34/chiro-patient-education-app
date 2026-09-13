@@ -69,6 +69,17 @@ export const ReportItemsSelector = ({
     return items.filter(item => item.categoryId === categoryId);
   };
 
+  // Filter items by search query across name, description, and definition
+  const getSearchedItems = (categoryItems: ReportItem[]) => {
+    if (!searchQuery.trim()) return categoryItems;
+    const query = searchQuery.toLowerCase().trim();
+    return categoryItems.filter(item =>
+      item.name.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      (item.definition && item.definition.toLowerCase().includes(query))
+    );
+  };
+
   if (isLoading) {
     return <ReportLoadingState />;
   }
