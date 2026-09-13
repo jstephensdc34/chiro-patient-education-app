@@ -9,6 +9,7 @@ import { SubcategorySelector } from "./SubcategorySelector";
 import { ReportItemList } from "./ReportItemList";
 import { ReportLoadingState } from "./ReportLoadingState";
 import { categoryNames, getDefaultSubcategory } from "@/utils/categoryUtils";
+import { Search } from "lucide-react";
 
 interface ReportItemsSelectorProps {
   items: ReportItem[];
@@ -40,11 +41,13 @@ export const ReportItemsSelector = ({
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // When category changes, reset subcategory if needed
+  // When category changes, reset subcategory and clear search query
   const handleCategoryChange = (category: CategoryType) => {
     onCategoryChange(category);
     setActiveSubcategory(getDefaultSubcategory(category));
+    setSearchQuery("");
   };
 
   // Handle subcategory selection without causing the main tab to change
@@ -64,6 +67,17 @@ export const ReportItemsSelector = ({
       );
     }
     return items.filter(item => item.categoryId === categoryId);
+  };
+
+  // Filter items by search query across name, description, and definition
+  const getSearchedItems = (categoryItems: ReportItem[]) => {
+    if (!searchQuery.trim()) return categoryItems;
+    const query = searchQuery.toLowerCase().trim();
+    return categoryItems.filter(item =>
+      item.name.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      (item.definition && item.definition.toLowerCase().includes(query))
+    );
   };
 
   if (isLoading) {
@@ -103,9 +117,23 @@ export const ReportItemsSelector = ({
                     onSubcategoryClick={handleSubcategoryClick}
                   />
                 )}
+
+                <div className="sticky top-0 z-10 bg-card py-3 border-y border-border">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                    <Input
+                      type="search"
+                      placeholder={`Search ${categoryNames[category].toLowerCase()}...`}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9"
+                      aria-label={`Search ${categoryNames[category]} items`}
+                    />
+                  </div>
+                </div>
                 
                 <ReportItemList
-                  items={getFilteredItems(category)}
+                  items={getSearchedItems(getFilteredItems(category))}
                   selectedItems={selectedItems}
                   onToggleItem={onToggleItem}
                 />
