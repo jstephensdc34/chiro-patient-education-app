@@ -117,9 +117,23 @@ export const ReportItemsSelector = ({
                     onSubcategoryClick={handleSubcategoryClick}
                   />
                 )}
+
+                <div className="sticky top-0 z-10 bg-card py-3 border-y border-border">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                    <Input
+                      type="search"
+                      placeholder={`Search ${categoryNames[category].toLowerCase()}...`}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9"
+                      aria-label={`Search ${categoryNames[category]} items`}
+                    />
+                  </div>
+                </div>
                 
                 <ReportItemList
-                  items={getFilteredItems(category)}
+                  items={getSearchedItems(getFilteredItems(category))}
                   selectedItems={selectedItems}
                   onToggleItem={onToggleItem}
                 />
