@@ -41,11 +41,13 @@ export const ReportItemsSelector = ({
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // When category changes, reset subcategory if needed
+  // When category changes, reset subcategory and clear search query
   const handleCategoryChange = (category: CategoryType) => {
     onCategoryChange(category);
     setActiveSubcategory(getDefaultSubcategory(category));
+    setSearchQuery("");
   };
 
   // Handle subcategory selection without causing the main tab to change
