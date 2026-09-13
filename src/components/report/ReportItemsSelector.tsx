@@ -9,6 +9,7 @@ import { SubcategorySelector } from "./SubcategorySelector";
 import { ReportItemList } from "./ReportItemList";
 import { ReportLoadingState } from "./ReportLoadingState";
 import { categoryNames, getDefaultSubcategory } from "@/utils/categoryUtils";
+import { Search } from "lucide-react";
 
 interface ReportItemsSelectorProps {
   items: ReportItem[];
