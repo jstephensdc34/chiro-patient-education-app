@@ -175,7 +175,7 @@ export const ReportBuilder = ({
           onPatientInfoChange={onPatientInfoChange}
         />
 
-        {isModular && <div className="mt-6">{reportItemsSelector}</div>}
+        {!isWorkspace && <div className="mt-6">{reportItemsSelector}</div>}
         
         <NotesField
           notes={additionalNotes}
