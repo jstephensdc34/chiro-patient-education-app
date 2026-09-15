@@ -175,7 +175,7 @@ export const ReportBuilder = ({
           onPatientInfoChange={onPatientInfoChange}
         />
 
-        {isModular && <div className="mt-6">{reportItemsSelector}</div>}
+        {!isWorkspace && <div className="mt-6">{reportItemsSelector}</div>}
         
         <NotesField
           notes={additionalNotes}
@@ -225,7 +225,7 @@ export const ReportBuilder = ({
       
       {/* Right Column - Report Items */}
       <div className={rightColClass}>
-        {!isModular && reportItemsSelector}
+        {isWorkspace && reportItemsSelector}
         
         <Tabs defaultValue="full" className={isModular ? "" : "mt-6"}>
           <TabsList>
