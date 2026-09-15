@@ -225,7 +225,7 @@ export const ReportBuilder = ({
       
       {/* Right Column - Report Items */}
       <div className={rightColClass}>
-        {!isModular && reportItemsSelector}
+        {isWorkspace && reportItemsSelector}
         
         <Tabs defaultValue="full" className={isModular ? "" : "mt-6"}>
           <TabsList>
