@@ -131,6 +131,23 @@ export const ReportBuilder = ({
     ? "lg:col-span-3"
     : "";
 
+
+  const reportItemsSelector = (
+    <ReportItemsSelector
+      items={items}
+      activeCategory={activeCategory}
+      selectedItems={selectedItems}
+      onCategoryChange={onCategoryChange}
+      onToggleItem={onToggleItem}
+      isLoading={isLoading}
+      subcategories={subcategories}
+      customTreatmentGoals={customTreatmentGoals}
+      onTreatmentGoalsChange={onTreatmentGoalsChange}
+      estimatedCost={estimatedCost}
+      onEstimatedCostChange={onEstimatedCostChange}
+    />
+  );
+
   return (
     <>
       <div className="mb-6">
@@ -157,6 +174,8 @@ export const ReportBuilder = ({
           patient={patient}
           onPatientInfoChange={onPatientInfoChange}
         />
+
+        {isModular && <div className="mt-6">{reportItemsSelector}</div>}
         
         <NotesField
           notes={additionalNotes}
@@ -206,21 +225,9 @@ export const ReportBuilder = ({
       
       {/* Right Column - Report Items */}
       <div className={rightColClass}>
-        <ReportItemsSelector
-          items={items}
-          activeCategory={activeCategory}
-          selectedItems={selectedItems}
-          onCategoryChange={onCategoryChange}
-          onToggleItem={onToggleItem}
-          isLoading={isLoading}
-          subcategories={subcategories}
-          customTreatmentGoals={customTreatmentGoals}
-          onTreatmentGoalsChange={onTreatmentGoalsChange}
-          estimatedCost={estimatedCost}
-          onEstimatedCostChange={onEstimatedCostChange}
-        />
+        {!isModular && reportItemsSelector}
         
-        <Tabs defaultValue="full" className="mt-6">
+        <Tabs defaultValue="full" className={isModular ? "" : "mt-6"}>
           <TabsList>
             <TabsTrigger value="full">Full Report</TabsTrigger>
             <TabsTrigger value="overview">Overview Report</TabsTrigger>
