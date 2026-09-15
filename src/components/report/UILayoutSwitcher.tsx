@@ -6,8 +6,8 @@ export type UILayout = "ui-dossier" | "ui-modular" | "ui-workspace";
 
 export const UI_LAYOUT_OPTIONS: { value: UILayout; label: string }[] = [
   { value: "ui-dossier", label: "Option A: Vertical" },
-  { value: "ui-modular", label: "Option B: Modular Cards" },
-  { value: "ui-workspace", label: "Option C: Pro Workspace" },
+  { value: "ui-modular", label: "Option B: Hybrid" },
+  { value: "ui-workspace", label: "Option C: Side by Side" },
 ];
 
 interface UILayoutSwitcherProps {
