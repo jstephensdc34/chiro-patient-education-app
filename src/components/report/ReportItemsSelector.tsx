@@ -136,6 +136,8 @@ export const ReportItemsSelector = ({
                   items={getSearchedItems(getFilteredItems(category))}
                   selectedItems={selectedItems}
                   onToggleItem={onToggleItem}
+                  activeSearchQuery={searchQuery}
+                  onClearSearch={() => setSearchQuery("")}
                 />
                 
                 {category === "treatment" && activeSubcategory === "treatment_goals" && onTreatmentGoalsChange && (
