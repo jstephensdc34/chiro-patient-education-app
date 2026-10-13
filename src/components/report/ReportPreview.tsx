@@ -7,6 +7,7 @@ import { ReportSetting } from "@/services/reportSettingsService";
 import { PatientInfoDisplay } from "./PatientInfoDisplay";
 import { ReportCategory } from "./ReportCategory";
 import { ReportStyle, DEFAULT_REPORT_STYLE } from "./reportStyleVariants";
+import { composeTreatmentSchedule } from "@/utils/treatmentSchedule";
 
 
 // Category name mapping
@@ -64,6 +65,13 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     const subcategory = subcategories.find(s => s.id === subcategoryId);
     return subcategory ? subcategory.name : "";
   };
+
+  const treatmentSchedule = composeTreatmentSchedule({
+    visitsPerPeriod: treatmentVisitsPerPeriod,
+    periodUnit: treatmentPeriodUnit,
+    duration: treatmentDuration,
+    durationUnit: treatmentDurationUnit,
+  });
 
   const hasSelectedItemsInCategory = (categoryId: string) => {
     return items.some(item => 
