@@ -30,7 +30,7 @@ export const TreatmentScheduleForm = ({
   onDurationUnitChange,
 }: TreatmentScheduleFormProps) => {
   return (
-    <div className="mt-4 rounded-md border bg-muted/40 p-4 space-y-4">
+    <div className="rounded-md border bg-muted/40 p-4 space-y-4">
       <div>
         <p className="text-sm font-medium text-foreground mb-2">Treatment Frequency & Duration</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
