@@ -5,6 +5,13 @@ interface TreatmentScheduleParts {
   durationUnit?: "weeks" | "months";
 }
 
+const pluralize = (value: string, unit: string): string => {
+  const n = Number(value);
+  const singular = unit.replace(/s$/, "");
+  if (n === 1) return singular;
+  return unit;
+};
+
 /**
  * Composes a human-readable treatment schedule sentence, e.g.
  * "3 visits per week for 6 weeks". Handles partial entries gracefully
@@ -24,7 +31,7 @@ export const composeTreatmentSchedule = ({
     : "";
 
   const durationPart = dur
-    ? `${dur} ${durationUnit || "weeks"}${Number(dur) === 1 ? "" : ""}`.replace("1 weeks", "1 week").replace("1 months", "1 month")
+    ? `${dur} ${pluralize(dur, durationUnit || "weeks")}`
     : "";
 
   if (frequencyPart && durationPart) {
