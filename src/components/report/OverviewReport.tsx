@@ -432,7 +432,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 )}
 
                 {/* Section 3: Care Plan + Phase of Care + Treatment Goals */}
-                {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
+                {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost || treatmentSchedule) && (
                   <div>
                     <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} variant={reportStyle} />
                     <div className={gridClass}>
@@ -470,6 +470,25 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                               ))}
                               {customTreatmentGoals && <li>{customTreatmentGoals}</li>}
                             </ul>
+                          </div>
+                        </div>
+                        )
+                      )}
+
+                      {/* Treatment Frequency & Duration card - spans full width */}
+                      {treatmentSchedule && (
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Treatment Frequency & Duration</h4>
+                            <p className="text-2xl font-bold mt-1" style={{ color: DOSSIER_PRIMARY }}>{treatmentSchedule}</p>
+                          </div>
+                        ) : (
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${isNeutral ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${isNeutral ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${isNeutral ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Frequency & Duration</h4>
+                          </div>
+                          <div className="px-4 py-4 text-center">
+                            <p className="text-2xl font-bold text-treatment">{treatmentSchedule}</p>
                           </div>
                         </div>
                         )
