@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
+import { TreatmentScheduleForm } from "./TreatmentScheduleForm";
 import { ReportItemList } from "./ReportItemList";
 import { ReportLoadingState } from "./ReportLoadingState";
 import { categoryNames, getDefaultSubcategory } from "@/utils/categoryUtils";
@@ -156,6 +157,19 @@ export const ReportItemsSelector = ({
                   onClearSearch={() => setSearchQuery("")}
                 />
                 
+                {category === "treatment" && activeSubcategory === "care_plan_type" && onVisitsPerPeriodChange && (
+                  <TreatmentScheduleForm
+                    visitsPerPeriod={treatmentVisitsPerPeriod}
+                    periodUnit={treatmentPeriodUnit}
+                    duration={treatmentDuration}
+                    durationUnit={treatmentDurationUnit}
+                    onVisitsPerPeriodChange={onVisitsPerPeriodChange}
+                    onPeriodUnitChange={onPeriodUnitChange}
+                    onDurationChange={onDurationChange}
+                    onDurationUnitChange={onDurationUnitChange}
+                  />
+                )}
+
                 {category === "treatment" && activeSubcategory === "treatment_goals" && onTreatmentGoalsChange && (
                   <div className="mt-4">
                     <label className="text-sm font-medium text-foreground mb-2 block">
