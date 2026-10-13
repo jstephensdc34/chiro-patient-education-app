@@ -1,6 +1,7 @@
 import { PatientInfo, ReportItem } from "@/types";
 import { ReportSetting } from "@/services/reportSettingsService";
 import { reportColors } from "@/utils/reportColorTokens";
+import { composeTreatmentSchedule } from "@/utils/treatmentSchedule";
 
 interface GenerateOverviewHtmlParams {
   patient: PatientInfo;
@@ -89,7 +90,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     </div>`;
   }
 
-  if (carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) {
+  if (carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost || treatmentSchedule) {
     const carePlanCards = [...carePlanItems, ...phaseOfCareItems].map(item => renderCard(item.name, item.definition, item.infoLink, sectionColors.carePlan)).join("");
 
     let goalsCard = "";
