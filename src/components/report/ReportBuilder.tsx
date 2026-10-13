@@ -161,6 +161,14 @@ export const ReportBuilder = ({
       onTreatmentGoalsChange={onTreatmentGoalsChange}
       estimatedCost={estimatedCost}
       onEstimatedCostChange={onEstimatedCostChange}
+      treatmentVisitsPerPeriod={treatmentVisitsPerPeriod}
+      treatmentPeriodUnit={treatmentPeriodUnit}
+      treatmentDuration={treatmentDuration}
+      treatmentDurationUnit={treatmentDurationUnit}
+      onVisitsPerPeriodChange={onVisitsPerPeriodChange}
+      onPeriodUnitChange={onPeriodUnitChange}
+      onDurationChange={onDurationChange}
+      onDurationUnitChange={onDurationUnitChange}
     />
   );
 
