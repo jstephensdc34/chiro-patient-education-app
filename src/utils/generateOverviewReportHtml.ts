@@ -111,6 +111,16 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
         </div>`;
     }
 
+    const scheduleCard = treatmentSchedule ? `
+      <div style="grid-column:1 / -1;border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
+        <div style="padding:8px 16px;background:${sectionColors.carePlan.headerBg};">
+          <h4 style="margin:0;font-size:14px;font-weight:600;color:${reportColors.primaryForeground};">Treatment Frequency & Duration</h4>
+        </div>
+        <div style="padding:16px;text-align:center;">
+          <p style="margin:0;font-size:24px;font-weight:700;color:${reportColors.warning};">${treatmentSchedule}</p>
+        </div>
+      </div>` : "";
+
     const costCard = estimatedCost ? `
       <div style="grid-column:1 / -1;border-radius:8px;border:1px solid ${sectionColors.carePlan.border};background:${sectionColors.carePlan.bg};overflow:hidden;box-shadow:0 1px 2px hsl(0 0% 0% / 0.05);">
         <div style="padding:8px 16px;background:${sectionColors.carePlan.headerBg};">
@@ -127,7 +137,7 @@ export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): 
     sections += `<div style="margin-bottom:24px;">
       ${renderSectionHeader("Care Plan", sectionColors.carePlan.headerBg)}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        ${carePlanCards}${goalsCard}${costCard}
+        ${carePlanCards}${goalsCard}${scheduleCard}${costCard}
       </div>
     </div>`;
   }
