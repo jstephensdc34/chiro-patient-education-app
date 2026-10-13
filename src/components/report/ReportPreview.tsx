@@ -159,7 +159,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               
               <div className={reportStyle === "dossier" ? "space-y-10" : reportStyle === "workspace" ? "space-y-4" : "space-y-8"}>
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
-                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost))).map((category) => (
+                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost || treatmentSchedule))).map((category) => (
                   <ReportCategory
                     key={category}
                     categoryId={category}
@@ -169,6 +169,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                     getSubcategoryName={getSubcategoryName}
                     customTreatmentGoals={category === "treatment" ? customTreatmentGoals : undefined}
                     estimatedCost={category === "treatment" ? estimatedCost : undefined}
+                    treatmentSchedule={category === "treatment" ? treatmentSchedule : undefined}
                     variant={reportStyle}
                   />
                 ))}
