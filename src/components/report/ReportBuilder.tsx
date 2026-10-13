@@ -35,6 +35,10 @@ interface ReportBuilderProps {
   additionalNotes: string;
   customTreatmentGoals: string;
   estimatedCost: string;
+  treatmentVisitsPerPeriod: string;
+  treatmentPeriodUnit: "week" | "month";
+  treatmentDuration: string;
+  treatmentDurationUnit: "weeks" | "months";
   settings: ReportSetting[];
   settingsLoading: boolean;
   isLoading: boolean;
@@ -65,6 +69,10 @@ export const ReportBuilder = ({
   additionalNotes,
   customTreatmentGoals,
   estimatedCost,
+  treatmentVisitsPerPeriod,
+  treatmentPeriodUnit,
+  treatmentDuration,
+  treatmentDurationUnit,
   settings,
   settingsLoading,
   isLoading,
