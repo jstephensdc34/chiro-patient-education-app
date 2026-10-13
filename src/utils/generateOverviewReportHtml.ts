@@ -8,6 +8,10 @@ interface GenerateOverviewHtmlParams {
   notes: string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   settings: ReportSetting[];
   subcategories: any[];
 }
@@ -35,7 +39,8 @@ const renderSectionHeader = (label: string, headerBg: string) => `
 `;
 
 export const generateOverviewReportHtml = (params: GenerateOverviewHtmlParams): string => {
-  const { patient, selectedItems, notes, customTreatmentGoals, estimatedCost, settings, subcategories } = params;
+  const { patient, selectedItems, notes, customTreatmentGoals, estimatedCost, treatmentVisitsPerPeriod, treatmentPeriodUnit, treatmentDuration, treatmentDurationUnit, settings, subcategories } = params;
+  const treatmentSchedule = composeTreatmentSchedule({ visitsPerPeriod: treatmentVisitsPerPeriod, periodUnit: treatmentPeriodUnit, duration: treatmentDuration, durationUnit: treatmentDurationUnit });
 
   const clinicName = settings.find(s => s.name === "clinic_name")?.value || "Chiropractic Clinic";
   const clinicAddress = settings.find(s => s.name === "clinic_address")?.value || "";
