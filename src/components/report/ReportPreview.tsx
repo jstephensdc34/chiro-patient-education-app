@@ -25,6 +25,10 @@ interface ReportPreviewProps {
   additionalNotes: string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -39,6 +43,10 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   additionalNotes,
   customTreatmentGoals = "",
   estimatedCost = "",
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
   subcategories = [],
   settings = [],
   settingsLoading = false,
