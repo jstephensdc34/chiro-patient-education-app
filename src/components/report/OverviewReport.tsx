@@ -475,24 +475,6 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                         )
                       )}
 
-                      {/* Treatment Frequency & Duration card - spans full width */}
-                      {treatmentSchedule && (
-                        reportStyle === "dossier" ? (
-                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
-                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Treatment Frequency & Duration</h4>
-                            <p className="text-2xl font-bold mt-1" style={{ color: DOSSIER_PRIMARY }}>{treatmentSchedule}</p>
-                          </div>
-                        ) : (
-                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${isNeutral ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
-                          <div className={`px-4 py-2 ${isNeutral ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
-                            <h4 className={`font-semibold text-sm ${isNeutral ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Frequency & Duration</h4>
-                          </div>
-                          <div className="px-4 py-4 text-center">
-                            <p className="text-2xl font-bold text-treatment">{treatmentSchedule}</p>
-                          </div>
-                        </div>
-                        )
-                      )}
 
                       {/* Estimated Cost card - spans full width */}
                       {estimatedCost && (
