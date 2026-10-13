@@ -23,6 +23,14 @@ interface ReportItemsSelectorProps {
   onTreatmentGoalsChange?: (goals: string) => void;
   estimatedCost?: string;
   onEstimatedCostChange?: (cost: string) => void;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
+  onVisitsPerPeriodChange?: (value: string) => void;
+  onPeriodUnitChange?: (value: "week" | "month") => void;
+  onDurationChange?: (value: string) => void;
+  onDurationUnitChange?: (value: "weeks" | "months") => void;
 }
 
 export const ReportItemsSelector = ({
@@ -37,6 +45,14 @@ export const ReportItemsSelector = ({
   onTreatmentGoalsChange,
   estimatedCost = "",
   onEstimatedCostChange,
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
+  onVisitsPerPeriodChange,
+  onPeriodUnitChange,
+  onDurationChange,
+  onDurationUnitChange,
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
