@@ -157,18 +157,6 @@ export const ReportItemsSelector = ({
                   onClearSearch={() => setSearchQuery("")}
                 />
                 
-                {category === "treatment" && activeSubcategory === "care_plan_type" && onVisitsPerPeriodChange && (
-                  <TreatmentScheduleForm
-                    visitsPerPeriod={treatmentVisitsPerPeriod}
-                    periodUnit={treatmentPeriodUnit}
-                    duration={treatmentDuration}
-                    durationUnit={treatmentDurationUnit}
-                    onVisitsPerPeriodChange={onVisitsPerPeriodChange}
-                    onPeriodUnitChange={onPeriodUnitChange}
-                    onDurationChange={onDurationChange}
-                    onDurationUnitChange={onDurationUnitChange}
-                  />
-                )}
 
                 {category === "treatment" && activeSubcategory === "treatment_goals" && onTreatmentGoalsChange && (
                   <div className="mt-4">
