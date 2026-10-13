@@ -14,6 +14,7 @@ import {
   DOSSIER_PRIMARY,
   DOSSIER_ACCENT,
 } from "./reportStyleVariants";
+import { composeTreatmentSchedule } from "@/utils/treatmentSchedule";
 
 // Section color configs using HSL-based tokens
 const sectionStyles = {
@@ -309,6 +310,13 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     (item) => selectedItems.includes(item.id) && item.categoryId === "exercises"
   );
 
+  const treatmentSchedule = composeTreatmentSchedule({
+    visitsPerPeriod: treatmentVisitsPerPeriod,
+    periodUnit: treatmentPeriodUnit,
+    duration: treatmentDuration,
+    durationUnit: treatmentDurationUnit,
+  });
+
   const hasContent =
     diagnosisItems.length > 0 ||
     extremityItems.length > 0 ||
@@ -318,6 +326,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
     estimatedCost ||
+    treatmentSchedule ||
     homecareItems.length > 0 ||
     exerciseItems.length > 0 ||
     !!additionalNotes;
