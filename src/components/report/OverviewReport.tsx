@@ -67,6 +67,10 @@ interface OverviewReportProps {
   selectedItems: string[];
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
@@ -205,6 +209,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   selectedItems,
   customTreatmentGoals = "",
   estimatedCost = "",
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
   additionalNotes = "",
   subcategories = [],
   settings = [],
