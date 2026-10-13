@@ -226,6 +226,10 @@ export const ReportBuilder = ({
             additionalNotes={additionalNotes}
             customTreatmentGoals={customTreatmentGoals}
             estimatedCost={estimatedCost}
+            treatmentVisitsPerPeriod={treatmentVisitsPerPeriod}
+            treatmentPeriodUnit={treatmentPeriodUnit}
+            treatmentDuration={treatmentDuration}
+            treatmentDurationUnit={treatmentDurationUnit}
             settings={settings}
             subcategories={subcategories}
             disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}
