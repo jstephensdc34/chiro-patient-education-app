@@ -54,6 +54,10 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onEstimatedCostChange: (cost: string) => void;
+  onVisitsPerPeriodChange: (value: string) => void;
+  onPeriodUnitChange: (value: "week" | "month") => void;
+  onDurationChange: (value: string) => void;
+  onDurationUnitChange: (value: "weeks" | "months") => void;
   onGeneratePDF: (element: HTMLElement | null) => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
@@ -88,6 +92,10 @@ export const ReportBuilder = ({
   onNotesChange,
   onTreatmentGoalsChange,
   onEstimatedCostChange,
+  onVisitsPerPeriodChange,
+  onPeriodUnitChange,
+  onDurationChange,
+  onDurationUnitChange,
   onGeneratePDF,
   onShareReport,
   onShareUrlChange,
