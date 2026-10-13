@@ -30,6 +30,7 @@ interface ReportCategoryProps {
   getSubcategoryName: (id: string) => string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentSchedule?: string;
   variant?: ReportStyle;
 }
 
@@ -41,6 +42,7 @@ export const ReportCategory = ({
   getSubcategoryName,
   customTreatmentGoals,
   estimatedCost,
+  treatmentSchedule,
   variant = "classic",
 }: ReportCategoryProps) => {
   const style = sectionStyles[categoryId] || sectionStyles.diagnosis;
