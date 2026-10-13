@@ -135,6 +135,19 @@ export const ReportItemsSelector = ({
                   />
                 )}
 
+                {category === "treatment" && activeSubcategory === "care_plan_type" && onVisitsPerPeriodChange && (
+                  <TreatmentScheduleForm
+                    visitsPerPeriod={treatmentVisitsPerPeriod}
+                    periodUnit={treatmentPeriodUnit}
+                    duration={treatmentDuration}
+                    durationUnit={treatmentDurationUnit}
+                    onVisitsPerPeriodChange={onVisitsPerPeriodChange}
+                    onPeriodUnitChange={onPeriodUnitChange}
+                    onDurationChange={onDurationChange}
+                    onDurationUnitChange={onDurationUnitChange}
+                  />
+                )}
+
                 <div className="sticky top-0 z-10 bg-card py-3 border-y border-border">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
