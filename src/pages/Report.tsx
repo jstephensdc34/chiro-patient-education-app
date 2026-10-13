@@ -41,6 +41,10 @@ const Report = () => {
     setAdditionalNotes,
     setCustomTreatmentGoals,
     setEstimatedCost,
+    setTreatmentVisitsPerPeriod,
+    setTreatmentPeriodUnit,
+    setTreatmentDuration,
+    setTreatmentDurationUnit,
     setActiveCategory,
     setShareUrl,
     setPatient,
@@ -103,6 +107,10 @@ const Report = () => {
               additionalNotes={additionalNotes}
               customTreatmentGoals={customTreatmentGoals}
               estimatedCost={estimatedCost}
+              treatmentVisitsPerPeriod={treatmentVisitsPerPeriod}
+              treatmentPeriodUnit={treatmentPeriodUnit}
+              treatmentDuration={treatmentDuration}
+              treatmentDurationUnit={treatmentDurationUnit}
               settings={settings}
               settingsLoading={settingsLoading}
               isLoading={isLoading}
@@ -118,6 +126,10 @@ const Report = () => {
               onNotesChange={setAdditionalNotes}
               onTreatmentGoalsChange={setCustomTreatmentGoals}
               onEstimatedCostChange={setEstimatedCost}
+              onVisitsPerPeriodChange={setTreatmentVisitsPerPeriod}
+              onPeriodUnitChange={setTreatmentPeriodUnit}
+              onDurationChange={setTreatmentDuration}
+              onDurationUnitChange={setTreatmentDurationUnit}
               onGeneratePDF={handleGenerateReport}
               onShareReport={(format) => handleShareReport(format)}
               onShareUrlChange={setShareUrl}
