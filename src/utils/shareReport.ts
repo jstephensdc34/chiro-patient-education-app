@@ -11,6 +11,10 @@ interface ShareReportParams {
   notes: string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   settings: ReportSetting[];
   subcategories: any[];
   format?: ShareReportFormat;

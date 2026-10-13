@@ -30,6 +30,7 @@ interface ReportCategoryProps {
   getSubcategoryName: (id: string) => string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentSchedule?: string;
   variant?: ReportStyle;
 }
 
@@ -41,6 +42,7 @@ export const ReportCategory = ({
   getSubcategoryName,
   customTreatmentGoals,
   estimatedCost,
+  treatmentSchedule,
   variant = "classic",
 }: ReportCategoryProps) => {
   const style = sectionStyles[categoryId] || sectionStyles.diagnosis;
@@ -98,6 +100,21 @@ export const ReportCategory = ({
             )}
             <div className={isDossier ? "mt-1.5" : "px-4 py-3"}>
               <p className="text-sm font-bold text-foreground/80">• {customTreatmentGoals}</p>
+            </div>
+          </div>
+        )}
+
+        {treatmentSchedule && (
+          <div className={panelClass} style={isDossier ? { borderLeft: `2px solid ${DOSSIER_PRIMARY_SOFT}` } : undefined}>
+            {isDossier ? (
+              <h4 className="text-sm font-semibold" style={{ color: DOSSIER_PRIMARY }}>Treatment Frequency & Duration</h4>
+            ) : (
+              <div className={`px-4 py-2 ${style.headerBg}`}>
+                <h4 className={`font-semibold text-sm ${style.headerText}`}>Treatment Frequency & Duration</h4>
+              </div>
+            )}
+            <div className={isDossier ? "mt-1.5" : "px-4 py-3"}>
+              <p className="text-xl font-bold text-treatment">{treatmentSchedule}</p>
             </div>
           </div>
         )}

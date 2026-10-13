@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CategoryType, MAIN_CATEGORIES, ReportItem } from "@/types";
 import { useState } from "react";
 import { SubcategorySelector } from "./SubcategorySelector";
+import { TreatmentScheduleForm } from "./TreatmentScheduleForm";
 import { ReportItemList } from "./ReportItemList";
 import { ReportLoadingState } from "./ReportLoadingState";
 import { categoryNames, getDefaultSubcategory } from "@/utils/categoryUtils";
@@ -23,6 +24,14 @@ interface ReportItemsSelectorProps {
   onTreatmentGoalsChange?: (goals: string) => void;
   estimatedCost?: string;
   onEstimatedCostChange?: (cost: string) => void;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
+  onVisitsPerPeriodChange?: (value: string) => void;
+  onPeriodUnitChange?: (value: "week" | "month") => void;
+  onDurationChange?: (value: string) => void;
+  onDurationUnitChange?: (value: "weeks" | "months") => void;
 }
 
 export const ReportItemsSelector = ({
@@ -37,6 +46,14 @@ export const ReportItemsSelector = ({
   onTreatmentGoalsChange,
   estimatedCost = "",
   onEstimatedCostChange,
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
+  onVisitsPerPeriodChange,
+  onPeriodUnitChange,
+  onDurationChange,
+  onDurationUnitChange,
 }: ReportItemsSelectorProps) => {
   const [activeSubcategory, setActiveSubcategory] = useState<string | null>(
     getDefaultSubcategory(activeCategory)
@@ -140,6 +157,19 @@ export const ReportItemsSelector = ({
                   onClearSearch={() => setSearchQuery("")}
                 />
                 
+                {category === "treatment" && activeSubcategory === "care_plan_type" && onVisitsPerPeriodChange && (
+                  <TreatmentScheduleForm
+                    visitsPerPeriod={treatmentVisitsPerPeriod}
+                    periodUnit={treatmentPeriodUnit}
+                    duration={treatmentDuration}
+                    durationUnit={treatmentDurationUnit}
+                    onVisitsPerPeriodChange={onVisitsPerPeriodChange}
+                    onPeriodUnitChange={onPeriodUnitChange}
+                    onDurationChange={onDurationChange}
+                    onDurationUnitChange={onDurationUnitChange}
+                  />
+                )}
+
                 {category === "treatment" && activeSubcategory === "treatment_goals" && onTreatmentGoalsChange && (
                   <div className="mt-4">
                     <label className="text-sm font-medium text-foreground mb-2 block">

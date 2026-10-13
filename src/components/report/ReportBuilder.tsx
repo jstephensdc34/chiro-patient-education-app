@@ -35,6 +35,10 @@ interface ReportBuilderProps {
   additionalNotes: string;
   customTreatmentGoals: string;
   estimatedCost: string;
+  treatmentVisitsPerPeriod: string;
+  treatmentPeriodUnit: "week" | "month";
+  treatmentDuration: string;
+  treatmentDurationUnit: "weeks" | "months";
   settings: ReportSetting[];
   settingsLoading: boolean;
   isLoading: boolean;
@@ -50,6 +54,10 @@ interface ReportBuilderProps {
   onNotesChange: (notes: string) => void;
   onTreatmentGoalsChange: (goals: string) => void;
   onEstimatedCostChange: (cost: string) => void;
+  onVisitsPerPeriodChange: (value: string) => void;
+  onPeriodUnitChange: (value: "week" | "month") => void;
+  onDurationChange: (value: string) => void;
+  onDurationUnitChange: (value: "weeks" | "months") => void;
   onGeneratePDF: (element: HTMLElement | null) => void;
   onShareReport: (format: ShareReportFormat) => void;
   onShareUrlChange: (url: string | null) => void;
@@ -65,6 +73,10 @@ export const ReportBuilder = ({
   additionalNotes,
   customTreatmentGoals,
   estimatedCost,
+  treatmentVisitsPerPeriod,
+  treatmentPeriodUnit,
+  treatmentDuration,
+  treatmentDurationUnit,
   settings,
   settingsLoading,
   isLoading,
@@ -80,6 +92,10 @@ export const ReportBuilder = ({
   onNotesChange,
   onTreatmentGoalsChange,
   onEstimatedCostChange,
+  onVisitsPerPeriodChange,
+  onPeriodUnitChange,
+  onDurationChange,
+  onDurationUnitChange,
   onGeneratePDF,
   onShareReport,
   onShareUrlChange,
@@ -145,6 +161,14 @@ export const ReportBuilder = ({
       onTreatmentGoalsChange={onTreatmentGoalsChange}
       estimatedCost={estimatedCost}
       onEstimatedCostChange={onEstimatedCostChange}
+      treatmentVisitsPerPeriod={treatmentVisitsPerPeriod}
+      treatmentPeriodUnit={treatmentPeriodUnit}
+      treatmentDuration={treatmentDuration}
+      treatmentDurationUnit={treatmentDurationUnit}
+      onVisitsPerPeriodChange={onVisitsPerPeriodChange}
+      onPeriodUnitChange={onPeriodUnitChange}
+      onDurationChange={onDurationChange}
+      onDurationUnitChange={onDurationUnitChange}
     />
   );
 
@@ -202,6 +226,10 @@ export const ReportBuilder = ({
             additionalNotes={additionalNotes}
             customTreatmentGoals={customTreatmentGoals}
             estimatedCost={estimatedCost}
+            treatmentVisitsPerPeriod={treatmentVisitsPerPeriod}
+            treatmentPeriodUnit={treatmentPeriodUnit}
+            treatmentDuration={treatmentDuration}
+            treatmentDurationUnit={treatmentDurationUnit}
             settings={settings}
             subcategories={subcategories}
             disabled={isGeneratingPDF || !patient.name || selectedItems.length === 0}

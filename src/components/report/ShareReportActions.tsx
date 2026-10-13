@@ -13,6 +13,10 @@ interface ShareReportActionsProps {
   additionalNotes: string;
   customTreatmentGoals: string;
   estimatedCost: string;
+  treatmentVisitsPerPeriod: string;
+  treatmentPeriodUnit: "week" | "month";
+  treatmentDuration: string;
+  treatmentDurationUnit: "weeks" | "months";
   settings: ReportSetting[];
   subcategories: Subcategory[];
   disabled?: boolean;
@@ -27,6 +31,10 @@ export const ShareReportActions = ({
   additionalNotes,
   customTreatmentGoals,
   estimatedCost,
+  treatmentVisitsPerPeriod,
+  treatmentPeriodUnit,
+  treatmentDuration,
+  treatmentDurationUnit,
   settings,
   subcategories,
   disabled,
@@ -44,6 +52,10 @@ export const ShareReportActions = ({
       notes: additionalNotes,
       customTreatmentGoals,
       estimatedCost,
+      treatmentVisitsPerPeriod,
+      treatmentPeriodUnit,
+      treatmentDuration,
+      treatmentDurationUnit,
       settings,
       subcategories,
     };

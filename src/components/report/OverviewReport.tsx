@@ -14,6 +14,7 @@ import {
   DOSSIER_PRIMARY,
   DOSSIER_ACCENT,
 } from "./reportStyleVariants";
+import { composeTreatmentSchedule } from "@/utils/treatmentSchedule";
 
 // Section color configs using HSL-based tokens
 const sectionStyles = {
@@ -67,6 +68,10 @@ interface OverviewReportProps {
   selectedItems: string[];
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   additionalNotes?: string;
   subcategories: any[];
   settings?: ReportSetting[];
@@ -205,6 +210,10 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
   selectedItems,
   customTreatmentGoals = "",
   estimatedCost = "",
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
   additionalNotes = "",
   subcategories = [],
   settings = [],
@@ -301,6 +310,13 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     (item) => selectedItems.includes(item.id) && item.categoryId === "exercises"
   );
 
+  const treatmentSchedule = composeTreatmentSchedule({
+    visitsPerPeriod: treatmentVisitsPerPeriod,
+    periodUnit: treatmentPeriodUnit,
+    duration: treatmentDuration,
+    durationUnit: treatmentDurationUnit,
+  });
+
   const hasContent =
     diagnosisItems.length > 0 ||
     extremityItems.length > 0 ||
@@ -310,6 +326,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
     treatmentGoalItems.length > 0 ||
     customTreatmentGoals ||
     estimatedCost ||
+    treatmentSchedule ||
     homecareItems.length > 0 ||
     exerciseItems.length > 0 ||
     !!additionalNotes;
@@ -415,7 +432,7 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                 )}
 
                 {/* Section 3: Care Plan + Phase of Care + Treatment Goals */}
-                {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost) && (
+                {(carePlanItems.length > 0 || phaseOfCareItems.length > 0 || treatmentGoalItems.length > 0 || customTreatmentGoals || estimatedCost || treatmentSchedule) && (
                   <div>
                     <SectionHeader label={sectionStyles.carePlan.label} style={sectionStyles.carePlan} variant={reportStyle} />
                     <div className={gridClass}>
@@ -453,6 +470,25 @@ export const OverviewReport = forwardRef<HTMLDivElement, OverviewReportProps>(({
                               ))}
                               {customTreatmentGoals && <li>{customTreatmentGoals}</li>}
                             </ul>
+                          </div>
+                        </div>
+                        )
+                      )}
+
+                      {/* Treatment Frequency & Duration card - spans full width */}
+                      {treatmentSchedule && (
+                        reportStyle === "dossier" ? (
+                          <div className="pl-4 py-1 border-l-2" style={{ borderColor: DOSSIER_ACCENT }}>
+                            <h4 className="font-semibold text-sm" style={{ color: DOSSIER_ACCENT }}>Treatment Frequency & Duration</h4>
+                            <p className="text-2xl font-bold mt-1" style={{ color: DOSSIER_PRIMARY }}>{treatmentSchedule}</p>
+                          </div>
+                        ) : (
+                        <div className={`col-span-2 rounded-lg border overflow-hidden shadow-sm ${isNeutral ? "border-border bg-card" : `${sectionStyles.carePlan.border} ${sectionStyles.carePlan.bg}`}`}>
+                          <div className={`px-4 py-2 ${isNeutral ? "bg-muted border-b" : sectionStyles.carePlan.headerBg}`}>
+                            <h4 className={`font-semibold text-sm ${isNeutral ? "text-foreground" : sectionStyles.carePlan.headerText}`}>Treatment Frequency & Duration</h4>
+                          </div>
+                          <div className="px-4 py-4 text-center">
+                            <p className="text-2xl font-bold text-treatment">{treatmentSchedule}</p>
                           </div>
                         </div>
                         )

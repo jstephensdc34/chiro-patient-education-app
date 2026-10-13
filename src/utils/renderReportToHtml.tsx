@@ -83,6 +83,10 @@ export interface RenderReportParams {
   notes: string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   settings: ReportSetting[];
   subcategories: any[];
   format: "full" | "overview";
@@ -96,6 +100,10 @@ export const renderReportToHtml = (params: RenderReportParams): string => {
     selectedItems: selectedIds,
     customTreatmentGoals: params.customTreatmentGoals,
     estimatedCost: params.estimatedCost,
+    treatmentVisitsPerPeriod: params.treatmentVisitsPerPeriod,
+    treatmentPeriodUnit: params.treatmentPeriodUnit,
+    treatmentDuration: params.treatmentDuration,
+    treatmentDurationUnit: params.treatmentDurationUnit,
     subcategories: params.subcategories,
     settings: params.settings,
     printMode: true as const,

@@ -22,6 +22,10 @@ export const useReportGeneration = (
   const [additionalNotes, setAdditionalNotes] = useState<string>("");
   const [customTreatmentGoals, setCustomTreatmentGoals] = useState<string>("");
   const [estimatedCost, setEstimatedCost] = useState<string>("");
+  const [treatmentVisitsPerPeriod, setTreatmentVisitsPerPeriod] = useState<string>("");
+  const [treatmentPeriodUnit, setTreatmentPeriodUnit] = useState<"week" | "month">("week");
+  const [treatmentDuration, setTreatmentDuration] = useState<string>("");
+  const [treatmentDurationUnit, setTreatmentDurationUnit] = useState<"weeks" | "months">("weeks");
   const [activeCategory, setActiveCategory] = useState<CategoryType>("diagnosis");
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [pdfProgress, setPdfProgress] = useState<RenderPdfProgress>({ status: 'preparing', percentage: 0 });
@@ -116,6 +120,10 @@ export const useReportGeneration = (
         notes: additionalNotes,
         customTreatmentGoals,
         estimatedCost,
+        treatmentVisitsPerPeriod,
+        treatmentPeriodUnit,
+        treatmentDuration,
+        treatmentDurationUnit,
         settings,
         subcategories,
         format,
@@ -136,6 +144,10 @@ export const useReportGeneration = (
     additionalNotes,
     customTreatmentGoals,
     estimatedCost,
+    treatmentVisitsPerPeriod,
+    treatmentPeriodUnit,
+    treatmentDuration,
+    treatmentDurationUnit,
     activeCategory,
     isGeneratingPDF,
     pdfProgress,
@@ -148,6 +160,10 @@ export const useReportGeneration = (
     setAdditionalNotes,
     setCustomTreatmentGoals,
     setEstimatedCost,
+    setTreatmentVisitsPerPeriod,
+    setTreatmentPeriodUnit,
+    setTreatmentDuration,
+    setTreatmentDurationUnit,
     setActiveCategory,
     setShareUrl,
     setPatient,

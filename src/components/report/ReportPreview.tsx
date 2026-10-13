@@ -7,6 +7,7 @@ import { ReportSetting } from "@/services/reportSettingsService";
 import { PatientInfoDisplay } from "./PatientInfoDisplay";
 import { ReportCategory } from "./ReportCategory";
 import { ReportStyle, DEFAULT_REPORT_STYLE } from "./reportStyleVariants";
+import { composeTreatmentSchedule } from "@/utils/treatmentSchedule";
 
 
 // Category name mapping
@@ -25,6 +26,10 @@ interface ReportPreviewProps {
   additionalNotes: string;
   customTreatmentGoals?: string;
   estimatedCost?: string;
+  treatmentVisitsPerPeriod?: string;
+  treatmentPeriodUnit?: "week" | "month";
+  treatmentDuration?: string;
+  treatmentDurationUnit?: "weeks" | "months";
   subcategories: any[];
   settings?: ReportSetting[];
   settingsLoading?: boolean;
@@ -39,6 +44,10 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
   additionalNotes,
   customTreatmentGoals = "",
   estimatedCost = "",
+  treatmentVisitsPerPeriod = "",
+  treatmentPeriodUnit = "week",
+  treatmentDuration = "",
+  treatmentDurationUnit = "weeks",
   subcategories = [],
   settings = [],
   settingsLoading = false,
@@ -56,6 +65,13 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
     const subcategory = subcategories.find(s => s.id === subcategoryId);
     return subcategory ? subcategory.name : "";
   };
+
+  const treatmentSchedule = composeTreatmentSchedule({
+    visitsPerPeriod: treatmentVisitsPerPeriod,
+    periodUnit: treatmentPeriodUnit,
+    duration: treatmentDuration,
+    durationUnit: treatmentDurationUnit,
+  });
 
   const hasSelectedItemsInCategory = (categoryId: string) => {
     return items.some(item => 
@@ -143,7 +159,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
               
               <div className={reportStyle === "dossier" ? "space-y-10" : reportStyle === "workspace" ? "space-y-4" : "space-y-8"}>
                 {/* Render categories in the same order as MAIN_CATEGORIES */}
-                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost))).map((category) => (
+                {MAIN_CATEGORIES.filter(category => hasSelectedItemsInCategory(category) || (category === "treatment" && (customTreatmentGoals || estimatedCost || treatmentSchedule))).map((category) => (
                   <ReportCategory
                     key={category}
                     categoryId={category}
@@ -153,6 +169,7 @@ export const ReportPreview = forwardRef<HTMLDivElement, ReportPreviewProps>(({
                     getSubcategoryName={getSubcategoryName}
                     customTreatmentGoals={category === "treatment" ? customTreatmentGoals : undefined}
                     estimatedCost={category === "treatment" ? estimatedCost : undefined}
+                    treatmentSchedule={category === "treatment" ? treatmentSchedule : undefined}
                     variant={reportStyle}
                   />
                 ))}
